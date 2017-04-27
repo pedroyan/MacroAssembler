@@ -1,11 +1,5 @@
 #pragma once
 
-#ifdef STRINGLIBRARY_EXPORTS  
-#define STRINGLIBRARY_API __declspec(dllexport)   
-#else  
-#define STRINGLIBRARY_API __declspec(dllimport)   
-#endif 
-
 #include <string>
 
 using std::string;
