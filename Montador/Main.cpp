@@ -5,6 +5,9 @@
 
 using std::string;
 
+
+FILE* VerifyFile(const char* fileName);
+
 int main(int argc, char *argv[]) {
 
 	#ifdef _DEBUG
@@ -22,9 +25,8 @@ int main(int argc, char *argv[]) {
 
 	string tipoOperacao = StringLibrary::ToLower(argv[1]);
 
-	FILE* fp = fopen(argv[2],"r");
+	FILE* fp = VerifyFile(argv[2]);
 	if (fp == nullptr) {
-		printf("O arquivo especificado %s nao existe", argv[2]);
 		return 0;
 	}
 
@@ -38,4 +40,29 @@ int main(int argc, char *argv[]) {
 
 	getchar();
 	return 0;
+}
+
+/// <summary>
+/// Verifica a extensão do arquivo passado e se ele foi encontrado
+/// </summary>
+/// <param name="fileName">nome do arquivo</param>
+/// <returns>Um ponteiro pro arquivo caso a verificação seja bem sucedida. Nullptr caso contrário</returns>
+FILE* VerifyFile(const char* fileName) {
+	string fileNameS(fileName);
+	size_t extensionIndex = fileNameS.find_last_of(".");
+
+	string extension = StringLibrary::ToLower(fileNameS.substr(extensionIndex + 1));
+
+	if (extension != "asm") {
+		printf("O Montador aceita somente arquivos .asm \nExtensao do arquivo passado: .%s\n", extension.c_str());
+		return nullptr;
+	}
+
+	FILE* fp = fopen(fileName, "r");
+	if (fp == nullptr) {
+		printf("O arquivo especificado %s nao existe\n", fileName);
+		return nullptr;
+	}
+
+	return fp;
 }
