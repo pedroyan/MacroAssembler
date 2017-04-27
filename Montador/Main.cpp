@@ -1,9 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
+
+using std::string;
 
 int main(int argc, char *argv[]) {
-	for (size_t i = 0; i < argc; i++) {
-		printf("%s \n", argv[i]);
+	if (argc < 4) {
+		printf("Sao necessarios 3 argumentos para executar o montador:\n");
+		printf("cmd>Montador <Tipo de Operacao> <Arquivo de Entrada> <Arquivo de Saida>\n");
 	}
-	getchar();
+	string tipoOperacao(argv[1]);
+
+	if (tipoOperacao == "-p") {
+
+	}
+	return 0;
 }
