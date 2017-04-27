@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "-p";
+	argv[2] = "assemblyTest.asm";
 	#else
 	//pega os argumentos da linha de comando em modo release
 	if (argc < 4) {
@@ -20,6 +21,12 @@ int main(int argc, char *argv[]) {
 	#endif // DEBUG
 
 	string tipoOperacao = StringLibrary::ToLower(argv[1]);
+
+	FILE* fp = fopen(argv[2],"r");
+	if (fp == nullptr) {
+		printf("O arquivo especificado %s nao existe", argv[2]);
+		return 0;
+	}
 
 	if (tipoOperacao == "-p") {
 		printf("pre-processamento");
