@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B2F0E33C-2AE2-4E82-876F-DE137D156451}</ProjectGuid>
-    <RootNamespace>MacroAssembler</RootNamespace>
+    <ProjectGuid>{D1FE65E9-170E-402A-B86D-60102F887071}</ProjectGuid>
+    <RootNamespace>Montador</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
