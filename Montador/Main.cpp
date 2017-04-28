@@ -8,7 +8,7 @@
 using std::string;
 using std::ifstream;
 
-ifstream& VerifyFile(const char* fileName);
+ifstream VerifyFile(const char* fileName);
 
 int main(int argc, char *argv[]) {
 
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 /// </summary>
 /// <param name="fileName">nome do arquivo</param>
 /// <returns>Uma stream para o arquivo o caso a verificação seja bem sucedida. Sai do programa caso contrario</returns>
-ifstream& VerifyFile(const char* fileName) {
+ifstream VerifyFile(const char* fileName) {
 	string fileNameS(fileName);
 	size_t extensionIndex = fileNameS.find_last_of(".");
 
