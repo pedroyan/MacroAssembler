@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "-p";
 	argv[2] = "assemblyTest.asm";
+	argv[3] = "middleFile";
 	#else
 	//pega os argumentos da linha de comando em modo release
 	if (argc < 4) {
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]) {
 	ifstream& fileStream = VerifyFile(argv[2]);
 
 	if (tipoOperacao == "-p") {
-		PreProcessor processor;
+		PreProcessor processor(argv[2],argv[3]);
 		processor.PreProcessPass(fileStream);
 		return 0;
 	} else if (tipoOperacao == "-o") {

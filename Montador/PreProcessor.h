@@ -10,7 +10,7 @@ using std::istream;
 
 class PreProcessor {
 	public:
-		PreProcessor();
+		PreProcessor(string inputFileName, string outputFileName);
 		~PreProcessor();
 		/// <summary>
 		/// Realiza o preprocessamento do arquivo passado
@@ -18,7 +18,10 @@ class PreProcessor {
 		/// <param name="stream">ponteiro para o arquivo a ser preprocessado</param>
 		void PreProcessPass(istream& stream);
 	private:
-		unordered_map<string, int> ValueTable;
+		unordered_map<string, int> valueTable;
+		int lineCount;
+		string inputFileName;
+		string outputFileName;
 		void insertOnTable(string atributionLine);
 };
 

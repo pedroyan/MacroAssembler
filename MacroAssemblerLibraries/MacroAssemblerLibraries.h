@@ -45,4 +45,11 @@ class StringLibrary {
 	/// <param name="delim">Delimitador</param>
 	/// <param name="v">Vetor onde serão inseridas as string divididas</param>
 	static MACROASSEMBLERLIBRARIES void Split(const string &s, const char* delim, vector<string> &v);
+
+	/// <summary>
+	/// Remove todos os espaços em branco no começo e no fim de um string
+	/// </summary>
+	/// <param name="s">string que será reduzida</param>
+	/// <returns>a string reduzida</returns>
+	static MACROASSEMBLERLIBRARIES string Trim(string s);
 };

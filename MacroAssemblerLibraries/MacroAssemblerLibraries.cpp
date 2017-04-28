@@ -41,3 +41,16 @@ string StringLibrary::RemoveExcessiveSpaces(string original) {
 	 }
 	 free(dup);
 }
+
+string StringLibrary::Trim(string s) {
+	string whitespace = " \t";
+
+	const auto strBegin = s.find_first_not_of(whitespace);
+	if (strBegin == std::string::npos)
+		return ""; // no content
+
+	const auto strEnd = s.find_last_not_of(whitespace);
+	const auto strRange = strEnd - strBegin + 1;
+
+	return s.substr(strBegin, strRange);
+ }
