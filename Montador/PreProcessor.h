@@ -7,6 +7,7 @@
 using std::unordered_map;
 using std::string;
 using std::istream;
+using std::fstream;
 
 class PreProcessor {
 	public:
@@ -22,6 +23,11 @@ class PreProcessor {
 		int lineCount;
 		string inputFileName;
 		string outputFileName;
+		fstream outputStream;
+
 		void insertOnTable(string atributionLine);
+		bool evaluate(string& ifExpression);
+		string getNextLine(istream& stream);
+
 };
 
