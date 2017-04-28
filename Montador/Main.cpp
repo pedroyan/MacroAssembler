@@ -1,12 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
+#include <fstream>
 #include "MacroAssemblerLibraries.h"
+#include "PreProcessor.h"
 
 using std::string;
+using std::ifstream;
 
-
-FILE* VerifyFile(const char* fileName);
+ifstream& VerifyFile(const char* fileName);
 
 int main(int argc, char *argv[]) {
 
@@ -25,13 +27,12 @@ int main(int argc, char *argv[]) {
 
 	string tipoOperacao = StringLibrary::ToLower(argv[1]);
 
-	FILE* fp = VerifyFile(argv[2]);
-	if (fp == nullptr) {
-		return 0;
-	}
+	ifstream& fileStream = VerifyFile(argv[2]);
 
 	if (tipoOperacao == "-p") {
-		printf("pre-processamento");
+		PreProcessor processor;
+		processor.PreProcessPass(fileStream);
+		return 0;
 	} else if (tipoOperacao == "-o") {
 		printf("montagem");
 	} else {
@@ -46,8 +47,8 @@ int main(int argc, char *argv[]) {
 /// Verifica a extensão do arquivo passado e se ele foi encontrado
 /// </summary>
 /// <param name="fileName">nome do arquivo</param>
-/// <returns>Um ponteiro pro arquivo caso a verificação seja bem sucedida. Nullptr caso contrário</returns>
-FILE* VerifyFile(const char* fileName) {
+/// <returns>Uma stream para o arquivo o caso a verificação seja bem sucedida. Sai do programa caso contrario</returns>
+ifstream& VerifyFile(const char* fileName) {
 	string fileNameS(fileName);
 	size_t extensionIndex = fileNameS.find_last_of(".");
 
@@ -55,14 +56,14 @@ FILE* VerifyFile(const char* fileName) {
 
 	if (extension != "asm") {
 		printf("O Montador aceita somente arquivos .asm \nExtensao do arquivo passado: .%s\n", extension.c_str());
-		return nullptr;
+		exit(0);
 	}
 
-	FILE* fp = fopen(fileName, "r");
-	if (fp == nullptr) {
+	ifstream file(fileName);
+	if (!file.is_open()) {
 		printf("O arquivo especificado %s nao existe\n", fileName);
-		return nullptr;
+		exit(0);
 	}
 
-	return fp;
+	return file;
 }
