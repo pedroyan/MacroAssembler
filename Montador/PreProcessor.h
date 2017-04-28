@@ -19,5 +19,6 @@ class PreProcessor {
 		void PreProcessPass(istream& stream);
 	private:
 		unordered_map<string, int> ValueTable;
+		void insertOnTable(string atributionLine);
 };
 
