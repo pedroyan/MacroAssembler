@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include <unordered_map>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 
 using std::unordered_map;
 using std::string;
 using std::istream;
 using std::fstream;
+using std::stringstream;
 
 class PreProcessor {
 	public:
@@ -23,11 +25,14 @@ class PreProcessor {
 		int lineCount;
 		string inputFileName;
 		string outputFileName;
-		fstream outputStream;
+		stringstream outputContent;
 
 		void insertOnTable(string atributionLine);
-		bool evaluate(string& ifExpression);
+		bool evaluateIf(string& line, istream & stream);
 		string getNextLine(istream& stream);
+		void printError(string message);
+		void saveFile();
+		bool failed;
 
 };
 
