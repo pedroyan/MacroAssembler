@@ -36,6 +36,8 @@ void PreProcessor::PreProcessPass(istream& stream) {
 			writeThisDown = evaluateIf(line, stream);
 		}
 
+		removeComments(line);
+
 		if (writeThisDown) {
 			outputContent << line + "\n";
 		}
@@ -97,6 +99,13 @@ bool PreProcessor::evaluateIf(string & line, istream & stream) {
 	}
 	line = getNextLine(stream);
 	return element->second == 1;
+}
+
+void PreProcessor::removeComments(string & line) {
+	auto index = line.find(';');
+	if (index != string::npos) {
+		line = line.substr(0, index);
+	}
 }
 
 string PreProcessor::getNextLine(istream & stream) {

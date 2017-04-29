@@ -36,6 +36,11 @@ class PreProcessor {
 		/// <param name="stream">stream de leitura</param>
 		/// <returns>Flag indicando se a proxima linha vai ser escrita ou não</returns>
 		bool evaluateIf(string& line, istream & stream);
+
+		/// <summary>
+		/// Remove os comentarios da linha passada
+		/// </summary>
+		void removeComments(string& line);
 		string getNextLine(istream& stream);
 		void printError(string message);
 		void saveFile();
