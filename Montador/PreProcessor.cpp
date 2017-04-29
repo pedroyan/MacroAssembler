@@ -32,7 +32,7 @@ void PreProcessor::PreProcessPass(istream& stream) {
 		if (regex_match(line,equRegex)) {
 			insertOnTable(line);
 			writeThisDown = false;
-		} else if (regex_match(line,ifRegex,std::regex_constants::match_any)) {
+		} else if (regex_match(line,ifRegex)) {
 			writeThisDown = evaluateIf(line, stream);
 		}
 
@@ -86,9 +86,17 @@ bool PreProcessor::evaluateIf(string & line, istream & stream) {
 	if (members.size() != 2) {
 		string errorMessage = "A diretiva if deve possuir somente 1 operando";
 		printError(errorMessage);
-		return true;
+		return false;
 	}
-	return false;
+
+	auto element = valueTable.find(members[1]);
+	if (element == valueTable.end()) {
+		string errorMessage = "Simbolo" + members[1] + "nao definido";
+		printError(errorMessage);
+		return false;
+	}
+	line = getNextLine(stream);
+	return element->second == 1;
 }
 
 string PreProcessor::getNextLine(istream & stream) {
