@@ -21,8 +21,8 @@ void ModuleEngine::populateA(){
 	this->tableUse.push_back(ObjectTable("MOD_B", 9));
 
 	//populando a tabela de definicao
-	this->tableUse.push_back(ObjectTable("L1", 10));
-	this->tableUse.push_back(ObjectTable("VAL", 11));
+	this->tableDefenition.push_back(ObjectTable("L1", 10));
+	this->tableDefenition.push_back(ObjectTable("VAL", 11));
 
 
 	
@@ -44,8 +44,8 @@ void ModuleEngine::populateB(){
 	
 
 	//populando a tabela de definicao
-	this->tableUse.push_back(  ObjectTable("MOD_B",0));
-	this->tableUse.push_back(  ObjectTable("Y", 8));
+	this->tableDefenition.push_back(  ObjectTable("MOD_B",0));
+	this->tableDefenition.push_back(  ObjectTable("Y", 8));
 }
 
 vector<ObjectCode> ModuleEngine::GetListaObjectCode(){

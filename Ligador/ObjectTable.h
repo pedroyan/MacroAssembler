@@ -17,6 +17,9 @@ using std::string;
 class ObjectTable {
 	public:
 		ObjectTable(string variableName,int variableAdress);
+		void SetCorrecao(int newAdress);
+		int GetVariableAdress();
+		string GetVariableName();
 	private:
 		string variableName;
 		int variableAdress;

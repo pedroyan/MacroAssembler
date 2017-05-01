@@ -12,27 +12,22 @@ using std::string;
 
 int main(int argc, char *argv[]) {
 	int pause;
+	auto linker = new LinkerEngine;
 	auto mod_A_teste = new ModuleEngine;
 	mod_A_teste->populateA();
+	linker->AddModule(*mod_A_teste);
 
 	auto mod_B_teste = new ModuleEngine;
 	mod_B_teste->populateB();
-	auto teste = mod_A_teste->GetListaObjectCode();
-	auto vat1 = teste[2];
-
-	cout << vat1.GetFunctionCode();
-
-
 	
-
+	linker->AddModule(*mod_B_teste);
+	linker->AddModule(*mod_B_teste);
+	linker->ObtainGlobalDefinition();
 	
-
-
-	
-
-	
-	
+	cout << "fim";
 	cin >> pause;
+
+
 
 	return 0;
 }

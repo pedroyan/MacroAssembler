@@ -9,7 +9,7 @@
 #include "ObjectTable.h"
 #include "ObjectCode.h"
 #include "ModuleEngine.h"
-
+using std::cout;
 using std::unordered_map;
 using std::string;
 using std::istream;
@@ -22,10 +22,14 @@ class LinkerEngine {
 public:
 	LinkerEngine();
 	void AddModule(ModuleEngine module);
+	void ObtainGlobalDefinition();
 private:
 	vector<ObjectCode> listaObjectCode;
 	vector<ObjectTable> tableGlobalDefinition;
 	vector<ModuleEngine> listOfModules;
+	vector<int>correctionFactor;
+	int numberOfModules=0;
+
 
 
 };
