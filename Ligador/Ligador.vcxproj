@@ -110,7 +110,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LinkerEngine.cpp" />
+    <ClCompile Include="ModuleEngine.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ObjectCode.cpp" />
+    <ClCompile Include="ObjectTable.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LinkerEngine.h" />
+    <ClInclude Include="ModuleEngine.h" />
+    <ClInclude Include="ObjectCode.h" />
+    <ClInclude Include="ObjectTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
