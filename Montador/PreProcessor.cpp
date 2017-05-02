@@ -9,7 +9,7 @@ using std::vector;
 using std::regex;
 using std::regex_match;
 
-regex equRegex("([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?([[:digit:]]+)([[:space:]]+)?");
+regex equRegex("([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?(.+)");
 regex ifRegex("IF[[:space:]](.+)");
 PreProcessor::PreProcessor(string inputFileName,string outputFileName) {
 	lineCount = 0;
@@ -60,7 +60,6 @@ void PreProcessor::insertOnTable(string atributionLine) {
 	StringLibrary::Split(atributionLine, ":", stringDivision);
 
 	string identifier = stringDivision[0];
-
 	if (valueTable.find(identifier) != valueTable.end()) {
 		string errorMessage = "Simbolo textual " + identifier + " ja definido.";
 		printError(errorMessage);
@@ -82,6 +81,16 @@ void PreProcessor::insertOnTable(string atributionLine) {
 	stringDivision.clear();
 
 	StringLibrary::Split(expression, " ", stringDivision);
+	if (stringDivision.size() > 2) {
+		printError("EQU deve possuir apenas 1 operando");
+		return;
+	}
+
+	if (!StringLibrary::IsInteger(stringDivision[1])) {
+		printError("Operando do EQU precisa ser um inteiro");
+		return;
+	}
+
 	int valueNumber = std::stoi(stringDivision[1], nullptr);
 
 	valueTable.emplace(std::make_pair(identifier, valueNumber));

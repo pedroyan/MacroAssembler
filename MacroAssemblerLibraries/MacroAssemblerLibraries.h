@@ -52,4 +52,11 @@ class StringLibrary {
 	/// <param name="s">string que será reduzida</param>
 	/// <returns>a string reduzida</returns>
 	static MACROASSEMBLERLIBRARIES string Trim(string s);
+
+	/// <summary>
+	/// Verifica se a string contém um número inteiro
+	/// </summary>
+	/// <param name="s">string a ser analisada</param>
+	/// <returns>Uma flag indiciando se o número é inteiro</returns>
+	static MACROASSEMBLERLIBRARIES bool IsInteger(string s);
 };
