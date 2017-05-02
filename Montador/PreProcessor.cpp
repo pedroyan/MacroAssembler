@@ -3,12 +3,13 @@
 #include <sstream>
 #include <regex>
 #include <vector>
+#include <cctype>
 
 using std::vector;
 using std::regex;
 using std::regex_match;
 
-regex equRegex("[^[:digit:]]([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?([[:digit:]]+)([[:space:]]+)?");
+regex equRegex("([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?([[:digit:]]+)([[:space:]]+)?");
 regex ifRegex("IF[[:space:]](.+)");
 PreProcessor::PreProcessor(string inputFileName,string outputFileName) {
 	lineCount = 0;
@@ -66,6 +67,11 @@ void PreProcessor::insertOnTable(string atributionLine) {
 		return;
 	}
 
+	if (isdigit(identifier[0])) {
+		string errorMessage = "Identificador " + identifier + " invalido. Primeiro caractere nao pode ser um digito";
+		printError(errorMessage);
+	}
+
 	if (identifier.size() > 50) {
 		string errorMessage = "Simbolo textual nao deve possuir mais de 50 caracteres.";
 		printError(errorMessage);
@@ -93,7 +99,7 @@ bool PreProcessor::evaluateIf(string & line, istream & stream) {
 
 	auto element = valueTable.find(members[1]);
 	if (element == valueTable.end()) {
-		string errorMessage = "Simbolo" + members[1] + "nao definido";
+		string errorMessage = "Simbolo " + members[1] + " nao definido";
 		printError(errorMessage);
 		return false;
 	}
