@@ -76,4 +76,25 @@ void LinkerEngine::ResolveCorrecaoEnderecos(){
 
 }
 
+void LinkerEngine::Merge(){
+	printf("MERGED CODE :");
+	ObtainGlobalDefinition();
+	ResolveReferencesCross();
+	for (int i = 0; i < numberOfModules; i++) {
+		auto objectCode = this->listOfModules[i].GetListaObjectCode();
+		for (int z = 0; z < objectCode.size(); z++) {
+			if (z == 0 && i == 0) {
+				printf("%d", objectCode[z].GetFunctionCode());
+			}else
+			printf(" %d", objectCode[z].GetFunctionCode());
+			if (objectCode[z].GetVarAdress()>-1) {
+				printf(" %d", objectCode[z].GetVarAdress());
+			}
+		}
+		
+	}
+
+
+}
+
 

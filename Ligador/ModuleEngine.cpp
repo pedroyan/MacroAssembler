@@ -74,3 +74,5 @@ void ModuleEngine::SetTableDefenition(vector<ObjectTable> newTable){
 	this->tableDefenition.clear();
 	this->tableDefenition = newTable;
 }
+
+

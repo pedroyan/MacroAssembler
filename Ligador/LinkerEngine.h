@@ -26,8 +26,9 @@ public:
 	void ResolveReferencesCross();
 	int GetVarAdressGlobalTable(string symbol);
 	void ResolveCorrecaoEnderecos();
+	void Merge();
 private:
-	vector<ObjectCode> listaObjectCode;
+	//string outputCode;
 	vector<ModuleEngine> listOfModules;
 	vector<int>listaFatoresCorerrecao;
 	int numberOfModules=0;
