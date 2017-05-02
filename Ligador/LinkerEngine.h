@@ -27,7 +27,7 @@ private:
 	vector<ObjectCode> listaObjectCode;
 	vector<ObjectTable> tableGlobalDefinition;
 	vector<ModuleEngine> listOfModules;
-	vector<int>correctionFactor;
+	vector<int>listaFatoresCorerrecao;
 	int numberOfModules=0;
 
 

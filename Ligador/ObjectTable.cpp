@@ -4,7 +4,7 @@ ObjectTable::ObjectTable(string variableName, int variableAdress){
 	this->variableName = variableName;
 }
 
-void ObjectTable::SetCorrecao(int newAdress){
+void ObjectTable::AddFatorCorrecao(int newAdress){
 	this->variableAdress =this->variableAdress+newAdress;
 }
 
