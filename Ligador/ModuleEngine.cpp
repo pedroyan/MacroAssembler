@@ -32,7 +32,7 @@ void ModuleEngine::populateB(){
 	//populando o codigo objeto
 	this->listaObjectCode.push_back(ObjectCode(0, 13, 8));
 	this->listaObjectCode.push_back(ObjectCode(2, 13, 0));
-	this->listaObjectCode.push_back(ObjectCode(4, 13, 0));
+	this->listaObjectCode.push_back(ObjectCode(4, 13, 10));
 	this->listaObjectCode.push_back(ObjectCode(6, 5 , 0));
 	this->listaObjectCode.push_back(ObjectCode(8,-1, -1));
 	this->listaObjectCode.push_back(ObjectCode(9,-1, -1));
@@ -58,4 +58,19 @@ vector<ObjectTable> ModuleEngine::GetGetTableUse(){
 
 vector<ObjectTable> ModuleEngine::GetTableDefenition(){
 	return this->tableDefenition;
+}
+
+void ModuleEngine::SetListaObjectCode(vector<ObjectCode> newObjectList){
+	this->listaObjectCode.clear();
+	this->listaObjectCode = newObjectList;
+}
+
+void ModuleEngine::SetGetTableUse(vector<ObjectTable> newTable){
+	this->tableUse.clear();
+	this->tableUse = newTable;
+}
+
+void ModuleEngine::SetTableDefenition(vector<ObjectTable> newTable){
+	this->tableDefenition.clear();
+	this->tableDefenition = newTable;
 }

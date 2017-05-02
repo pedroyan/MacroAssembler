@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
 	mod_B_teste->populateB();
 	
 	linker->AddModule(*mod_B_teste);
-	linker->AddModule(*mod_B_teste);
 	linker->ObtainGlobalDefinition();
+	linker->ResolveReferencesCross();
 	
 	cout << "fim";
 	cin >> pause;

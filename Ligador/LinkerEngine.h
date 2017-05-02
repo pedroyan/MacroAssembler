@@ -23,12 +23,15 @@ public:
 	LinkerEngine();
 	void AddModule(ModuleEngine module);
 	void ObtainGlobalDefinition();
+	void ResolveReferencesCross();
+	int GetVarAdressGlobalTable(string symbol);
 private:
 	vector<ObjectCode> listaObjectCode;
-	vector<ObjectTable> tableGlobalDefinition;
 	vector<ModuleEngine> listOfModules;
 	vector<int>listaFatoresCorerrecao;
 	int numberOfModules=0;
+	unordered_map<string, int > tableGlobalDefinition;
+
 
 
 

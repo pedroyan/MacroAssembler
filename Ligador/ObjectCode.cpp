@@ -20,3 +20,17 @@ int ObjectCode::GetVarAdress()
 {
 	return this->varAdress;
 }
+
+void ObjectCode::SetIsChanged(bool isChanged){
+	this->isChanged = isChanged;
+}
+
+bool ObjectCode::GetIsChanged()
+{
+	return this->isChanged;
+}
+
+void ObjectCode::SetVarAdress(int newAdress){
+	this->varAdress = newAdress;
+
+}

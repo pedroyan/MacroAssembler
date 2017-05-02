@@ -26,7 +26,9 @@ public:
 	vector<ObjectCode> GetListaObjectCode();
 	vector<ObjectTable> GetGetTableUse();
 	vector<ObjectTable> GetTableDefenition();
-	//list<ObjectTable>  GetTableRealocation;
+	void SetListaObjectCode(vector<ObjectCode> newObjectList);
+	void SetGetTableUse(vector<ObjectTable> newTable);
+	void SetTableDefenition(vector<ObjectTable> newTable);
 
 private:
 	vector<ObjectCode> listaObjectCode;
