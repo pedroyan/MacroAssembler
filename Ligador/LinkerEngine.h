@@ -33,6 +33,7 @@ private:
 	vector<int>listaFatoresCorerrecao;
 	int numberOfModules=0;
 	unordered_map<string, int > tableGlobalDefinition;
+	float linkerHaveProblem=false;
 
 
 
