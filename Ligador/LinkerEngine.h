@@ -25,6 +25,7 @@ public:
 	void ObtainGlobalDefinition();
 	void ResolveReferencesCross();
 	int GetVarAdressGlobalTable(string symbol);
+	void ResolveCorrecaoEnderecos();
 private:
 	vector<ObjectCode> listaObjectCode;
 	vector<ModuleEngine> listOfModules;

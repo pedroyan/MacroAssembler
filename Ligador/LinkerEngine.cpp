@@ -34,9 +34,11 @@ void LinkerEngine::ObtainGlobalDefinition() {
 
 void LinkerEngine::ResolveReferencesCross(){
 	for (int i = 0; i < numberOfModules; i++) {
+		//guarda a tabela de uso e codigoObjeto de cada modulo
 		auto objectCode = this->listOfModules[i].GetListaObjectCode();
 		auto tabelaUso = this->listOfModules[i].GetGetTableUse();
 		for (int y = 0; y < tabelaUso.size(); y++) {
+			//para cada modulo,analisa a tabela de uso e muda o endereco de seus dados
 			auto enderecoParaAtulizar = tabelaUso[y].GetVariableAdress() - 1;
 			auto newAdress = GetVarAdressGlobalTable(tabelaUso[y].GetVariableName());
 			for (int z = 0; z < objectCode.size(); z++) {
@@ -57,6 +59,21 @@ void LinkerEngine::ResolveReferencesCross(){
 int LinkerEngine::GetVarAdressGlobalTable(string symbol){
 	auto map = this->tableGlobalDefinition.find(symbol);
 	return map->second;
+}
+
+void LinkerEngine::ResolveCorrecaoEnderecos(){
+	for (int i = 1; i < numberOfModules; i++) {
+		auto objectCode = this->listOfModules[i].GetListaObjectCode();
+		for (int z = 0; z < objectCode.size(); z++) {
+			if(!objectCode[z].GetIsChanged() && objectCode[z].GetVarAdress()>-1) {
+				objectCode[z].SetVarAdress(this->listaFatoresCorerrecao[i - 1] + objectCode[z].GetVarAdress());
+				objectCode[z].SetIsChanged(true);
+			}
+
+		}
+		this->listOfModules[i].SetListaObjectCode(objectCode);
+	}
+
 }
 
 

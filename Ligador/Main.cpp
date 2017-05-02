@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
 	linker->AddModule(*mod_B_teste);
 	linker->ObtainGlobalDefinition();
 	linker->ResolveReferencesCross();
+	linker->ResolveCorrecaoEnderecos();
 	
 	cout << "fim";
 	cin >> pause;
