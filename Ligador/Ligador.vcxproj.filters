@@ -33,6 +33,9 @@
     <ClCompile Include="Leitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObjectCode.h">
