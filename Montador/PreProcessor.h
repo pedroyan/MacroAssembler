@@ -37,6 +37,8 @@ class PreProcessor {
 		/// <param name="equTokens"></param>
 		void EvaluateEQU(const vector<string>& equTokens);
 
+		bool IsEQU(vector<string> tokensLidos);
+
 		/// <summary>
 		/// Avalia se a próxima linha deverá ser escrita ou não
 		/// </summary>

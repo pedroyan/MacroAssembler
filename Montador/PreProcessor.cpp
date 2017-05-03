@@ -48,7 +48,7 @@ bool PreProcessor::PreProcessPass(istream& stream) {
 			preProcessingZone = !(StringLibrary::CompareInsensitive(tokens[0],"section") || (StringLibrary::CompareInsensitive(tokens[0],"begin") || StringLibrary::CompareInsensitive(tokens[1], "begin")));
 		}
 
-		if (tokens.size() > 1 && regex_match(tokens[0], labelRegex) && StringLibrary::CompareInsensitive(tokens[1],"equ")) {
+		if (IsEQU(tokens)) {
 			EvaluateEQU(tokens);
 			writeThisDown = false;
 		} else if (regex_match(line,ifRegex)) {
@@ -112,6 +112,10 @@ void PreProcessor::EvaluateEQU(const vector<string>& equTokens) {
 	valueTable.emplace(std::make_pair(identifier, valueNumber));
 }
 
+bool PreProcessor::IsEQU(vector<string> tokensLidos) {
+	return tokensLidos.size() > 1 && regex_match(tokensLidos[0], labelRegex) && StringLibrary::CompareInsensitive(tokensLidos[1], "equ");
+}
+
 bool PreProcessor::EvaluateIf(string & line, istream & stream) {
 	vector<string> members;
 	StringLibrary::Tokenize(line, " ", members);
@@ -129,6 +133,13 @@ bool PreProcessor::EvaluateIf(string & line, istream & stream) {
 		return false;
 	}
 	line = getNextLine(stream);
+
+	vector<string> tokens;
+	StringLibrary::Tokenize(line, " ", tokens);
+	if (IsEQU(tokens)) {
+		printError("Diretiva EQU precisa ser definida no inicio do codigo");
+	}
+
 	return element->second == 1;
 }
 

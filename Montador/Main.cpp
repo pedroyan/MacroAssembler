@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "-p";
-	argv[2] = "fat_mod_A.asm";
+	argv[2] = "assemblyTest.asm";
 	argv[3] = "middleFile";
 	#else
 	//pega os argumentos da linha de comando em modo release
