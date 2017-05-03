@@ -23,6 +23,8 @@ class PreProcessor {
 	private:
 		unordered_map<string, int> valueTable;
 		int lineCount;
+		bool preProcessingZone;
+
 		string inputFileName;
 		string outputFileName;
 		stringstream outputContent;

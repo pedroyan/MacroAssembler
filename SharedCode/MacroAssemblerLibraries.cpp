@@ -1,7 +1,3 @@
-// MacroAssemblerLibraries.cpp : Defines the exported functions for the DLL application.
-//
-
-#include "stdafx.h"
 #include "MacroAssemblerLibraries.h"
 #include <regex>
 
@@ -28,10 +24,10 @@ string StringLibrary::RemoveExcessiveSpaces(string original) {
 	return std::regex_replace(original, lotsOfSpaces, " ");
 }
 
- void StringLibrary::Split(const string & s, const char * delim, vector<string>& v) {
+ void StringLibrary::Tokenize(const string & s, const char * delim, vector<string>& v) {
 	 // to avoid modifying original string
 	 // first duplicate the original string and return a char pointer then free the memory
-	 char * dup = strdup(s.c_str());
+	 char * dup = _strdup(s.c_str());
 	 char * token = strtok(dup, delim);
 	 while (token != NULL) {
 		 v.push_back(string(token));
@@ -55,7 +51,7 @@ string StringLibrary::Trim(string s) {
 	return s.substr(strBegin, strRange);
  }
 
-MACROASSEMBLERLIBRARIES bool StringLibrary::IsInteger(string s) {
+bool StringLibrary::IsInteger(string s) {
 
 	if (s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) return false;
 
