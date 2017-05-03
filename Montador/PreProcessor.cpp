@@ -8,10 +8,7 @@ using std::regex;
 using std::regex_match;
 
 regex labelRegex("(.+)?\\:");
-regex equRegex("([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?(.+)", std::regex_constants::icase);
 regex ifRegex("IF[[:space:]](.+)", std::regex_constants::icase);
-regex sectionRegex("SECTION[[:space:]](.+)", std::regex_constants::icase);
-regex beginRegex("((.+)[[:space:]])?BEGIN", std::regex_constants::icase);
 
 PreProcessor::PreProcessor(string inputFileName,string outputFileName) {
 	lineCount = 0;
@@ -51,7 +48,7 @@ bool PreProcessor::PreProcessPass(istream& stream) {
 		if (IsEQU(tokens)) {
 			EvaluateEQU(tokens);
 			writeThisDown = false;
-		} else if (regex_match(line,ifRegex)) {
+		} else if (StringLibrary::CompareInsensitive(tokens[0],"if")) {
 			writeThisDown = EvaluateIf(line, stream);
 		}
 
