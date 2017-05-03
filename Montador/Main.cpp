@@ -33,8 +33,12 @@ int main(int argc, char *argv[]) {
 	if (tipoOperacao == "-p") {
 		PreProcessor processor(argv[2],argv[3]);
 		processor.PreProcessPass(fileStream);
+		fileStream.close();
 	} else if (tipoOperacao == "-o") {
-		printf("montagem");
+		PreProcessor processor(argv[2], argv[3]);
+		if (processor.PreProcessPass(fileStream)) {
+
+		}
 	} else {
 		printf("tipo operação não especificado");
 	}

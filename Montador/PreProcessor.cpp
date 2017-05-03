@@ -22,7 +22,7 @@ PreProcessor::PreProcessor(string inputFileName,string outputFileName) {
 PreProcessor::~PreProcessor() {
 }
 
-bool PreProcessor::PreProcessPass(istream& stream) {
+bool PreProcessor::PreProcessPass(ifstream& stream) {
 	string line;
 	bool writeThisDown;
 	vector<string> tokens;
@@ -60,14 +60,16 @@ bool PreProcessor::PreProcessPass(istream& stream) {
 		}
 	}
 
-	if (!failed) {
-		printf("arquivo %s.pre gerado com sucesso", outputFileName.c_str());
-		saveFile();
-		return true;
-	} else {
+	stream.close();
+
+	if (failed) {
 		printf("Erros de pre-processamento encontrados. O arquivo .pre nao foi gerado\n");
 		return false;
-	}
+	} 
+		
+	printf("arquivo %s.pre gerado com sucesso", outputFileName.c_str());
+	saveFile();
+	return true;
 }
 
 void PreProcessor::EvaluateEQU(const vector<string>& equTokens) {

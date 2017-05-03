@@ -8,6 +8,7 @@
 
 using std::unordered_map;
 using std::string;
+using std::ifstream;
 using std::istream;
 using std::fstream;
 using std::stringstream;
@@ -21,7 +22,7 @@ class PreProcessor {
 		/// Realiza o preprocessamento do arquivo passado
 		/// </summary>
 		/// <param name="stream">ponteiro para o arquivo a ser preprocessado</param>
-		bool PreProcessPass(istream& stream);
+		bool PreProcessPass(ifstream& stream);
 	private:
 		unordered_map<string, int> valueTable;
 		int lineCount;
