@@ -60,3 +60,8 @@ bool StringLibrary::IsInteger(string s) {
 
 	return (*p == 0);
 }
+
+
+bool StringLibrary::CompareInsensitive(string a, string b) {
+	return ToLower(a) == ToLower(b);
+}

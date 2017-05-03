@@ -2,13 +2,12 @@
 #include "MacroAssemblerLibraries.h"
 #include <sstream>
 #include <regex>
-#include <vector>
 #include <cctype>
 
-using std::vector;
 using std::regex;
 using std::regex_match;
 
+regex labelRegex("(.+)?\\:");
 regex equRegex("([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?(.+)", std::regex_constants::icase);
 regex ifRegex("IF[[:space:]](.+)", std::regex_constants::icase);
 regex sectionRegex("SECTION[[:space:]](.+)", std::regex_constants::icase);
@@ -26,7 +25,7 @@ PreProcessor::PreProcessor(string inputFileName,string outputFileName) {
 PreProcessor::~PreProcessor() {
 }
 
-void PreProcessor::PreProcessPass(istream& stream) {
+bool PreProcessor::PreProcessPass(istream& stream) {
 	string line;
 	bool writeThisDown;
 	vector<string> tokens;
@@ -37,47 +36,51 @@ void PreProcessor::PreProcessPass(istream& stream) {
 		writeThisDown = true;
 
 		line = getNextLine(stream);
-
-		StringLibrary::Tokenize(line, " ",tokens);
-		if (preProcessingZone && tokens.size() >1) {
-			preProcessingZone = !(StringLibrary::ToLower(tokens[0]) == "section");
-		}
-
-		if (regex_match(line,equRegex)) {
-			insertOnTable(line);
-			writeThisDown = false;
-		} else if (regex_match(line,ifRegex)) {
-			writeThisDown = evaluateIf(line, stream);
-		}
-
 		removeComments(line);
 
-		if (writeThisDown && !preProcessingZone) {
+		StringLibrary::Tokenize(line, " ",tokens);
+
+		if (tokens.size() < 1) {
+			continue; // ignora linhas sem tokens
+		}
+
+		if (preProcessingZone && tokens.size() >1) {
+			preProcessingZone = !(StringLibrary::CompareInsensitive(tokens[0],"section") || (StringLibrary::CompareInsensitive(tokens[0],"begin") || StringLibrary::CompareInsensitive(tokens[1], "begin")));
+		}
+
+		if (tokens.size() > 1 && regex_match(tokens[0], labelRegex) && StringLibrary::CompareInsensitive(tokens[1],"equ")) {
+			EvaluateEQU(tokens);
+			writeThisDown = false;
+		} else if (regex_match(line,ifRegex)) {
+			writeThisDown = EvaluateIf(line, stream);
+		}
+
+		
+		line = StringLibrary::Trim(line);
+
+		if (writeThisDown && line != "") {
 			outputContent << line + "\n";
 		}
 	}
 
 	if (!failed) {
+		printf("arquivo %s.pre gerado com sucesso", outputFileName.c_str());
 		saveFile();
+		return true;
 	} else {
 		printf("Erros de pre-processamento encontrados. O arquivo .pre nao foi gerado\n");
+		return false;
 	}
-
-	return;
 }
 
-void PreProcessor::insertOnTable(string atributionLine) {
+void PreProcessor::EvaluateEQU(const vector<string>& equTokens) {
 
 	if (!preProcessingZone) {
 		printError("Diretiva EQU precisa ser definida no inicio do codigo");
 		return;
 	}
 
-	vector<string> stringDivision;
-
-	StringLibrary::Tokenize(atributionLine, ":", stringDivision);
-
-	string identifier = stringDivision[0];
+	string identifier = equTokens[0].substr(0, equTokens[0].find(':'));
 	if (valueTable.find(identifier) != valueTable.end()) {
 		string errorMessage = "Simbolo textual " + identifier + " ja definido.";
 		printError(errorMessage);
@@ -94,27 +97,22 @@ void PreProcessor::insertOnTable(string atributionLine) {
 		printError(errorMessage);
 	}
 
-	string expression = stringDivision[1];
-
-	stringDivision.clear();
-
-	StringLibrary::Tokenize(expression, " ", stringDivision);
-	if (stringDivision.size() > 2) {
+	if (equTokens.size() > 3) {
 		printError("EQU deve possuir apenas 1 operando");
 		return;
 	}
 
-	if (!StringLibrary::IsInteger(stringDivision[1])) {
+	if (!StringLibrary::IsInteger(equTokens[2])) {
 		printError("Operando do EQU precisa ser um inteiro");
 		return;
 	}
 
-	int valueNumber = std::stoi(stringDivision[1], nullptr);
+	int valueNumber = std::stoi(equTokens[2], nullptr);
 
 	valueTable.emplace(std::make_pair(identifier, valueNumber));
 }
 
-bool PreProcessor::evaluateIf(string & line, istream & stream) {
+bool PreProcessor::EvaluateIf(string & line, istream & stream) {
 	vector<string> members;
 	StringLibrary::Tokenize(line, " ", members);
 
