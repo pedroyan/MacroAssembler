@@ -29,13 +29,18 @@ PreProcessor::~PreProcessor() {
 void PreProcessor::PreProcessPass(istream& stream) {
 	string line;
 	bool writeThisDown;
+	vector<string> tokens;
+
 	while (stream.good()) {
 
+		tokens.clear();
 		writeThisDown = true;
+
 		line = getNextLine(stream);
 
-		if (preProcessingZone) {
-			preProcessingZone = !(regex_match(line, sectionRegex) || regex_match(line,beginRegex));
+		StringLibrary::Tokenize(line, " ",tokens);
+		if (preProcessingZone && tokens.size() >1) {
+			preProcessingZone = !(StringLibrary::ToLower(tokens[0]) == "section");
 		}
 
 		if (regex_match(line,equRegex)) {
@@ -47,7 +52,7 @@ void PreProcessor::PreProcessPass(istream& stream) {
 
 		removeComments(line);
 
-		if (writeThisDown) {
+		if (writeThisDown && !preProcessingZone) {
 			outputContent << line + "\n";
 		}
 	}
