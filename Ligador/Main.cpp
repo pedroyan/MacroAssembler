@@ -4,6 +4,8 @@
 #include "LinkerEngine.h"
 #include "ModuleEngine.h"
 #include "ObjectCode.h"
+#include "Leitor.h"
+#include "Leitor.h"
 using std::cout;
 using std::cin;
 using std::advance;
@@ -11,6 +13,15 @@ using std::advance;
 using std::string;
 
 int main(int argc, char *argv[]) {
+	Leitor testeLeitor;
+	FILE *fp;
+	string file = "arquivoTeste.o";
+	auto let = new Leitor;
+	let->MontaMatriz();
+
+
+	
+	
 	int pause;
 	auto linker = new LinkerEngine;
 	auto mod_A_teste = new ModuleEngine;

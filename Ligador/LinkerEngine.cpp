@@ -102,7 +102,7 @@ void LinkerEngine::Merge() {
 			}
 		}
 	} else {
-		//printf("Linker nao \n ");
+		printf("\n Erros de ligamento encontrados. O arquivo .exe nao foi gerado\n");
 	}
 }
 

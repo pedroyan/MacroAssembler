@@ -110,6 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Leitor.cpp" />
     <ClCompile Include="LinkerEngine.cpp" />
     <ClCompile Include="ModuleEngine.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="ObjectTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Leitor.h" />
     <ClInclude Include="LinkerEngine.h" />
     <ClInclude Include="ModuleEngine.h" />
     <ClInclude Include="ObjectCode.h" />
