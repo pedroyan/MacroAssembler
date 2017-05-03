@@ -3,18 +3,23 @@
 #include <sstream>
 #include <regex>
 #include <vector>
+#include <cctype>
 
 using std::vector;
 using std::regex;
 using std::regex_match;
 
-regex equRegex("[^[:digit:]]([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?([[:digit:]]+)([[:space:]]+)?");
-regex ifRegex("IF[[:space:]](.+)");
+regex equRegex("([_[:alnum:]]+)?\\:([[:space:]]+)?EQU[[:space:]]([[:space:]]+)?(.+)", std::regex_constants::icase);
+regex ifRegex("IF[[:space:]](.+)", std::regex_constants::icase);
+regex sectionRegex("SECTION[[:space:]](.+)", std::regex_constants::icase);
+regex beginRegex("((.+)[[:space:]])?BEGIN", std::regex_constants::icase);
+
 PreProcessor::PreProcessor(string inputFileName,string outputFileName) {
 	lineCount = 0;
 	this->inputFileName = inputFileName;
 	this->outputFileName = outputFileName;
 	failed = false;
+	preProcessingZone = true;
 }
 
 
@@ -28,6 +33,10 @@ void PreProcessor::PreProcessPass(istream& stream) {
 
 		writeThisDown = true;
 		line = getNextLine(stream);
+
+		if (preProcessingZone) {
+			preProcessingZone = !(regex_match(line, sectionRegex) || regex_match(line,beginRegex));
+		}
 
 		if (regex_match(line,equRegex)) {
 			insertOnTable(line);
@@ -54,16 +63,25 @@ void PreProcessor::PreProcessPass(istream& stream) {
 
 void PreProcessor::insertOnTable(string atributionLine) {
 
+	if (!preProcessingZone) {
+		printError("Diretiva EQU precisa ser definida no inicio do codigo");
+		return;
+	}
+
 	vector<string> stringDivision;
 
-	StringLibrary::Split(atributionLine, ":", stringDivision);
+	StringLibrary::Tokenize(atributionLine, ":", stringDivision);
 
 	string identifier = stringDivision[0];
-
 	if (valueTable.find(identifier) != valueTable.end()) {
 		string errorMessage = "Simbolo textual " + identifier + " ja definido.";
 		printError(errorMessage);
 		return;
+	}
+
+	if (isdigit(identifier[0])) {
+		string errorMessage = "Identificador " + identifier + " invalido. Primeiro caractere nao pode ser um digito";
+		printError(errorMessage);
 	}
 
 	if (identifier.size() > 50) {
@@ -75,7 +93,17 @@ void PreProcessor::insertOnTable(string atributionLine) {
 
 	stringDivision.clear();
 
-	StringLibrary::Split(expression, " ", stringDivision);
+	StringLibrary::Tokenize(expression, " ", stringDivision);
+	if (stringDivision.size() > 2) {
+		printError("EQU deve possuir apenas 1 operando");
+		return;
+	}
+
+	if (!StringLibrary::IsInteger(stringDivision[1])) {
+		printError("Operando do EQU precisa ser um inteiro");
+		return;
+	}
+
 	int valueNumber = std::stoi(stringDivision[1], nullptr);
 
 	valueTable.emplace(std::make_pair(identifier, valueNumber));
@@ -83,7 +111,7 @@ void PreProcessor::insertOnTable(string atributionLine) {
 
 bool PreProcessor::evaluateIf(string & line, istream & stream) {
 	vector<string> members;
-	StringLibrary::Split(line, " ", members);
+	StringLibrary::Tokenize(line, " ", members);
 
 	if (members.size() != 2) {
 		string errorMessage = "A diretiva if deve possuir somente 1 operando";
@@ -93,7 +121,7 @@ bool PreProcessor::evaluateIf(string & line, istream & stream) {
 
 	auto element = valueTable.find(members[1]);
 	if (element == valueTable.end()) {
-		string errorMessage = "Simbolo" + members[1] + "nao definido";
+		string errorMessage = "Simbolo " + members[1] + " nao definido";
 		printError(errorMessage);
 		return false;
 	}
