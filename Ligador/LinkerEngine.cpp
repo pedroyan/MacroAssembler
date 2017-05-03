@@ -7,12 +7,14 @@ void LinkerEngine::AddModule(ModuleEngine  module){
 	this->listOfModules.push_back(module);
 	auto sizeCodigoObjeto=module.GetListaObjectCode().size();
 	if (this->numberOfModules > 0) {//calcula o fator de correcao para o proximo modulo
-		this->listaFatoresCorerrecao.push_back(module.GetListaObjectCode()[sizeCodigoObjeto - 1].GetAddress() + 1 + listaFatoresCorerrecao[numberOfModules-1]);
+		this->listaFatoresCorerrecao.push_back(module.GetListaObjectCode().size()  + listaFatoresCorerrecao[numberOfModules]);
 		this->numberOfModules = this->numberOfModules + 1;
 		return;
 	}//calcula o fator de correcao para o proximo modulo caso nao tennha modulos anteriores
-	this->listaFatoresCorerrecao.push_back(module.GetListaObjectCode()[sizeCodigoObjeto - 1].GetAddress() + 1);
+	this->listaFatoresCorerrecao.push_back(0);
+	this->listaFatoresCorerrecao.push_back(module.GetListaObjectCode().size() );
 	this->numberOfModules = this->numberOfModules + 1;
+	
 	
 }
 
@@ -21,7 +23,7 @@ void LinkerEngine::ObtainGlobalDefinition() {
 		auto listaDefinicao  = this->listOfModules[i].GetTableDefenition();
 		for (int y = 0; y < listaDefinicao.size(); y++) {
 			if (i > 0) {
-				listaDefinicao[y].AddFatorCorrecao(this->listaFatoresCorerrecao[i-1]);
+				listaDefinicao[y].AddFatorCorrecao(this->listaFatoresCorerrecao[i]);
 			}
 			auto enderecoRelativo = listaDefinicao[y];
 		//	cout << enderecoRelativo.GetVariableName();
@@ -39,20 +41,14 @@ void LinkerEngine::ResolveReferencesCross(){
 		auto tabelaUso = this->listOfModules[i].GetGetTableUse();
 		for (int y = 0; y < tabelaUso.size(); y++) {
 			//para cada modulo,analisa a tabela de uso e muda o endereco de seus dados
-			auto enderecoParaAtulizar = tabelaUso[y].GetVariableAdress() - 1;
+			auto enderecoParaAtulizar = tabelaUso[y].GetVariableAdress();
 			auto newAdress = GetVarAdressGlobalTable(tabelaUso[y].GetVariableName());
-			for (int z = 0; z < objectCode.size(); z++) {
-				if (objectCode[z].GetAddress() == enderecoParaAtulizar) {
-					objectCode[z].SetVarAdress(newAdress+objectCode[z].GetVarAdress());
-					objectCode[z].SetIsChanged(true);
-					break;
-				}
+			objectCode[enderecoParaAtulizar] = newAdress+ objectCode[enderecoParaAtulizar]- listaFatoresCorerrecao[i];
 
-			}
+			
 			
 		}
 		this->listOfModules[i].SetListaObjectCode(objectCode);
-		this->listOfModules[i].SetGetTableUse(tabelaUso);
 	}
 }
 
@@ -72,10 +68,10 @@ int LinkerEngine::GetVarAdressGlobalTable(string symbol){
 void LinkerEngine::ResolveCorrecaoEnderecos(){
 	for (int i = 1; i < numberOfModules; i++) {
 		auto objectCode = this->listOfModules[i].GetListaObjectCode();
+		auto tableRealocation = this->listOfModules[i].GetTableRealocation();
 		for (int z = 0; z < objectCode.size(); z++) {
-			if(!objectCode[z].GetIsChanged() && objectCode[z].GetVarAdress()>-1) {
-				objectCode[z].SetVarAdress(this->listaFatoresCorerrecao[i - 1] + objectCode[z].GetVarAdress());
-				objectCode[z].SetIsChanged(true);
+			if(tableRealocation[z]=='1') {
+				objectCode[z]=this->listaFatoresCorerrecao[i] + objectCode[z];		
 			}
 
 		}
@@ -87,18 +83,14 @@ void LinkerEngine::ResolveCorrecaoEnderecos(){
 void LinkerEngine::Merge() {
 	ObtainGlobalDefinition();
 	ResolveReferencesCross();
+
 	if (!this->linkerHaveProblem) {
 		printf("MERGED CODE :");
 		for (int i = 0; i < numberOfModules; i++) {
 			auto objectCode = this->listOfModules[i].GetListaObjectCode();
 			for (int z = 0; z < objectCode.size(); z++) {
-				if (z == 0 && i == 0) {
-					printf("%d", objectCode[z].GetFunctionCode());
-				} else
-					printf(" %d", objectCode[z].GetFunctionCode());
-				if (objectCode[z].GetVarAdress() > -1) {
-					printf(" %d", objectCode[z].GetVarAdress());
-				}
+					printf(" %d", objectCode[z]);
+				
 			}
 		}
 	} else {

@@ -8,12 +8,12 @@ void Leitor::MontaMatriz() { //recebe um ponteiro de arquivos e lê as informaçõe
 	vector<int> m;
 	int teste;
 	string aux;
-	string file = "arquivoTeste.o";
+	string file = "arquivoTeste.o";// pasta debug da pasta do exe
 	string table("TABLE");
 	ifstream fp;
 	fp.open(file);
 	string verificaTable = RetiraString(fp);
-
+	//FAZER LEITURA CORRETA E MUDAR LIGADOR PARA MUDAR OS ENDEREDCOS RELATIVOS USANDO A TABELA
 	if (verificaTable== table) {
 		do {
 			verificaTable = RetiraString(fp);

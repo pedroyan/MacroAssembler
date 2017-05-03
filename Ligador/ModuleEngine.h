@@ -23,18 +23,20 @@ public:
 	ModuleEngine();
 	void populateA();
 	void populateB();
-	vector<ObjectCode> GetListaObjectCode();
+	vector<int> GetListaObjectCode();
 	vector<ObjectTable> GetGetTableUse();
 	vector<ObjectTable> GetTableDefenition();
-	void SetListaObjectCode(vector<ObjectCode> newObjectList);
-	void SetGetTableUse(vector<ObjectTable> newTable);
+	vector<char> GetTableRealocation();
+	void SetListaObjectCode(vector<int> newObjectList);
+	void SetTableUse(vector<ObjectTable> newTable);
 	void SetTableDefenition(vector<ObjectTable> newTable);
 
 private:
-	vector<ObjectCode> listaObjectCode;
+	//vector<ObjectCode> listaObjectCode;
 	vector<ObjectTable> tableUse;
 	vector<ObjectTable> tableDefenition;
-	//list<ObjectTable> tableRealocation;
+	vector<char> tableRealocation;
+	vector<int> listaObjectCode;
 
 };
 
