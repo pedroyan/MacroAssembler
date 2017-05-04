@@ -13,31 +13,31 @@
 using std::vector;
 using std::unordered_map;
 using std::istream;
-using std::fstream;
+using std::ifstream;
 using std::stringstream;
 using std::list;
 using std::string;
 
 class ModuleEngine {
 public:
-	ModuleEngine();
-	void populateA();
-	void populateB();
-	vector<int> GetListaObjectCode();
+	ModuleEngine(string fileName);
+	vector<ObjectCode> GetListaObjectCode();
 	vector<ObjectTable> GetTableUse();
 	vector<ObjectTable> GetTableDefenition();
 	vector<char> GetTableRealocation();
-	void SetListaObjectCode(vector<int> newObjectList);
+	void SetListaObjectCode(vector<ObjectCode> newObjectList);
 	void SetTableUse(vector<ObjectTable> newTable);
 	void SetTableDefenition(vector<ObjectTable> newTable);
 	void SetTableRealocation(string newTable);
+	void ReadFile();
+	string GetNextLine(istream & stream);
 
 private:
-	//vector<ObjectCode> listaObjectCode;
 	vector<ObjectTable> tableUse;
 	vector<ObjectTable> tableDefenition;
 	vector<char> tableRealocation;
-	vector<int> listaObjectCode;
+	vector<ObjectCode> listaObjectCode;
+	string fileName;
 
 };
 

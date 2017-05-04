@@ -26,10 +26,8 @@ void LinkerEngine::ObtainGlobalDefinition() {
 				listaDefinicao[y].AddFatorCorrecao(this->listaFatoresCorerrecao[i]);
 			}
 			auto enderecoRelativo = listaDefinicao[y];
-		//	cout << enderecoRelativo.GetVariableName();
-		//	printf("--%d \n",enderecoRelativo.GetVariableAdress());
 			this->tableGlobalDefinition.emplace(enderecoRelativo.GetVariableName(), enderecoRelativo.GetVariableAdress());
-		//	this->tableGlobalDefinition.push_back(enderecoRelativo);
+
 		}
 	}
 }
@@ -39,16 +37,17 @@ void LinkerEngine::ResolveReferencesCross(){
 		//guarda a tabela de uso e codigoObjeto de cada modulo
 		auto objectCode = this->listOfModules[i].GetListaObjectCode();
 		auto tabelaUso = this->listOfModules[i].GetTableUse();
-		for (int y = 0; y < tabelaUso.size(); y++) {
-			//para cada modulo,analisa a tabela de uso e muda o endereco de seus dados
-			auto enderecoParaAtulizar = tabelaUso[y].GetVariableAdress();
-			auto newAdress = GetVarAdressGlobalTable(tabelaUso[y].GetVariableName());
-			objectCode[enderecoParaAtulizar] = newAdress+ objectCode[enderecoParaAtulizar]- listaFatoresCorerrecao[i];
+		if (!this->linkerHaveProblem) {
+			for (int y = 0; y < tabelaUso.size(); y++) {
+				//para cada modulo,analisa a tabela de uso e muda o endereco de seus dados
+				auto enderecoParaAtulizar = tabelaUso[y].GetVariableAdress();
+				auto newAdress = GetVarAdressGlobalTable(tabelaUso[y].GetVariableName());
+				objectCode[enderecoParaAtulizar] = newAdress + objectCode[enderecoParaAtulizar].GetCode();
+				objectCode[enderecoParaAtulizar].SetIsChanged(true);
 
-			
-			
+			}
+			this->listOfModules[i].SetListaObjectCode(objectCode);
 		}
-		this->listOfModules[i].SetListaObjectCode(objectCode);
 	}
 }
 
@@ -70,8 +69,8 @@ void LinkerEngine::ResolveCorrecaoEnderecos(){
 		auto objectCode = this->listOfModules[i].GetListaObjectCode();
 		auto tableRealocation = this->listOfModules[i].GetTableRealocation();
 		for (int z = 0; z < objectCode.size(); z++) {
-			if(tableRealocation[z]=='1') {
-				objectCode[z]=this->listaFatoresCorerrecao[i] + objectCode[z];		
+			if(tableRealocation[z]=='1' && !objectCode[z].GetIsChanged()) {
+				objectCode[z]=this->listaFatoresCorerrecao[i] + objectCode[z].GetCode();		
 			}
 
 		}
@@ -81,9 +80,10 @@ void LinkerEngine::ResolveCorrecaoEnderecos(){
 }
 
 void LinkerEngine::Merge() {
-	ResolveCorrecaoEnderecos();
+	
 	ObtainGlobalDefinition();
 	ResolveReferencesCross();
+	ResolveCorrecaoEnderecos();
 
 	if (!this->linkerHaveProblem) {
 		printf("MERGED CODE :");
@@ -98,5 +98,4 @@ void LinkerEngine::Merge() {
 		printf("\n Erros de ligamento encontrados. O arquivo .exe nao foi gerado\n");
 	}
 }
-
 

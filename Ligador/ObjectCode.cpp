@@ -1,24 +1,15 @@
 #include "ObjectCode.h"
 
-ObjectCode::ObjectCode(int address, int functionCode, int varAdress){
-	this->address = address;
-	this->functionCode = functionCode;
-	this->varAdress = varAdress;
+ObjectCode::ObjectCode(int code){
+	this->code = code;
+	
 }
 
-int ObjectCode::GetAddress()
-{
-	return this->address;
-}
 
-int ObjectCode::GetFunctionCode()
-{
-	return this->functionCode;
-}
 
-int ObjectCode::GetVarAdress()
+int ObjectCode::GetCode()
 {
-	return this->varAdress;
+	return this->code;
 }
 
 void ObjectCode::SetIsChanged(bool isChanged){
@@ -30,7 +21,7 @@ bool ObjectCode::GetIsChanged()
 	return this->isChanged;
 }
 
-void ObjectCode::SetVarAdress(int newAdress){
-	this->varAdress = newAdress;
+void ObjectCode::SetCode(int newCode){
+	this->code = newCode;
 
 }
