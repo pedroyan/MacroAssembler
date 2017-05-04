@@ -1,5 +1,8 @@
 #include "ModuleEngine.h"
+#include <fstream>
 #include "MacroAssemblerLibraries.h"
+using std::ifstream;
+
 
 ModuleEngine::ModuleEngine(string fileName){
 	this->fileName = fileName;

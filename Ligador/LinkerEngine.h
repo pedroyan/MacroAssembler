@@ -1,13 +1,8 @@
 #pragma once
 #include <stdio.h>
 #include <unordered_map>
-#include <fstream>
-#include <sstream>
 #include <iostream>
-#include <list>
 #include <vector>
-#include "ObjectTable.h"
-#include "ObjectCode.h"
 #include "ModuleEngine.h"
 using std::cout;
 using std::unordered_map;

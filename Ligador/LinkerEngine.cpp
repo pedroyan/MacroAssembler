@@ -1,4 +1,6 @@
 #include "LinkerEngine.h"
+#include "ObjectTable.h"
+#include "ObjectCode.h"
 
 LinkerEngine::LinkerEngine(){
 }
