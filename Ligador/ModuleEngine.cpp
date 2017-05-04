@@ -87,7 +87,7 @@ vector<int> ModuleEngine::GetListaObjectCode(){
 	return this->listaObjectCode;
 }
 
-vector<ObjectTable> ModuleEngine::GetGetTableUse(){
+vector<ObjectTable> ModuleEngine::GetTableUse(){
 	return this->tableUse;
 }
 
@@ -112,6 +112,12 @@ void ModuleEngine::SetTableUse(vector<ObjectTable> newTable){
 void ModuleEngine::SetTableDefenition(vector<ObjectTable> newTable){
 	this->tableDefenition.clear();
 	this->tableDefenition = newTable;
+}
+
+void ModuleEngine::SetTableRealocation(string newTable){
+	vector<char> data(newTable.begin(), newTable.end());
+	this->tableRealocation = data;
+
 }
 
 

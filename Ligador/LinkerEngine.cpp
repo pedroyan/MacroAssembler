@@ -38,7 +38,7 @@ void LinkerEngine::ResolveReferencesCross(){
 	for (int i = 0; i < numberOfModules; i++) {
 		//guarda a tabela de uso e codigoObjeto de cada modulo
 		auto objectCode = this->listOfModules[i].GetListaObjectCode();
-		auto tabelaUso = this->listOfModules[i].GetGetTableUse();
+		auto tabelaUso = this->listOfModules[i].GetTableUse();
 		for (int y = 0; y < tabelaUso.size(); y++) {
 			//para cada modulo,analisa a tabela de uso e muda o endereco de seus dados
 			auto enderecoParaAtulizar = tabelaUso[y].GetVariableAdress();
@@ -81,6 +81,7 @@ void LinkerEngine::ResolveCorrecaoEnderecos(){
 }
 
 void LinkerEngine::Merge() {
+	ResolveCorrecaoEnderecos();
 	ObtainGlobalDefinition();
 	ResolveReferencesCross();
 

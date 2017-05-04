@@ -24,12 +24,13 @@ public:
 	void populateA();
 	void populateB();
 	vector<int> GetListaObjectCode();
-	vector<ObjectTable> GetGetTableUse();
+	vector<ObjectTable> GetTableUse();
 	vector<ObjectTable> GetTableDefenition();
 	vector<char> GetTableRealocation();
 	void SetListaObjectCode(vector<int> newObjectList);
 	void SetTableUse(vector<ObjectTable> newTable);
 	void SetTableDefenition(vector<ObjectTable> newTable);
+	void SetTableRealocation(string newTable);
 
 private:
 	//vector<ObjectCode> listaObjectCode;
