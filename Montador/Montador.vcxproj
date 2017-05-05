@@ -114,11 +114,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SharedCode\FileLibrary.cpp" />
     <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp" />
+    <ClCompile Include="ErrorPrinter.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PreProcessor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ErrorPrinter.h" />
     <ClInclude Include="PreProcessor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

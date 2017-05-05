@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include "MacroAssemblerLibraries.h"
+#include "FileLibrary.h"
 #include "PreProcessor.h"
 
 using std::string;
@@ -28,18 +29,24 @@ int main(int argc, char *argv[]) {
 
 	string tipoOperacao = StringLibrary::ToLower(argv[1]);
 
-	ifstream& fileStream = VerifyFile(argv[2]);
+	ifstream fileStream;
 
-	if (tipoOperacao == "-p") {
-		PreProcessor processor(argv[2],argv[3]);
-		processor.PreProcessPass(fileStream);
-		return 0;
-	} else if (tipoOperacao == "-o") {
-		printf("montagem");
-	} else {
-		printf("tipo operação não especificado");
+	if (FileLibrary::VerifyFile(argv[2], "asm","O Montador aceita somente arquivos .asm ",&fileStream)) {
+		if (tipoOperacao == "-p") {
+			PreProcessor processor(argv[2], argv[3]);
+			processor.PreProcessPass(fileStream);
+		} else if (tipoOperacao == "-o") {
+			PreProcessor processor(argv[2], argv[2]);
+			if (processor.PreProcessPass(fileStream)) {
+
+			}
+		} else {
+			printf("tipo de operacao nao especificada");
+		}
 	}
 
+	fileStream.close();
+	printf("\nPressione enter para fechar");
 	getchar();
 	return 0;
 }
