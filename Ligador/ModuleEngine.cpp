@@ -1,6 +1,7 @@
 #include "ModuleEngine.h"
 #include <fstream>
 #include "MacroAssemblerLibraries.h"
+#include "FileLibrary.h"
 using std::ifstream;
 
 
@@ -48,7 +49,7 @@ void ModuleEngine::SetTableRealocation(string newTable){
 }
 void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	ifstream fp;
-	StringLibrary leitor;
+	FileLibrary leitor;
 	fp.open(this->fileName);
 	vector<string> members;
 	vector<ObjectTable> tableUse, tableDefinition;
@@ -91,7 +92,6 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 		} while (members[0] != string("CODE"));
 	}
 	if (line == string("CODE")) {
-		StringLibrary leitor;
 		members.clear();
 		line = leitor.GetNextLine(fp);
 		StringLibrary::Tokenize(line, " ", members);
