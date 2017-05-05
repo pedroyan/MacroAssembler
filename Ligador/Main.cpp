@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	linker->Merge(argv[argc-1]);
-	getchar();
+//	getchar();
 	return 0;
 }
 
