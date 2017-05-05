@@ -11,7 +11,7 @@ using std::vector;
 using std::istream;
 using std::string;
 
-class ModuleEngine {//Classe que possui todas as informacoes contidas no modulo lido pelo arquivo objeto
+class ModuleEngine {//Possui todas as informacoes contidas no modulo lido pelo arquivo objeto
 public:
 	ModuleEngine(string fileName);
 	void ReadFile();

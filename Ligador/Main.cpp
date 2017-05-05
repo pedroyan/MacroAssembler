@@ -20,15 +20,10 @@ int main(int argc, char *argv[]) {
 	argv[1] = "arquivoTesteA.o";
 	argv[2] = "arquivoTesteB.o";
 	argv[3] = "arquivoTesteA.o";
-	argv[4] = "arquivoTeste.exe";
+	argv[4] = "arquivoTeste.e";
 #else
 	//pega os argumentos da linha de comando em modo release
-	if (argc > 5) {
-		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
-		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
-		return 1;
-	}
-	if (argc < 4) {
+	if (argc > 5 || argc < 4) {
 		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
 		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
 		return 1;
@@ -37,14 +32,14 @@ int main(int argc, char *argv[]) {
 	for (int i = 1; i < argc-1 ; i++) {//confere todos os arquivos .o se estao no formato correto
 		ifstream& fileStream = VerifyFile(argv[i]);
 	}
-	auto linker = new LinkerEngine;
+	auto linker =  LinkerEngine();
 	for (int  i = 1; i < argc-1 ; i++) {//adiciona todos os arquivos ao ligador
-		auto File = new ModuleEngine(argv[i]);
-		linker->AddModule(*File);
+		auto File =  ModuleEngine(argv[i]);
+		linker.AddModule(File);
 	}
 	
-	linker->Merge(argv[argc-1]);
-//	getchar();
+	linker.Merge(argv[argc-1]);
+	getchar();
 	return 0;
 }
 
@@ -72,33 +67,3 @@ ifstream VerifyFile(const char* fileName) {
 
 	return file;
 }
-	
-	
-	
-	/*
-	int pause;
-	string fileA = "arquivoTesteA.o";
-	string fileB = "arquivoTesteB.o";
-
-
-	
-	
-	auto linker = new LinkerEngine;
-	auto mod_A_teste = new ModuleEngine(fileA);
-	linker->AddModule(*mod_A_teste);
-
-
-	auto mod_B_teste = new ModuleEngine(fileB);
-	linker->AddModule(*mod_B_teste);
-
-
-	linker->Merge();
-
-	cin >> pause;
-
-
-
-	return 0;
-}*/
-
-	

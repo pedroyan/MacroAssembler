@@ -21,7 +21,7 @@ void LinkerEngine::AddModule(ModuleEngine  module){
 	
 }
 
-void LinkerEngine::ObtainGlobalDefinition() {//Funcao que obtem a juncao das tabelas de definicao,junto com as correcoes de endereco.Criando a tabela global de definicao.
+void LinkerEngine::ObtainGlobalDefinition() {//  obtem a juncao das tabelas de definicao,junto com as correcoes de endereco.Criando a tabela global de definicao.
 	for (int i = 0; i < numberOfModules; i++) {
 		auto listaDefinicao  = this->listOfModules[i].GetTableDefenition();
 		for (int y = 0; y < listaDefinicao.size(); y++) {
@@ -38,7 +38,7 @@ void LinkerEngine::ObtainGlobalDefinition() {//Funcao que obtem a juncao das tab
 	}
 }
 
-void LinkerEngine::ResolveReferencesCross(){//Funcao em que resolve todas as referencias cruzadas nos codigos objetos
+void LinkerEngine::ResolveReferencesCross(){// Resolve todas as referencias cruzadas nos codigos objetos
 	for (int i = 0; i < numberOfModules; i++) {
 		//guarda a tabela de uso e codigoObjeto de cada modulo
 		auto objectCode = this->listOfModules[i].GetListaObjectCode();
@@ -57,7 +57,7 @@ void LinkerEngine::ResolveReferencesCross(){//Funcao em que resolve todas as ref
 	}
 }
 
-int LinkerEngine::GetVarAdressGlobalTable(string symbol){//Funcao que retorna o valor da tabela de definicao global, retornando assim o valor da variavel inserida.
+int LinkerEngine::GetVarAdressGlobalTable(string symbol){//  retorna o valor da tabela de definicao global, retornando assim o valor da variavel inserida.
 	auto map = this->tableGlobalDefinition.find(symbol);
 	if (map == this->tableGlobalDefinition.end()) {//caso nao encotnre o valor na tabela,o codigo exe nao sera produzido e o terminal ira mostrar a variavel a qual nao possui definicao.
 		printf("Linker error:SIMBOLO NAO DEFINIDO:");
@@ -82,7 +82,7 @@ bool LinkerEngine::AddVarAdressGlobalTable(string nomeVariable, int adress){
 	return true;
 }
 
-void LinkerEngine::ResolveCorrecaoEnderecos(){// Funcao em que corrige os enderecos relativos dos codigos objetos
+void LinkerEngine::ResolveCorrecaoEnderecos(){//  Corrige os enderecos relativos dos codigos objetos
 	for (int i = 1; i < numberOfModules; i++) {
 		auto objectCode = this->listOfModules[i].GetListaObjectCode();
 		auto tableRealocation = this->listOfModules[i].GetTableRealocation();
@@ -97,7 +97,7 @@ void LinkerEngine::ResolveCorrecaoEnderecos(){// Funcao em que corrige os endere
 
 }
 
-void LinkerEngine::Merge(string outputFile) {//funcao que conecta os.o e assim cria o executavel.
+void LinkerEngine::Merge(string outputFile) {//  conecta os.o e assim cria o executavel.
 	fstream outputStream;
 	stringstream outputContent;
 	outputStream.open(outputFile, std::fstream::out);

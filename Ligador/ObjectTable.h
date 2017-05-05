@@ -2,7 +2,7 @@
 #include <string>
 using std::string;
 
-class ObjectTable {//classe das variaveis que ficam em tabelas de uso ou de definicao.
+class ObjectTable {//Variaveis que ficam em tabelas de uso ou de definicao.
 	public:
 		ObjectTable(string variableName,int variableAdress);
 		/// <summary>

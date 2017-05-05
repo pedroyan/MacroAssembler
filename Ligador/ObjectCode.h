@@ -1,5 +1,5 @@
 #pragma once
-class ObjectCode{//classe do codigo objeto
+class ObjectCode{//Classe do codigo objeto
 	public:
 		ObjectCode(int code);
 		int GetCode();
