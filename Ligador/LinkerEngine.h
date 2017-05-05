@@ -21,7 +21,7 @@ public:
 	void ResolveReferencesCross();
 	int GetVarAdressGlobalTable(string symbol);
 	void ResolveCorrecaoEnderecos();
-	void Merge();
+	void Merge(string outputFile);
 private:
 	//string outputCode;
 	vector<ModuleEngine> listOfModules;
@@ -29,6 +29,7 @@ private:
 	int numberOfModules=0;
 	unordered_map<string, int > tableGlobalDefinition;
 	float linkerHaveProblem=false;
+
 
 
 

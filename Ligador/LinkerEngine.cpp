@@ -1,6 +1,7 @@
 #include "LinkerEngine.h"
 #include "ObjectTable.h"
 #include "ObjectCode.h"
+#include <sstream>
 
 LinkerEngine::LinkerEngine(){
 }
@@ -81,7 +82,10 @@ void LinkerEngine::ResolveCorrecaoEnderecos(){
 
 }
 
-void LinkerEngine::Merge() {
+void LinkerEngine::Merge(string outputFile) {
+	fstream outputStream;
+	stringstream outputContent;
+	outputStream.open(outputFile, std::fstream::out);
 	
 	ObtainGlobalDefinition();
 	ResolveReferencesCross();
@@ -92,10 +96,15 @@ void LinkerEngine::Merge() {
 		for (int i = 0; i < numberOfModules; i++) {
 			auto objectCode = this->listOfModules[i].GetListaObjectCode();
 			for (int z = 0; z < objectCode.size(); z++) {
-					printf(" %d", objectCode[z]);
-				
+					printf(" %d", objectCode[z].GetCode());
+					outputContent << objectCode[z].GetCode();
+						outputContent << " ";
+
 			}
+			
 		}
+		outputStream << outputContent.rdbuf();
+		outputStream.close();
 	} else {
 		printf("\n Erros de ligamento encontrados. O arquivo .exe nao foi gerado\n");
 	}

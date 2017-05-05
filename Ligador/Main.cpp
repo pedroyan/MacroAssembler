@@ -17,33 +17,27 @@ ifstream VerifyFile(const char* fileName);
 int main(int argc, char *argv[]) {
 #ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
-	argv[0] = "arquivoTesteA.o";
-	argv[1] = "arquivoTesteB.o";
-	argv[2] = "arquivoTeste.exe";
+	argv[1] = "arquivoTesteA.o";
+	argv[2] = "arquivoTesteB.o";
+	argv[3] = "arquivoTeste.exe";
 #else
 	//pega os argumentos da linha de comando em modo release
-	if (argc < 4) {
-		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
-		printf("cmd>Montador <Arquivo de Entrada1> <Arquivo de Entrada2> <Arquivo de Saida>\n");
-		return 0;
-	}
-	if (argc > 3) {
+	if (argc > 4) {
 		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
 		printf("cmd>Montador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
 		return 0;
 	}
 #endif // DEBUG
-	for (int i = 0; i < 2; i++) {
+	for (int i = 1; i < argc-1 ; i++) {
 		ifstream& fileStream = VerifyFile(argv[i]);
 	}
 	auto linker = new LinkerEngine;
-	for (int  i = 0; i < 2; i++) {
+	for (int  i = 1; i < argc-1 ; i++) {
 		auto File = new ModuleEngine(argv[i]);
 		linker->AddModule(*File);
 	}
-	linker->Merge();
 
-
+	linker->Merge(argv[argc-1]);
 	getchar();
 	return 0;
 }
