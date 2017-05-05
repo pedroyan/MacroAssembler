@@ -4,6 +4,7 @@
 #include <vector>
 using std::string;
 using std::vector;
+using std::istream;
 
 class StringLibrary {
 	public:
@@ -53,4 +54,5 @@ class StringLibrary {
 	/// <param name="s">string a ser analisada</param>
 	/// <returns>Uma flag indiciando se o número é inteiro</returns>
 	static bool IsInteger(string s);
+	string GetNextLine(istream & stream);
 };

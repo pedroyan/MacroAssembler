@@ -15,7 +15,7 @@ class ModuleEngine {//Possui todas as informacoes contidas no modulo lido pelo a
 public:
 	ModuleEngine(string fileName);
 	void ReadFile();
-	string GetNextLine(istream & stream);
+	//string GetNextLine(istream & stream);
 	vector<ObjectCode> GetListaObjectCode();
 	vector<ObjectTable> GetTableUse();
 	vector<ObjectTable> GetTableDefenition();

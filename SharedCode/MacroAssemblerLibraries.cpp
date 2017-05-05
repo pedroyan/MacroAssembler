@@ -60,3 +60,8 @@ bool StringLibrary::IsInteger(string s) {
 
 	return (*p == 0);
 }
+string StringLibrary::GetNextLine(istream & stream) {
+	string formatedLine;
+	std::getline(stream, formatedLine);
+	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
+}

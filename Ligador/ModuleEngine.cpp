@@ -46,17 +46,18 @@ void ModuleEngine::SetTableRealocation(string newTable){
 	this->tableRealocation = data;
 
 }
-void ModuleEngine::ReadFile() { //recebe um ponteiro de arquivos e lê as informações 
+void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	ifstream fp;
+	StringLibrary leitor;
 	fp.open(this->fileName);
 	vector<string> members;
 	vector<ObjectTable> tableUse, tableDefinition;
 	vector<ObjectCode> objectCode;
-	auto line = GetNextLine(fp);
+	auto line = leitor.GetNextLine(fp);
 	if (line == string("TABLE USE")) {
 		do {
 			members.clear();
-			line = GetNextLine(fp);
+			line = leitor.GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
 			if (members[0] != string("TABLE")) {
 				tableUse.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
@@ -69,7 +70,7 @@ void ModuleEngine::ReadFile() { //recebe um ponteiro de arquivos e lê as informa
 	if (line == string("TABLE DEFINITION")) {
 		do {
 			members.clear();
-			line = GetNextLine(fp);
+			line = leitor.GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
 			if (members[0] != string("TABLE")) {
 				tableDefinition.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
@@ -81,7 +82,7 @@ void ModuleEngine::ReadFile() { //recebe um ponteiro de arquivos e lê as informa
 	if (line == string("TABLE REALOCATION")) {
 		do {
 			members.clear();
-			line = GetNextLine(fp);
+			line = leitor.GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
 			if (members[0] != string("CODE")) {
 				 SetTableRealocation(members[0]);
@@ -90,8 +91,9 @@ void ModuleEngine::ReadFile() { //recebe um ponteiro de arquivos e lê as informa
 		} while (members[0] != string("CODE"));
 	}
 	if (line == string("CODE")) {
+		StringLibrary leitor;
 		members.clear();
-		line = GetNextLine(fp);
+		line = leitor.GetNextLine(fp);
 		StringLibrary::Tokenize(line, " ", members);
 		vector<int> codeObject;
 		for (int i = 0; i<members.size(); i++) {
@@ -103,10 +105,4 @@ void ModuleEngine::ReadFile() { //recebe um ponteiro de arquivos e lê as informa
 
 
 
-}
-
-string ModuleEngine::GetNextLine(istream & stream) {
-	string formatedLine;
-	std::getline(stream, formatedLine);
-	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
 }
