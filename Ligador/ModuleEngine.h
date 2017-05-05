@@ -11,9 +11,11 @@ using std::vector;
 using std::istream;
 using std::string;
 
-class ModuleEngine {
+class ModuleEngine {//Classe que possui todas as informacoes contidas no modulo lido pelo arquivo objeto
 public:
 	ModuleEngine(string fileName);
+	void ReadFile();
+	string GetNextLine(istream & stream);
 	vector<ObjectCode> GetListaObjectCode();
 	vector<ObjectTable> GetTableUse();
 	vector<ObjectTable> GetTableDefenition();
@@ -22,8 +24,6 @@ public:
 	void SetTableUse(vector<ObjectTable> newTable);
 	void SetTableDefenition(vector<ObjectTable> newTable);
 	void SetTableRealocation(string newTable);
-	void ReadFile();
-	string GetNextLine(istream & stream);
 
 private:
 	vector<ObjectTable> tableUse;

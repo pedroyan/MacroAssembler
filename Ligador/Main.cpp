@@ -24,19 +24,19 @@ int main(int argc, char *argv[]) {
 	//pega os argumentos da linha de comando em modo release
 	if (argc > 4) {
 		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
-		printf("cmd>Montador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
+		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
 		return 0;
 	}
 #endif // DEBUG
-	for (int i = 1; i < argc-1 ; i++) {
+	for (int i = 1; i < argc-1 ; i++) {//confere todos os arquivos .o se estao no formato correto
 		ifstream& fileStream = VerifyFile(argv[i]);
 	}
 	auto linker = new LinkerEngine;
-	for (int  i = 1; i < argc-1 ; i++) {
+	for (int  i = 1; i < argc-1 ; i++) {//adiciona todos os arquivos ao ligador
 		auto File = new ModuleEngine(argv[i]);
 		linker->AddModule(*File);
 	}
-
+	
 	linker->Merge(argv[argc-1]);
 	getchar();
 	return 0;
