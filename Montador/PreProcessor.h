@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
+#include "ErrorPrinter.h"
 
 using std::unordered_map;
 using std::string;
@@ -64,7 +65,8 @@ class PreProcessor {
 		/// Printa um erro com o nome do arquivo, a linha do erro e a mensagem
 		/// </summary>
 		/// <param name="message">mensagem a ser exibida</param>
-		void printError(string message);
+		/// <param name="type">Tipo do erro</param>
+		void printError(string message, ErrorPrinter::ErrorType type);
 
 		void saveFile();
 		bool failed;
