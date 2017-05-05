@@ -29,8 +29,11 @@ void LinkerEngine::ObtainGlobalDefinition() {//Funcao que obtem a juncao das tab
 				listaDefinicao[y].AddFatorCorrecao(this->listaFatoresCorerrecao[i]);
 			}
 			auto enderecoRelativo = listaDefinicao[y];
-			this->tableGlobalDefinition.emplace(enderecoRelativo.GetVariableName(), enderecoRelativo.GetVariableAdress());
-
+			bool haveAnyProblem = AddVarAdressGlobalTable(enderecoRelativo.GetVariableName(), enderecoRelativo.GetVariableAdress());
+			if (haveAnyProblem) {//identifica erro caso tenha alguma variavel com mais de uma definicao
+				this->linkerHaveProblem = true;
+			}
+			
 		}
 	}
 }
@@ -65,6 +68,18 @@ int LinkerEngine::GetVarAdressGlobalTable(string symbol){//Funcao que retorna o 
 	}
 
 	return map->second;
+}
+
+bool LinkerEngine::AddVarAdressGlobalTable(string nomeVariable, int adress){
+	auto map = this->tableGlobalDefinition.find(nomeVariable);
+	if (map == tableGlobalDefinition.end()) {
+		this->tableGlobalDefinition.emplace(nomeVariable, adress);
+		return false;
+	}
+	printf("ERRO DE LIGACAO: A VARIAVEL ");
+	cout << nomeVariable;
+	printf(" POSSUI MAIS DE UMA DEFINICAO \n");
+	return true;
 }
 
 void LinkerEngine::ResolveCorrecaoEnderecos(){// Funcao em que corrige os enderecos relativos dos codigos objetos
@@ -107,6 +122,9 @@ void LinkerEngine::Merge(string outputFile) {//funcao que conecta os.o e assim c
 		outputStream.close();
 	} else {
 		printf("\n Erros de ligamento encontrados. O arquivo .exe nao foi gerado\n");
+		outputContent << " ";
+		outputStream << outputContent.rdbuf();
+		outputStream.close();
 	}
 }
 

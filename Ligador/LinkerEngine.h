@@ -40,6 +40,13 @@ public:
 	/// <param name="symbol">Entrada da tabela de Uso </param>
 	/// <returns>Valor do endereco relativo</returns>
 	int GetVarAdressGlobalTable(string symbol);
+	/// <summary>
+	/// /// Funcao que adiciona valores na GlobalTable e o ligador adicionar duas variaveis iguais.Resultando em erro de ligacao.
+	/// </summary>
+	/// <param name="nomeVariable">Nome da variavel inserida</param>
+	/// <param name="adress">Valor de seu endereco</param>
+	/// <returns>Retorna se houve algum erro de ligacao.</returns>
+	bool AddVarAdressGlobalTable(string nomeVariable, int adress);
 private:
 	vector<ModuleEngine> listOfModules;
 	vector<int>listaFatoresCorerrecao;

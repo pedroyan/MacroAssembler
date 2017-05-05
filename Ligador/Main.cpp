@@ -19,13 +19,19 @@ int main(int argc, char *argv[]) {
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "arquivoTesteA.o";
 	argv[2] = "arquivoTesteB.o";
-	argv[3] = "arquivoTeste.exe";
+	argv[3] = "arquivoTesteA.o";
+	argv[4] = "arquivoTeste.exe";
 #else
 	//pega os argumentos da linha de comando em modo release
-	if (argc > 4) {
+	if (argc > 5) {
 		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
 		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
-		return 0;
+		return 1;
+	}
+	if (argc < 4) {
+		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
+		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
+		return 1;
 	}
 #endif // DEBUG
 	for (int i = 1; i < argc-1 ; i++) {//confere todos os arquivos .o se estao no formato correto
