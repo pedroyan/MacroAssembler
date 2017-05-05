@@ -114,6 +114,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SharedCode\FileLibrary.cpp" />
     <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp" />
     <ClCompile Include="ErrorPrinter.cpp" />
     <ClCompile Include="Main.cpp" />

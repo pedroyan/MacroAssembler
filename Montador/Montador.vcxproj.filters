@@ -30,6 +30,9 @@
     <ClCompile Include="ErrorPrinter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\SharedCode\FileLibrary.cpp">
+      <Filter>Source Files\Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreProcessor.h">
