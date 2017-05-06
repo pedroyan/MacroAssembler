@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SharedCode\FileLibrary.cpp" />
     <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp" />
     <ClCompile Include="LinkerEngine.cpp" />
     <ClCompile Include="ModuleEngine.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="ObjectTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\SharedCode\FileLibrary.h" />
     <ClInclude Include="LinkerEngine.h" />
     <ClInclude Include="ModuleEngine.h" />
     <ClInclude Include="ObjectCode.h" />

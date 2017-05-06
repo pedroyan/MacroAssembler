@@ -54,5 +54,9 @@ class StringLibrary {
 	/// <param name="s">string a ser analisada</param>
 	/// <returns>Uma flag indiciando se o número é inteiro</returns>
 	static bool IsInteger(string s);
-	//string GetNextLine(istream & stream);
+	/// <summary>
+	/// Compara string a com a string b sem considerar o case da letra
+	/// </summary>
+	/// <returns>True caso as strings sejam iguais</returns>
+	static bool CompareInsensitive(string a, string b);
 };

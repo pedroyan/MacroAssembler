@@ -4,6 +4,7 @@
 
 using std::string;
 using std::ifstream;
+using std::istream;
 
 class FileLibrary {
 	public:
