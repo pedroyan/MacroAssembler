@@ -42,7 +42,7 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		}
 
 		if (preProcessingZone && tokens.size() >1) {
-			preProcessingZone = !(StringLibrary::CompareInsensitive(tokens[0],"section") || (StringLibrary::CompareInsensitive(tokens[0],"begin") || StringLibrary::CompareInsensitive(tokens[1], "begin")));
+			preProcessingZone = !((tokens[0] == "section") || (tokens[0] == "begin" || tokens[1] == "begin"));
 		}
 
 		if (IsEQU(tokens)) {
@@ -148,6 +148,7 @@ string PreProcessor::getNextLine(istream & stream) {
 
 	string formatedLine;
 	std::getline(stream, formatedLine);
+	formatedLine = StringLibrary::ToLower(formatedLine);
 	LexicalScanner::RemoveComments(formatedLine);
 	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
 }
