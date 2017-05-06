@@ -50,11 +50,6 @@ class PreProcessor {
 		bool EvaluateIf(string& line, istream & stream);
 
 		/// <summary>
-		/// Remove os comentarios da linha passada
-		/// </summary>
-		void removeComments(string& line);
-
-		/// <summary>
 		/// Pega a proxima linha da stream, já removendo espaços excessivos
 		/// </summary>
 		/// <param name="stream">stream sendo lida</param>

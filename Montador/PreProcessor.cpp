@@ -1,5 +1,6 @@
 #include "PreProcessor.h"
 #include "MacroAssemblerLibraries.h"
+#include "LexicalScanner.h"
 #include <sstream>
 #include <regex>
 #include <cctype>
@@ -33,7 +34,6 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		writeThisDown = true;
 
 		line = getNextLine(stream);
-		removeComments(line);
 
 		StringLibrary::Tokenize(line, " ",tokens);
 
@@ -142,18 +142,13 @@ bool PreProcessor::EvaluateIf(string & line, istream & stream) {
 	return element->second == 1;
 }
 
-void PreProcessor::removeComments(string & line) {
-	auto index = line.find(';');
-	if (index != string::npos) {
-		line = line.substr(0, index);
-	}
-}
 
 string PreProcessor::getNextLine(istream & stream) {
 	lineCount++;
 
 	string formatedLine;
 	std::getline(stream, formatedLine);
+	LexicalScanner::RemoveComments(formatedLine);
 	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
 }
 
