@@ -15,8 +15,13 @@ int Assembler::GetLine() {
 }
 
 void Assembler::Assemble() {
+	firstPass();
+}
+
+void Assembler::firstPass() {
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
+
 		lineCount++;
 	}
 }

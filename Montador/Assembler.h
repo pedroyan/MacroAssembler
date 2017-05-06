@@ -11,6 +11,7 @@ class Assembler {
 		int GetLine();
 		void Assemble();
 	private:
+		void firstPass();
 
 		LexicalScanner scanner;
 		string outputFileName;

@@ -95,6 +95,7 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 			dto.operacao = tokens[i];
 		}
 	}
+	dto.success = true;
 
 	return dto;
 }
