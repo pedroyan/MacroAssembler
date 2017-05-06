@@ -1,5 +1,5 @@
 #include "Assembler.h"
-
+#include "TableManager.h"
 
 Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	outputFileName = outFileName;
@@ -21,7 +21,7 @@ void Assembler::Assemble() {
 void Assembler::firstPass() {
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
-
+		auto info = TableManager::GetInstruction("sub");
 		lineCount++;
 	}
 }
