@@ -5,7 +5,7 @@
 #include "MacroAssemblerLibraries.h"
 #include "FileLibrary.h"
 #include "PreProcessor.h"
-#include "LexicalScanner.h"
+#include "Assembler.h"
 
 using std::string;
 using std::ifstream;
@@ -39,10 +39,8 @@ int main(int argc, char *argv[]) {
 		} else if (tipoOperacao == "-o") {
 			PreProcessor processor(argv[2], argv[3]);
 			if (processor.PreProcessPass(fileStream)) {
-				LexicalScanner scanner(argv[3]);
-				while (scanner.CanRead()) {
-					auto oi = scanner.GetNextTokens();
-				}				
+				Assembler assembler(argv[3]);
+				assembler.Assemble();
 			}
 		} else {
 			printf("tipo de operacao nao especificada");

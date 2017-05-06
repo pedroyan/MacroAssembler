@@ -67,7 +67,7 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		return false;
 	} 
 		
-	printf("arquivo %s.pre gerado com sucesso", outputFileName.c_str());
+	printf("arquivo %s.pre gerado com sucesso\n", outputFileName.c_str());
 	saveFile();
 	return true;
 }
