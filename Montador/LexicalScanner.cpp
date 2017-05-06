@@ -105,7 +105,7 @@ void LexicalScanner::LexicalError(string message) {
 }
 
 bool LexicalScanner::validateToken(string token) {
-	regex rgx("([a-zA-Z0-9_\\:]+)");
+	regex rgx("([a-zA-Z0-9,_\\:]+)");
 	bool match = std::regex_match(token, rgx);
 	return token.size() <= 50 && match && !isdigit(token[0]);
 }
