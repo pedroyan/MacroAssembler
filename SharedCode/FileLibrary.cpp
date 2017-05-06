@@ -20,3 +20,10 @@ bool FileLibrary::VerifyFile(const char * fileName, const char * extension, cons
 
 	return true;
 }
+
+string FileLibrary::GetNextLine(istream & stream){
+	string formatedLine;
+	std::getline(stream, formatedLine);
+	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
+	
+}

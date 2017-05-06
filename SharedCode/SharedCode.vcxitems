@@ -14,9 +14,11 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)FileLibrary.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MacroAssemblerLibraries.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)FileLibrary.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)MacroAssemblerLibraries.h" />
   </ItemGroup>
 </Project>

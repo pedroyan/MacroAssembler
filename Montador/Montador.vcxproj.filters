@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Assembler">
       <UniqueIdentifier>{daa84a85-cb29-4072-83b1-0bd69747427d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shared">
+      <UniqueIdentifier>{755929bc-0622-43ff-8f27-4cee55f8ece3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -24,11 +27,14 @@
     <ClCompile Include="PreProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ErrorPrinter.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LexicalScanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp">
+      <Filter>Source Files\Shared</Filter>
     </ClCompile>
     <ClCompile Include="..\SharedCode\FileLibrary.cpp">
       <Filter>Source Files\Shared</Filter>
@@ -39,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ErrorPrinter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LexicalScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
