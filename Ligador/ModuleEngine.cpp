@@ -55,43 +55,43 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	vector<ObjectTable> tableUse, tableDefinition;
 	vector<ObjectCode> objectCode;
 	auto line = leitor.GetNextLine(fp);
-	if (line == string("TABLE USE")) {
+	if (StringLibrary::ToLower(line) == string("table use")) {
 		do {
 			members.clear();
 			line = leitor.GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
-			if (members[0] != string("TABLE")) {
+			if (StringLibrary::ToLower(members[0]) != string("table")) {
 				tableUse.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
 			}
 
 
-		} while (members[0] != string("TABLE"));
+		} while (StringLibrary::ToLower(members[0]) != string("table"));
 		 SetTableUse(tableUse);
 	}
-	if (line == string("TABLE DEFINITION")) {
+	if (StringLibrary::ToLower(line) == string("table definition")) {
 		do {
 			members.clear();
 			line = leitor.GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
-			if (members[0] != string("TABLE")) {
+			if (StringLibrary::ToLower(members[0]) != string("table")) {
 				tableDefinition.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
 			}
 
-		} while (members[0] != string("TABLE"));
+		} while (StringLibrary::ToLower(members[0]) != string("table"));
 		 SetTableDefenition(tableDefinition);
 	}
-	if (line == string("TABLE REALOCATION")) {
+	if (StringLibrary::ToLower(line) == string("table realocation")) {
 		do {
 			members.clear();
 			line = leitor.GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
-			if (members[0] != string("CODE")) {
+			if (StringLibrary::ToLower(members[0]) != string("code")) {
 				 SetTableRealocation(members[0]);
 			}
 
-		} while (members[0] != string("CODE"));
+		} while (StringLibrary::ToLower(members[0]) != string("code"));
 	}
-	if (line == string("CODE")) {
+	if (StringLibrary::ToLower(line) == string("code")) {
 		members.clear();
 		line = leitor.GetNextLine(fp);
 		StringLibrary::Tokenize(line, " ", members);

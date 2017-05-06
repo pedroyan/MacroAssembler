@@ -107,11 +107,9 @@ void LinkerEngine::Merge(string outputFile) {//  conecta os.o e assim cria o exe
 	ResolveCorrecaoEnderecos();
 
 	if (!this->linkerHaveProblem) {//cria o executavel apenas se nao houver problemas no processo de ligacao do codigo
-		printf("MERGED CODE :");
 		for (int i = 0; i < numberOfModules; i++) {
 			auto objectCode = this->listOfModules[i].GetListaObjectCode();
 			for (int z = 0; z < objectCode.size(); z++) {
-					printf(" %d", objectCode[z].GetCode());
 					outputContent << objectCode[z].GetCode();
 						outputContent << " ";
 
@@ -120,11 +118,10 @@ void LinkerEngine::Merge(string outputFile) {//  conecta os.o e assim cria o exe
 		}
 		outputStream << outputContent.rdbuf();
 		outputStream.close();
+		cout << outputFile;
+		cout << " is created successfully";
 	} else {
-		printf("\n Erros de ligamento encontrados. O arquivo .exe nao foi gerado\n");
-		outputContent << " ";
-		outputStream << outputContent.rdbuf();
-		outputStream.close();
+		printf("\n Erros de ligamento encontrados. O arquivo .e nao foi gerado ou atualizado \n");
 	}
 }
 

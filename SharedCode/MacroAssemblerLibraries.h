@@ -32,7 +32,7 @@ class StringLibrary {
 	static string RemoveExcessiveSpaces(string original);
 
 	/// <summary>
-	/// Divide a string pelo delimitador passado.
+	/// Divide a string pelos delimitadores passados.
 	/// 
 	/// Implementada originalmente em: http://ysonggit.github.io/coding/2014/12/16/split-a-string-using-c.html
 	/// </summary>
