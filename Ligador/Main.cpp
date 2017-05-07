@@ -20,13 +20,13 @@ int main(int argc, char *argv[]) {
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "arquivoTesteA.o";
 	argv[2] = "arquivoTesteB.o";
-	argv[3] = "arquivoTesteA.o";
-	argv[4] = "arquivoTeste.e";
+	argv[3] = "arquivoTeste.e";
+	argc = 4;
 #else
 	//pega os argumentos da linha de comando em modo release
 	if (argc > 5 || argc < 4) {
-		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
-		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
+		printf("Selecione entre 2 e 3 arquivos objetos e a saida\n");
+		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2> (<Arquivo de Entrada3> opcional) <Arquivo de Saida>\n");
 		return 1;
 	}
 #endif // DEBUG
@@ -44,6 +44,6 @@ int main(int argc, char *argv[]) {
 	}
 	
 	linker.Merge(argv[argc-1]);
-	//getchar();
+	getchar();
 	return 0;
 }
