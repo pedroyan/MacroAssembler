@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "arquivoTesteA.o";
 	argv[2] = "arquivoTesteB.o";
-	argv[3] = "arquivoTesteA.o";
-	argv[4] = "arquivoTeste.e";
+	argv[3] = "arquivoTeste.e";
+	argc = 4;
 #else
 	//pega os argumentos da linha de comando em modo release
 	if (argc > 5 || argc < 4) {
@@ -44,6 +44,6 @@ int main(int argc, char *argv[]) {
 	}
 	
 	linker.Merge(argv[argc-1]);
-	//getchar();
+	getchar();
 	return 0;
 }
