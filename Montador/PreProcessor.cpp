@@ -56,7 +56,12 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		line = StringLibrary::Trim(line);
 
 		if (writeThisDown && line != "") {
-			outputContent << line + "\n";
+			if (outputContent.rdbuf() -> in_avail() == 0) {
+				outputContent << line;
+			} else {
+				outputContent << "\n" + line;
+			}
+			
 		}
 	}
 
