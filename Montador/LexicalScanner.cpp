@@ -96,7 +96,9 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 			dto.Operacao = tokens[i];
 		}
 	}
-
+	if (dto.Operacao == "") {
+		throw std::runtime_error("A linha não possui nenhuma operacao");
+	}
 	return dto;
 }
 

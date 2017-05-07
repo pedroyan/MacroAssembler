@@ -23,7 +23,7 @@ void Assembler::Assemble() {
 void Assembler::firstPass() {
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
-		if (dto.Rotulo == "" && dto.Operacao=="") {
+		if (dto.Operacao=="") {
 			if (!dto.Done) {
 				successAssemble = false;
 			}
