@@ -2,11 +2,11 @@
 
 
 unordered_map<string, InstructionInfo> TableManager::InstructionTable{
-	{"add", {1,1} },
-	{"sub", {1,2} },
-	{"mult",{1,3} },
-	{"div", {1,4} },
-	{"jmp", {1,5} },
+	{"add", {1,1}},
+	{"sub", {1,2}},
+	{"mult",{1,3}},
+	{"div", {1,4}},
+	{"jmp", {1,5}},
 	{"jmpn", {1,6}},
 	{"jmpp", {1,7}},
 	{"jmpz", {1,8}},
