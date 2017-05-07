@@ -11,7 +11,7 @@ class Assembler {
 		~Assembler();
 
 		int GetLine();
-		int ExecuteDirective(string directiveName, DirectiveInfo const * info,vector<string>& const operands);
+		int ExecuteDirective(string directiveName, DirectiveInfo const * info,vector<string> operands);
 		void Assemble();
 	private:
 		void firstPass();
@@ -32,5 +32,6 @@ class Assembler {
 
 		void ShowError(string message, ErrorType type);
 		int ExecuteSection(vector<string> operands);
+		bool TryStringToInt(string s, int* result);
 };
 

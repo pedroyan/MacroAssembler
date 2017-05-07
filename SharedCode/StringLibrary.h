@@ -61,6 +61,14 @@ class StringLibrary {
 	/// <param name="s">string a ser analisada</param>
 	/// <returns>flag indicando se a string possui um numero hexadecimal</returns>
 	static bool IsHexadecimal(string s);
+
+	/// <summary>
+	/// Converte uma string hexadecimal para um inteiro
+	/// </summary>
+	/// <param name="s">string a ser convertida</param>
+	/// <returns>o inteiro convertido</returns>
+	static int ConvertHexaToInt(string s);
+
 	/// <summary>
 	/// Compara string a com a string b sem considerar o case da letra
 	/// </summary>

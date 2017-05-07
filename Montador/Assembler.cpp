@@ -17,10 +17,32 @@ int Assembler::GetLine() {
 	return lineCount;
 }
 
-int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info, vector<string>& const operands) {
+int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info, vector<string> operands) {
 	int positionSkip = 0;
+	int opsize = operands.size();
+
+	if ((info->operandCount != -1 && info->operandCount != opsize) || (info->operandCount == -1 && opsize != 0 && opsize != 1)) {
+		ShowError("Diretiva invalida: Quantidade de operandos errada.",Syntatic);
+		return 0;
+	}
+
 	if (directiveName  == "section") {
 		positionSkip = ExecuteSection(operands);
+	} else if (directiveName == "space") {
+		if (opsize == 0) {
+			positionSkip = 1;
+		} else {
+			auto argument = operands[0];
+			int toReturn;
+
+			if (TryStringToInt(argument, &toReturn)) {
+				return toReturn;
+			} else {
+				ShowError("Operando Invalido:" + argument, Syntatic);
+			}
+		}
+	} else {
+		positionSkip = info->size;
 	}
 	return positionSkip;
 }
@@ -94,4 +116,16 @@ int Assembler::ExecuteSection(vector<string> operands) {
 		ShowError("Diretiva Invalida: SECTION nao indentificada.", Syntatic);
 	}
 	return 0;
+}
+
+bool Assembler::TryStringToInt(string s, int* result) {
+	if (StringLibrary::IsInteger(s)) {
+		*result = std::stoi(s, nullptr);
+		return true;
+	} else if (StringLibrary::IsHexadecimal(s)) {
+		*result = StringLibrary::ConvertHexaToInt(s);
+		return true;
+	} else {
+		return false;
+	}
 }
