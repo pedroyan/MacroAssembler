@@ -1,5 +1,8 @@
 #include "TableManager.h"
+#include <vector>
+#include <algorithm>
 
+using std::vector;
 
 unordered_map<string, InstructionInfo> TableManager::InstructionTable{
 	{"add", {1,1}},
@@ -61,11 +64,27 @@ void TableManager::InsertSymbol(string symbolName, SymbolInfo info) {
 	SymbolTable.insert(std::make_pair(symbolName, info));
 }
 
+struct Symbol {
+	string name;
+	SymbolInfo info;
+};
+bool sortByValor(const Symbol &lhs, const Symbol &rhs) { return lhs.info.vlr < rhs.info.vlr; }
+//bool sortByName(const Person &lhs, const Person &rhs) { return lhs.name < rhs.name; }
+
 void TableManager::Diagnostic_PrintSymbols() {
+	vector<Symbol> vec;
+	for (auto& x : SymbolTable) {
+		vec.push_back({x.first,x.second});
+	}
+	std::sort(vec.begin(), vec.end(), sortByValor);
+
 	printf("\n---------DIAGNOSTIC SYMBOL TABLE -----------\n");
 	printf("Simb\tValor\textern");
-	for (auto it = SymbolTable.begin(); it != SymbolTable.end(); it++) {
-		printf("\n%s\t%d\t%d",it->first.c_str(),it->second.vlr,it->second.externo);
+
+	
+
+	for (auto symbol : vec) {
+		printf("\n%s\t%d\t%d",symbol.name.c_str(),symbol.info.vlr,symbol.info.externo);
 	}
 	printf("\n ----------------------------------------- \n");
 }
