@@ -1,5 +1,6 @@
 #include "Assembler.h"
 #include "TableManager.h"
+#include "ErrorPrinter.h"
 
 Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	outputFileName = outFileName;
@@ -28,8 +29,16 @@ void Assembler::firstPass() {
 			}
 			continue;
 		}
+		
+		if (dto.Rotulo != "") {
+			auto symbol = TableManager::GetSymbol(dto.Rotulo);
+			if (symbol != -1) {
+				ErrorPrinter::ShowError(ErrorPrinter::ErrorType::Syntatic, outputFileName, lineCount, "Simbolo " + dto.Rotulo + "redefinido");
+			} else {
+				TableManager::InsertSymbol(dto.Rotulo, positionCount);
+			}
+		}
 
-		auto info = TableManager::GetInstruction("sub");
 		lineCount++;
 	}
 }

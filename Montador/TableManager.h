@@ -30,8 +30,23 @@ class TableManager {
 		/// <param name="name">Nome da instrucao</param>
 		/// <returns>As informacoes da instrucao caso ela seja encontrada. Null caso contrario</returns>
 		static InstructionInfo* GetInstruction(string name);
+
+		/// <summary>
+		/// Busca a posicao de um símbolo. Retorna -1 caso o simbolo não tenha sido encontrado
+		/// </summary>
+		/// <param name="symbol">simobolo procurado</param>
+		/// <returns>posicao de um símbolo</returns>
+		static int GetSymbol(string symbol);
+
+		/// <summary>
+		/// Insere um simbolo na tabela de simbolos
+		/// </summary>
+		/// <param name="symbol">string que representa o simbolo</param>
+		/// <param name="position">posição do simbolo</param>
+		static void InsertSymbol(string symbol, int position);
 	private:
 		static unordered_map<string, InstructionInfo> InstructionTable;
 		static unordered_map<string, DirectiveInfo> DirectiveTable;
+		static unordered_map<string, int> SymbolTable;
 };
 
