@@ -12,14 +12,14 @@ struct InstructionInfo {
 
 struct DirectiveInfo {
 	/// <summary>
-	/// -1 significa tamanho variável
-	/// </summary>
-	int size;
-
-	/// <summary>
 	/// -1 significa 0 ou 1;
 	/// </summary>
 	int operandCount;
+
+	/// <summary>
+	/// -1 significa tamanho variável
+	/// </summary>
+	int size;
 };
 
 class TableManager {
