@@ -28,7 +28,7 @@ unordered_map<string, DirectiveInfo> TableManager::DirectiveTable{
 	{"end", {0,0}}
 };
 
-unordered_map<string, int> TableManager::SymbolTable;
+unordered_map<string, SymbolInfo> TableManager::SymbolTable;
 
 InstructionInfo const * TableManager::GetInstruction(string name) {
 	auto iterator = InstructionTable.find(name);
@@ -48,15 +48,15 @@ DirectiveInfo const * TableManager::GetDirective(string directive) {
 	}
 }
 
-int TableManager::GetSymbol(string symbol) {
+SymbolInfo* TableManager::GetSymbol(string symbol) {
 	auto iterator = SymbolTable.find(symbol);
 	if (iterator == SymbolTable.end()) {
-		return -1;
+		return nullptr;
 	} else {
-		return iterator->second;
+		return &iterator->second;
 	}
 }
 
-void TableManager::InsertSymbol(string symbol, int position) {
-	SymbolTable.insert(std::make_pair(symbol, position));
+void TableManager::InsertSymbol(string symbolName, SymbolInfo info) {
+	SymbolTable.insert(std::make_pair(symbolName, info));
 }

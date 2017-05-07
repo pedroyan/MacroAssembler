@@ -36,10 +36,10 @@ void Assembler::firstPass() {
 		
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
-			if (symbol != -1) {
+			if (symbol != nullptr) {
 				ErrorPrinter::ShowError(ErrorType::Syntatic, outputFileName, lineCount, "Simbolo " + dto.Rotulo + "redefinido");
 			} else {
-				TableManager::InsertSymbol(dto.Rotulo, positionCount);
+				TableManager::InsertSymbol(dto.Rotulo,SymbolInfo(positionCount,false));
 			}
 		}
 

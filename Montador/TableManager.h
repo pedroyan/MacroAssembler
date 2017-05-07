@@ -22,6 +22,12 @@ struct DirectiveInfo {
 	int size;
 };
 
+struct SymbolInfo {
+	int vlr;
+	bool externo;
+	SymbolInfo(int valor, bool ext) : vlr(valor), externo(ext) {};
+};
+
 class TableManager {
 	public:
 		/// <summary>
@@ -39,21 +45,21 @@ class TableManager {
 		static DirectiveInfo const * GetDirective(string directive);
 
 		/// <summary>
-		/// Busca a posicao de um símbolo. Retorna -1 caso o simbolo não tenha sido encontrado
+		/// Busca as informacoes de um símbolo. Retorna null caso o simbolo não tenha sido encontrado
 		/// </summary>
 		/// <param name="symbol">simobolo procurado</param>
-		/// <returns>posicao de um símbolo</returns>
-		static int GetSymbol(string symbol);
+		/// <returns>informacoes de um símbolo</returns>
+		static SymbolInfo* GetSymbol(string symbol);
 
 		/// <summary>
 		/// Insere um simbolo na tabela de simbolos
 		/// </summary>
-		/// <param name="symbol">string que representa o simbolo</param>
-		/// <param name="position">posição do simbolo</param>
-		static void InsertSymbol(string symbol, int position);
+		/// <param name="symbolName">string que representa o simbolo</param>
+		/// <param name="info">informacoes do simbolo</param>
+		static void InsertSymbol(string symbolName, SymbolInfo info);
 	private:
 		static unordered_map<string, InstructionInfo> InstructionTable;
 		static unordered_map<string, DirectiveInfo> DirectiveTable;
-		static unordered_map<string, int> SymbolTable;
+		static unordered_map<string, SymbolInfo> SymbolTable;
 };
 
