@@ -14,6 +14,7 @@ LexicalScanner::LexicalScanner(string preFileName, Assembler* ass) {
 	assembler = ass;
 	fileName = preFileName;
 	FileLibrary::VerifyFile(preFileName.c_str(), "pre", "O scanner lexico aceita somente arquivos .pre", &file);
+	SuppressErrors = false;
 }
 
 LexicalScanner::~LexicalScanner() {
@@ -43,7 +44,9 @@ TokensDTO LexicalScanner::GetNextTokens() {
 		toReturn = organizeTokens(tokens);
 
 	} catch (const std::runtime_error& ex) {
-		LexicalError(ex.what());
+		if (!SuppressErrors) {
+			LexicalError(ex.what());
+		}
 	}
 
 	return toReturn;
@@ -100,7 +103,7 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 }
 
 void LexicalScanner::LexicalError(string message) {
-	ErrorPrinter::ShowError(ErrorPrinter::ErrorType::Lexic, fileName, assembler->GetLine(), message);
+	ErrorPrinter::ShowError(ErrorType::Lexic, fileName, assembler->GetLine(), message);
 }
 
 bool LexicalScanner::validateToken(string token) {

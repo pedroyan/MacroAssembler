@@ -1,5 +1,4 @@
 #include "Assembler.h"
-#include "TableManager.h"
 #include "ErrorPrinter.h"
 
 Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
@@ -14,6 +13,10 @@ Assembler::~Assembler() {
 
 int Assembler::GetLine() {
 	return lineCount;
+}
+
+int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info) {
+	return 0;
 }
 
 void Assembler::Assemble() {
@@ -34,9 +37,21 @@ void Assembler::firstPass() {
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
 			if (symbol != -1) {
-				ErrorPrinter::ShowError(ErrorPrinter::ErrorType::Syntatic, outputFileName, lineCount, "Simbolo " + dto.Rotulo + "redefinido");
+				ErrorPrinter::ShowError(ErrorType::Syntatic, outputFileName, lineCount, "Simbolo " + dto.Rotulo + "redefinido");
 			} else {
 				TableManager::InsertSymbol(dto.Rotulo, positionCount);
+			}
+		}
+
+		auto instruction = TableManager::GetInstruction(dto.Operacao);
+		if (instruction != nullptr) {
+			positionCount += instruction->operandCount + 1;
+		} else {
+			auto directive = TableManager::GetDirective(dto.Operacao);
+			if (directive != nullptr) {
+				positionCount += ExecuteDirective(dto.Operacao, directive); // IMPLEMENTAR
+			} else {
+				ErrorPrinter::ShowError(ErrorType::Syntatic, outputFileName, lineCount, "Operacao" + dto.Operacao + "nao identificada");
 			}
 		}
 

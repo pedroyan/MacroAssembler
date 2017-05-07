@@ -30,9 +30,18 @@ unordered_map<string, DirectiveInfo> TableManager::DirectiveTable{
 
 unordered_map<string, int> TableManager::SymbolTable;
 
-InstructionInfo * TableManager::GetInstruction(string name) {
+InstructionInfo const * TableManager::GetInstruction(string name) {
 	auto iterator = InstructionTable.find(name);
 	if (iterator == InstructionTable.end()) {
+		return nullptr;
+	} else {
+		return &iterator->second;
+	}
+}
+
+DirectiveInfo const * TableManager::GetDirective(string directive) {
+	auto iterator = DirectiveTable.find(directive);
+	if (iterator == DirectiveTable.end()) {
 		return nullptr;
 	} else {
 		return &iterator->second;

@@ -65,6 +65,8 @@ class LexicalScanner {
 		/// Remove os comentarios da linha passada
 		/// </summary>
 		static void RemoveComments(string & line);
+
+		bool SuppressErrors;
 	private:
 		ifstream file;
 		string getNextLine();

@@ -1,6 +1,8 @@
 #pragma once
 #include<string>
 #include"LexicalScanner.h"
+#include "TableManager.h"
+
 using std::string;
 
 class Assembler {
@@ -9,6 +11,7 @@ class Assembler {
 		~Assembler();
 
 		int GetLine();
+		int ExecuteDirective(string directiveName, DirectiveInfo const * info);
 		void Assemble();
 	private:
 		void firstPass();

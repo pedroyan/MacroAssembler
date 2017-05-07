@@ -25,11 +25,18 @@ struct DirectiveInfo {
 class TableManager {
 	public:
 		/// <summary>
-		/// Busca as informações de uma instrucao
+		/// Busca as informações de uma instrucao. Retorna Null caso não seja encontrada
 		/// </summary>
 		/// <param name="name">Nome da instrucao</param>
-		/// <returns>As informacoes da instrucao caso ela seja encontrada. Null caso contrario</returns>
-		static InstructionInfo* GetInstruction(string name);
+		/// <returns>As informacoes da instrucao caso ela seja encontrada.</returns>
+		static InstructionInfo const * GetInstruction(string name);
+
+		/// <summary>
+		/// Busca as informações de uma diretiva. Retorna Null caso não seja encontrada
+		/// </summary>
+		/// <param name="directive">Nome da diretiva</param>
+		/// <returns>Informações da diretiva</returns>
+		static DirectiveInfo const * GetDirective(string directive);
 
 		/// <summary>
 		/// Busca a posicao de um símbolo. Retorna -1 caso o simbolo não tenha sido encontrado

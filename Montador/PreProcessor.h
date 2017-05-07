@@ -61,7 +61,7 @@ class PreProcessor {
 		/// </summary>
 		/// <param name="message">mensagem a ser exibida</param>
 		/// <param name="type">Tipo do erro</param>
-		void printError(string message, ErrorPrinter::ErrorType type);
+		void printError(string message, ErrorType type);
 
 		void saveFile();
 		bool failed;
