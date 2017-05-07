@@ -22,8 +22,6 @@ unordered_map<string, DirectiveInfo> TableManager::DirectiveTable{
 	{"section", {1,0}},
 	{"space", {-1,-1}},
 	{"const" , {1,1}},
-	{"equ", {1,0}},
-	{"if", {1,0}},
 	{"public", {1,0}},
 	{"extern", {0,0}},
 	{"begin", {0,0}},
