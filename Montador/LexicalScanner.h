@@ -16,9 +16,9 @@ class TokensDTO {
 		TokensDTO();
 
 		/// <summary>
-		/// flag indicando o sucesso da Operacao
+		/// flag indicando se a linha é vazia
 		/// </summary>
-		bool Done;
+		bool isEmpty;
 
 		/// <summary>
 		/// rótulo, se houver

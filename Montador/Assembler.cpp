@@ -24,9 +24,10 @@ void Assembler::firstPass() {
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
 		if (dto.Operacao=="") {
-			if (!dto.Done) {
+			if (!dto.isEmpty) {
 				successAssemble = false;
 			}
+			lineCount++;
 			continue;
 		}
 		

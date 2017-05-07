@@ -31,12 +31,9 @@ TokensDTO LexicalScanner::GetNextTokens() {
 	TokensDTO toReturn;
 
 	string line = getNextLine();
-	while (line == "" && file.good()) {
-		line = getNextLine();
-	}
 
 	if (line == "") {
-		toReturn.Done = true;
+		toReturn.isEmpty = true;
 		return toReturn;
 	}
 
@@ -113,7 +110,7 @@ bool LexicalScanner::validateToken(string token) {
 }
 
 TokensDTO::TokensDTO() {
-	Done = false;
+	isEmpty = false;
 	Rotulo = "";
 	Operacao = "";
 }
