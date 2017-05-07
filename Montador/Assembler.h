@@ -11,7 +11,7 @@ class Assembler {
 		~Assembler();
 
 		int GetLine();
-		int ExecuteDirective(string directiveName, DirectiveInfo const * info);
+		int ExecuteDirective(string directiveName, DirectiveInfo const * info,vector<string>& const operands);
 		void Assemble();
 	private:
 		void firstPass();
@@ -22,5 +22,15 @@ class Assembler {
 		int positionCount;
 		int lineCount;
 		bool successAssemble;
+		unsigned char sectionFlags;
+		enum SectionFlags {
+			None = 0,
+			Text = 1,
+			Data = 2
+		};
+
+
+		void ShowError(string message, ErrorType type);
+		int ExecuteSection(vector<string> operands);
 };
 

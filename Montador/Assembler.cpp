@@ -6,6 +6,7 @@ Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	positionCount = 0;
 	lineCount = 1;
 	successAssemble = true;
+	sectionFlags = None;
 }
 
 Assembler::~Assembler() {
@@ -15,8 +16,12 @@ int Assembler::GetLine() {
 	return lineCount;
 }
 
-int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info) {
-	return 0;
+int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info, vector<string>& const operands) {
+	int positionSkip = 0;
+	if (directiveName  == "section") {
+		positionSkip = ExecuteSection(operands);
+	}
+	return positionSkip;
 }
 
 void Assembler::Assemble() {
@@ -37,9 +42,9 @@ void Assembler::firstPass() {
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
 			if (symbol != nullptr) {
-				ErrorPrinter::ShowError(ErrorType::Syntatic, outputFileName, lineCount, "Simbolo " + dto.Rotulo + "redefinido");
+				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Syntatic);
 			} else {
-				TableManager::InsertSymbol(dto.Rotulo,SymbolInfo(positionCount,false));
+				TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount,false));
 			}
 		}
 
@@ -49,12 +54,43 @@ void Assembler::firstPass() {
 		} else {
 			auto directive = TableManager::GetDirective(dto.Operacao);
 			if (directive != nullptr) {
-				positionCount += ExecuteDirective(dto.Operacao, directive); // IMPLEMENTAR
+				positionCount += ExecuteDirective(dto.Operacao, directive,dto.Operandos); // IMPLEMENTAR
 			} else {
-				ErrorPrinter::ShowError(ErrorType::Syntatic, outputFileName, lineCount, "Operacao" + dto.Operacao + "nao identificada");
+				ShowError("Operacao" + dto.Operacao + "nao identificada", ErrorType::Syntatic);
 			}
 		}
-
 		lineCount++;
 	}
+	TableManager::Diagnostic_PrintSymbols();
+}
+
+void Assembler::ShowError(string message, ErrorType type) {
+	successAssemble = false;
+	ErrorPrinter::ShowError(type, scanner.GetFileName(), lineCount, message);
+}
+
+int Assembler::ExecuteSection(vector<string> operands) {
+	if (operands[0] == "text") {
+		if (sectionFlags & Text) {
+			ShowError("SECTION TEXT ja definida", ErrorType::Syntatic);
+			return 0;
+		}
+		sectionFlags = Text;
+	} else if (operands[0] == "data") {
+
+		if (sectionFlags & Data) {
+			ShowError("SECTION DATA ja definida", ErrorType::Syntatic);
+			return 0;
+		}
+
+		if (!(sectionFlags & Text)) {
+			ShowError("SECTION DATA definida antes de SECTION TEXT", ErrorType::Syntatic);
+			return 0;
+		}
+
+		sectionFlags = sectionFlags | Data;
+	} else {
+		ShowError("Diretiva Invalida: SECTION nao indentificada.", Syntatic);
+	}
+	return 0;
 }

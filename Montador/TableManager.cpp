@@ -60,3 +60,14 @@ SymbolInfo* TableManager::GetSymbol(string symbol) {
 void TableManager::InsertSymbol(string symbolName, SymbolInfo info) {
 	SymbolTable.insert(std::make_pair(symbolName, info));
 }
+
+void TableManager::Diagnostic_PrintSymbols() {
+	printf("\n---------DIAGNOSTIC SYMBOL TABLE -----------\n");
+	printf("Simb\tValor\textern");
+	for (auto it = SymbolTable.begin(); it != SymbolTable.end(); it++) {
+		printf("\n%s\t%d\t%d",it->first.c_str(),it->second.vlr,it->second.externo);
+	}
+	printf("\n ----------------------------------------- \n");
+}
+
+

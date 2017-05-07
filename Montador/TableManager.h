@@ -57,6 +57,11 @@ class TableManager {
 		/// <param name="symbolName">string que representa o simbolo</param>
 		/// <param name="info">informacoes do simbolo</param>
 		static void InsertSymbol(string symbolName, SymbolInfo info);
+
+		/// <summary>
+		/// Imprime os simbolos na tabela de simbolos
+		/// </summary>
+		static void Diagnostic_PrintSymbols();
 	private:
 		static unordered_map<string, InstructionInfo> InstructionTable;
 		static unordered_map<string, DirectiveInfo> DirectiveTable;
