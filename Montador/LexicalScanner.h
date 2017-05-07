@@ -16,23 +16,23 @@ class TokensDTO {
 		TokensDTO();
 
 		/// <summary>
-		/// flag indicando o sucesso da operacao
+		/// flag indicando o sucesso da Operacao
 		/// </summary>
-		bool success;
+		bool Done;
 
 		/// <summary>
 		/// rótulo, se houver
 		/// </summary>
-		string rotulo;
+		string Rotulo;
 		/// <summary>
 		/// pode ser diretiva ou instrucao
 		/// </summary>
-		string operacao;
+		string Operacao;
 
 		/// <summary>
-		/// operandos da operacao
+		/// Operandos da Operacao
 		/// </summary>
-		vector<string> operandos;
+		vector<string> Operandos;
 };
 
 class LexicalScanner {

@@ -18,5 +18,6 @@ class Assembler {
 
 		int positionCount;
 		int lineCount;
+		bool successAssemble;
 };
 

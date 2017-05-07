@@ -36,7 +36,8 @@ TokensDTO LexicalScanner::GetNextTokens() {
 	}
 
 	if (line == "") {
-		return toReturn; //Já inicializado com o valor success = false
+		toReturn.Done = true;
+		return toReturn;
 	}
 
 	try {
@@ -74,28 +75,27 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 		if (labelIndex != string::npos) { //valida a label, caso seja uma
 			auto replaced = firstToken.replace(labelIndex, 1, "");
 			if (replaced != "") {
-				dto.rotulo = replaced;
+				dto.Rotulo = replaced;
 			} else {
 				throw std::runtime_error("Token " + firstToken + " invalido");
 			}
 		} else {
-			dto.operacao = firstToken;
+			dto.Operacao = firstToken;
 		}
 	} else {
 		throw std::runtime_error("Token " + firstToken + " invalido");
 	}
 
 	for (size_t i = 1; i < tokens.size(); i++) {
-		if (dto.operacao != "") {
-			dto.operandos.push_back(tokens[i]);
+		if (dto.Operacao != "") {
+			StringLibrary::Tokenize(tokens[i], ",", dto.Operandos);
 		} else {
 			if (tokens[i].find(':') != string::npos) {
 				throw std::runtime_error("Duas labels na mesma linha");
 			}
-			dto.operacao = tokens[i];
+			dto.Operacao = tokens[i];
 		}
 	}
-	dto.success = true;
 
 	return dto;
 }
@@ -111,7 +111,7 @@ bool LexicalScanner::validateToken(string token) {
 }
 
 TokensDTO::TokensDTO() {
-	success = false;
-	rotulo = "";
-	operacao = "";
+	Done = false;
+	Rotulo = "";
+	Operacao = "";
 }
