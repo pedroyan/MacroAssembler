@@ -1,6 +1,6 @@
 #include "LexicalScanner.h"
 #include "FileLibrary.h"
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include "Assembler.h"
 #include <regex>
 

@@ -1,4 +1,4 @@
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include <regex>
 
 using std::regex;
@@ -59,6 +59,10 @@ bool StringLibrary::IsInteger(string s) {
 	strtol(s.c_str(), &p, 10);
 
 	return (*p == 0);
+}
+bool StringLibrary::IsHexadecimal(string s) {
+	regex hexRegex("(0x)?([[:xdigit:]]+)");
+	return std::regex_match(s,hexRegex);
 }
 bool StringLibrary::CompareInsensitive(string a, string b) {
 	return ToLower(a) == ToLower(b);

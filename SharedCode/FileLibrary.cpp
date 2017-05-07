@@ -1,5 +1,5 @@
 #include "FileLibrary.h"
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 
 bool FileLibrary::VerifyFile(const char * fileName, const char * extension, const char * extensionErrorMessage, ifstream* stream) {
 	string fileNameS(fileName);

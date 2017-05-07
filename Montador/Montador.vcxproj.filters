@@ -33,9 +33,6 @@
     <ClCompile Include="ErrorPrinter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp">
-      <Filter>Source Files\Shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\SharedCode\FileLibrary.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
@@ -47,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="TableManager.cpp">
       <Filter>Source Files\Assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SharedCode\StringLibrary.cpp">
+      <Filter>Source Files\Shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

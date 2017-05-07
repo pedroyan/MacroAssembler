@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include "FileLibrary.h"
 #include "PreProcessor.h"
 #include "Assembler.h"

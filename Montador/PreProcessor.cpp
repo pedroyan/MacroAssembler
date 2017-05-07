@@ -1,5 +1,5 @@
 #include "PreProcessor.h"
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include "LexicalScanner.h"
 #include <sstream>
 #include <regex>

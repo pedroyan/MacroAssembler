@@ -1,5 +1,6 @@
 #include "Assembler.h"
 #include "ErrorPrinter.h"
+#include "StringLibrary.h"
 
 Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	outputFileName = outFileName;
