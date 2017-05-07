@@ -41,6 +41,13 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 				ShowError("Operando Invalido:" + argument, Syntatic);
 			}
 		}
+	} else if (directiveName == "extern") {
+		// Insere o rotulo passado na tabela de simbolos com o valor 0
+		// e com a flag externa setada
+	} else if (directiveName == "public") {
+		//insere o operando na tabela de definicoes
+	} else if (directiveName == "begin" || directiveName == "end") {
+
 	} else {
 		positionSkip = info->size;
 	}
@@ -84,6 +91,8 @@ void Assembler::firstPass() {
 		}
 		lineCount++;
 	}
+	//preenche a tabela de definicoes com os valores dos simbolos
+	//publicos calculados na tabela de simbolos
 	TableManager::Diagnostic_PrintSymbols();
 }
 
