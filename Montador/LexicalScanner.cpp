@@ -70,7 +70,7 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 	TokensDTO dto;
 	auto firstToken = tokens[0];
 
-	if (validateToken(firstToken)) {
+	if (validateToken(firstToken,false)) {
 		auto labelIndex = firstToken.find(':');
 		if (labelIndex != string::npos) { //valida a label, caso seja uma
 			auto replaced = firstToken.replace(labelIndex, 1, "");
@@ -88,9 +88,14 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 
 	for (size_t i = 1; i < tokens.size(); i++) {
 		if (dto.Operacao != "") {
+			if (!validateToken(tokens[i], true)) {
+				throw std::runtime_error("Token de operando " + tokens[i] + " invalido");
+			}
 			StringLibrary::Tokenize(tokens[i], ",", dto.Operandos);
 		} else {
-			if (tokens[i].find(':') != string::npos) {
+			if (!validateToken(tokens[i],false)) {
+				throw std::runtime_error("Token de operacao " + tokens[i] + " invalido");
+			} else if (tokens[i].find(':') != string::npos) {
 				throw std::runtime_error("Duas labels na mesma linha");
 			}
 			dto.Operacao = tokens[i];
@@ -106,10 +111,10 @@ void LexicalScanner::LexicalError(string message) {
 	ErrorPrinter::ShowError(ErrorType::Lexic, fileName, assembler->GetLine(), message);
 }
 
-bool LexicalScanner::validateToken(string token) {
+bool LexicalScanner::validateToken(string token, bool operand) {
 	regex rgx("([a-zA-Z0-9,_\\:]+)");
 	bool match = std::regex_match(token, rgx);
-	return token.size() <= 50 && match && !isdigit(token[0]);
+	return token.size() <= 50 && match && (operand || !isdigit(token[0]));
 }
 
 TokensDTO::TokensDTO() {

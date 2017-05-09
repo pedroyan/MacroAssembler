@@ -72,7 +72,7 @@ void Assembler::firstPass() {
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
 			if (symbol != nullptr) {
-				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Syntatic);
+				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Semantic);
 			} else {
 				TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount,false));
 			}
@@ -104,19 +104,19 @@ void Assembler::ShowError(string message, ErrorType type) {
 int Assembler::ExecuteSection(vector<string> operands) {
 	if (operands[0] == "text") {
 		if (sectionFlags & Text) {
-			ShowError("SECTION TEXT ja definida", ErrorType::Syntatic);
+			ShowError("SECTION TEXT ja definida", ErrorType::Semantic);
 			return 0;
 		}
 		sectionFlags = Text;
 	} else if (operands[0] == "data") {
 
 		if (sectionFlags & Data) {
-			ShowError("SECTION DATA ja definida", ErrorType::Syntatic);
+			ShowError("SECTION DATA ja definida", ErrorType::Semantic);
 			return 0;
 		}
 
 		if (!(sectionFlags & Text)) {
-			ShowError("SECTION DATA definida antes de SECTION TEXT", ErrorType::Syntatic);
+			ShowError("SECTION DATA definida antes de SECTION TEXT", ErrorType::Semantic);
 			return 0;
 		}
 

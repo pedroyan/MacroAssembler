@@ -75,7 +75,7 @@ class LexicalScanner {
 
 		TokensDTO organizeTokens(vector<string> tokens);
 		void LexicalError(string message);
-		bool validateToken(string token);
+		bool validateToken(string token, bool operand);
 
 };
 
