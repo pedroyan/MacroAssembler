@@ -86,7 +86,7 @@ void Assembler::firstPass() {
 			if (directive != nullptr) {
 				positionCount += ExecuteDirective(dto.Operacao, directive,dto.Operandos); // IMPLEMENTAR
 			} else {
-				ShowError("Operacao" + dto.Operacao + "nao identificada", ErrorType::Syntatic);
+				ShowError("Operacao " + dto.Operacao + " nao identificada", ErrorType::Syntatic);
 			}
 		}
 		lineCount++;

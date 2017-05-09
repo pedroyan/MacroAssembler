@@ -35,6 +35,7 @@ class TokensDTO {
 		vector<string> Operandos;
 };
 
+
 class LexicalScanner {
 	public:
 		/// <summary>
@@ -72,10 +73,17 @@ class LexicalScanner {
 		string getNextLine();
 		Assembler* assembler;
 		string fileName;
+		ErrorType type;
+		
+		enum TokenType {
+			Label,
+			Operation,
+			Operand
+		};
 
 		TokensDTO organizeTokens(vector<string> tokens);
-		void LexicalError(string message);
-		bool validateToken(string token, bool operand);
-
+		void ShowError(string message);
+		bool validateToken(string token, TokenType operand);
+		void throwError(string errorMessage, ErrorType type);
 };
 
