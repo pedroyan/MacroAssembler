@@ -15,6 +15,7 @@ class Assembler {
 		void Assemble();
 	private:
 		void firstPass();
+		void secondPass();
 
 		LexicalScanner scanner;
 		string outputFileName;
@@ -36,7 +37,11 @@ class Assembler {
 			Begin = 1,
 			End = 2
 		};
-
+		enum operandTypes {
+			number,
+			label,
+			operation
+		};
 
 		void ShowError(string message, ErrorType type);
 		int ExecuteSection(vector<string> operands);
@@ -48,6 +53,6 @@ class Assembler {
 		/// </summary>
 		void setDefinitionTableValues();
 
-		/*void CheckBeforeInsertingSymbol(string label, int position, bool isExtern);*/
+		operandTypes GetType(string operand);
 };
 

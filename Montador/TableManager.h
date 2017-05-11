@@ -80,6 +80,9 @@ class TableManager {
 		/// </summary>
 		static void Diagnostic_PrintSymbols();
 
+		/// <summary>
+		/// Imprime a tabela de definições
+		/// </summary>
 		static void Diagnostic_PrintDefinitions();
 	private:
 		static unordered_map<string, InstructionInfo> InstructionTable;

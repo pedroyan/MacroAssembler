@@ -1,6 +1,10 @@
 #include "Assembler.h"
 #include "ErrorPrinter.h"
 #include "StringLibrary.h"
+#include <regex>
+
+using std::regex;
+using std::regex_match;
 
 Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	outputFileName = outFileName;
@@ -80,6 +84,8 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 void Assembler::Assemble() {
 	firstPass();
 	scanner.RestartStream();
+	scanner.SuppressErrors = true;
+	secondPass();
 }
 
 void Assembler::firstPass() {
@@ -120,6 +126,16 @@ void Assembler::firstPass() {
 	setDefinitionTableValues();
 	TableManager::Diagnostic_PrintSymbols();
 	TableManager::Diagnostic_PrintDefinitions();
+}
+
+void Assembler::secondPass() {
+	positionCount = 0;
+	lineCount = 1;
+
+	while (scanner.CanRead()) {
+		auto dto = scanner.GetNextTokens();
+		
+	}
 }
 
 void Assembler::ShowError(string message, ErrorType type) {
@@ -177,12 +193,18 @@ void Assembler::setDefinitionTableValues() {
 		}
 	}
 }
-//
-//void Assembler::CheckBeforeInsertingSymbol(string label, int position, bool isExtern) {
-//	auto symbol = TableManager::GetSymbol(label);
-//	if (symbol != nullptr) {
-//		ShowError("Simbolo " + label + "redefinido", ErrorType::Semantic);
-//	} else {
-//		TableManager::InsertSymbol(label, SymbolInfo(position, isExtern));
-//	}
-//}
+
+Assembler::operandTypes Assembler::GetType(string operand) {
+	regex numberRegex("[0-9]+");
+	regex operatorRegex("[\\+-]");
+	if (regex_match(operand,numberRegex)) {
+		return operandTypes::number;
+	}
+
+	if (regex_match(operand, operatorRegex)) {
+		return operandTypes::operation;
+	}
+
+	return operandTypes::label;
+}
+
