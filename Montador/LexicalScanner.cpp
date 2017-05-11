@@ -116,7 +116,7 @@ void LexicalScanner::ShowError(string message) {
 }
 
 bool LexicalScanner::validateToken(string token, LexicalScanner::TokenType type) {
-	string tokenRegex = type != Label ? "([a-zA-Z0-9,_]+)" : "([a-zA-Z0-9,_\\:]+)";
+	string tokenRegex = type != Label ? "([a-zA-Z0-9,_\\+-]+)" : "([a-zA-Z0-9,_\\:]+)";
 	regex rgx(tokenRegex.c_str());
 	bool match = std::regex_match(token, rgx);
 	return token.size() <= 50 && match && (type == TokenType::Operand || !isdigit(token[0]));

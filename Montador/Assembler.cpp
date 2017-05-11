@@ -7,8 +7,8 @@ Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	positionCount = 0;
 	lineCount = 1;
 	successAssemble = true;
-	sectionFlags = SectionFlags::None;
-	beginFlags = BeginFlags::None;
+	sectionFlags = 0;
+	beginFlags = 0;
 }
 
 Assembler::~Assembler() {
@@ -47,6 +47,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 		// e com a flag externa setada
 		if (symbol == nullptr) {
 			ShowError("Nenhum rótulo foi definido para a diretiva Extern",Syntatic);
+			return 0;
 		}
 		symbol->vlr = 0;
 		symbol->externo = true;
@@ -91,13 +92,13 @@ void Assembler::firstPass() {
 			continue;
 		}
 		
-		SymbolInfo* symbol = nullptr;
+		SymbolInfo* symbolCreated = nullptr;
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
 			if (symbol != nullptr) {
 				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Semantic);
 			} else {
-				symbol = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false));
+				symbolCreated = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false));
 			}
 		}
 
@@ -107,7 +108,7 @@ void Assembler::firstPass() {
 		} else {
 			auto directive = TableManager::GetDirective(dto.Operacao);
 			if (directive != nullptr) {
-				positionCount += ExecuteDirective(dto.Operacao, directive,dto.Operandos,symbol); // IMPLEMENTAR
+				positionCount += ExecuteDirective(dto.Operacao, directive,dto.Operandos, symbolCreated);
 			} else {
 				ShowError("Operacao " + dto.Operacao + " nao identificada", ErrorType::Syntatic);
 			}
