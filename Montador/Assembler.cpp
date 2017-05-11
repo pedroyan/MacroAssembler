@@ -79,6 +79,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 
 void Assembler::Assemble() {
 	firstPass();
+	scanner.RestartStream();
 }
 
 void Assembler::firstPass() {

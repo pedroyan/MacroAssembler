@@ -63,6 +63,11 @@ class LexicalScanner {
 		TokensDTO GetNextTokens();
 
 		/// <summary>
+		/// Volta a stream para o início do arquivo
+		/// </summary>
+		void RestartStream();
+
+		/// <summary>
 		/// Remove os comentarios da linha passada
 		/// </summary>
 		static void RemoveComments(string & line);

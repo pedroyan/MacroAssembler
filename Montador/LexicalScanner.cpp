@@ -52,6 +52,11 @@ TokensDTO LexicalScanner::GetNextTokens() {
 	return toReturn;
 }
 
+void LexicalScanner::RestartStream() {
+	file.clear();
+	file.seekg(0, std::ios::beg);
+}
+
 void LexicalScanner::RemoveComments(string & line) {
 	auto index = line.find(';');
 	if (index != string::npos) {
