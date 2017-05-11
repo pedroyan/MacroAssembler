@@ -134,7 +134,7 @@ void Assembler::secondPass() {
 
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
-		
+		//Para cada operando que é símbolo -> Procura operando na TS -> Se não achou:Erro, símbolo indefinido
 	}
 }
 
