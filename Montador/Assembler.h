@@ -23,7 +23,6 @@ class Assembler {
 		int lineCount;
 		bool successAssemble;
 
-		bool hasBegin;
 		bool hasStop;
 
 		unsigned char sectionFlags;
@@ -31,6 +30,13 @@ class Assembler {
 			None = 0,
 			Text = 1,
 			Data = 2
+		};
+
+		unsigned char beginFlags;
+		enum BeginFlags {
+			None = 0,
+			Begin = 1,
+			End = 2
 		};
 
 

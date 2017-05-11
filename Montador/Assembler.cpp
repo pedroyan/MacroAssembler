@@ -7,7 +7,8 @@ Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	positionCount = 0;
 	lineCount = 1;
 	successAssemble = true;
-	sectionFlags = None;
+	sectionFlags = SectionFlags::None;
+	beginFlags = BeginFlags::None;
 }
 
 Assembler::~Assembler() {
@@ -53,8 +54,21 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 		//insere o operando na tabela de definicoes
 		TableManager::InsertDefinition(operands[0]);
 	} else if (directiveName == "begin") {
-		
+		if (beginFlags & Begin) {
+			ShowError("Siretiva begin redefinida", Semantic);
+			return 0;
+		}
+		beginFlags = Begin;
 	} else if (directiveName == "end") {
+		if (!beginFlags & Begin) {
+			ShowError("End não possui um Begin correspondente",Semantic);
+			return 0;
+		}
+
+		if (beginFlags & BeginFlags::End) {
+			ShowError("Diretiva end redefinida", Semantic);
+			return 0;
+		}
 
 	} else {
 		positionSkip = info->size;
