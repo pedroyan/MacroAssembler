@@ -76,7 +76,6 @@ struct Symbol {
 	SymbolInfo info;
 };
 bool sortByValor(const Symbol &lhs, const Symbol &rhs) { return lhs.info.vlr < rhs.info.vlr; }
-//bool sortByName(const Person &lhs, const Person &rhs) { return lhs.name < rhs.name; }
 
 int * TableManager::GetDefinitionValue(string symbolName) {
 	auto iterator = DefinitionTable.find(symbolName);
@@ -98,7 +97,7 @@ void TableManager::Diagnostic_PrintSymbols() {
 	}
 	std::sort(vec.begin(), vec.end(), sortByValor);
 
-	printf("\n---------DIAGNOSTIC SYMBOL TABLE -----------\n");
+	printf("\n---------DIAGNOSTIC SYMBOL TABLE ----------\n");
 	printf("Simb\tValor\textern");
 
 	
@@ -106,6 +105,25 @@ void TableManager::Diagnostic_PrintSymbols() {
 	for (auto symbol : vec) {
 		printf("\n%s\t%d\t%d",symbol.name.c_str(),symbol.info.vlr,symbol.info.externo);
 	}
+	printf("\n ----------------------------------------- \n");
+}
+
+bool sortByInt(const std::pair<string, int> &lhs, const std::pair<string, int> &rhs) { return lhs.second < rhs.second; }
+
+void TableManager::Diagnostic_PrintDefinitions() {
+	vector<std::pair<string, int>> vec;
+	for (auto &it : DefinitionTable) {
+		vec.push_back(std::make_pair(it.first, it.second));
+	}
+	std::sort(vec.begin(), vec.end(), sortByInt);
+
+	printf("\n------DIAGNOSTIC DEFINITION TABLE --------\n");
+	printf("Simb\tValor");
+
+	for (auto symbol : vec) {
+		printf("\n%s\t%d", symbol.first.c_str(), symbol.second);
+	}
+
 	printf("\n ----------------------------------------- \n");
 }
 

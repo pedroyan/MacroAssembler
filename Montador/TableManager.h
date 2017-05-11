@@ -79,6 +79,8 @@ class TableManager {
 		/// Imprime os simbolos na tabela de simbolos
 		/// </summary>
 		static void Diagnostic_PrintSymbols();
+
+		static void Diagnostic_PrintDefinitions();
 	private:
 		static unordered_map<string, InstructionInfo> InstructionTable;
 		static unordered_map<string, DirectiveInfo> DirectiveTable;

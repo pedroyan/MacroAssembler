@@ -115,10 +115,10 @@ void Assembler::firstPass() {
 		}
 		lineCount++;
 	}
-	//preenche a tabela de definicoes com os valores dos simbolos
-	//publicos calculados na tabela de simbolos
+
 	setDefinitionTableValues();
 	TableManager::Diagnostic_PrintSymbols();
+	TableManager::Diagnostic_PrintDefinitions();
 }
 
 void Assembler::ShowError(string message, ErrorType type) {
@@ -165,7 +165,7 @@ bool Assembler::TryStringToInt(string s, int* result) {
 }
 
 void Assembler::setDefinitionTableValues() {
-	auto table = TableManager::GetDefinitionTable();
+	auto& table = TableManager::GetDefinitionTable();
 	for (auto& it : table) {
 		auto symbol = TableManager::GetSymbol(it.first);
 
