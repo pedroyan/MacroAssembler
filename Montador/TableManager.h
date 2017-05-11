@@ -49,14 +49,15 @@ class TableManager {
 		/// </summary>
 		/// <param name="symbol">simobolo procurado</param>
 		/// <returns>informacoes de um símbolo</returns>
-		static SymbolInfo const * GetSymbol(string symbol);
+		static SymbolInfo * GetSymbol(string symbol);
 
 		/// <summary>
 		/// Insere um simbolo na tabela de simbolos
 		/// </summary>
 		/// <param name="symbolName">string que representa o simbolo</param>
 		/// <param name="info">informacoes do simbolo</param>
-		static void InsertSymbol(string symbolName, SymbolInfo info);
+		/// <returns>Informacoes do simbolo inserido</returns>
+		static SymbolInfo* InsertSymbol(string symbolName, SymbolInfo info);
 
 		/// <summary>
 		/// Insere um simbolo na tabela de definição com o valor 0

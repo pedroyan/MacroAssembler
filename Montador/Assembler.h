@@ -11,7 +11,7 @@ class Assembler {
 		~Assembler();
 
 		int GetLine();
-		int ExecuteDirective(string directiveName, DirectiveInfo const * info,vector<string> operands);
+		int ExecuteDirective(string directiveName, DirectiveInfo const * info,vector<string> operands, SymbolInfo* symbol);
 		void Assemble();
 	private:
 		void firstPass();
@@ -22,6 +22,9 @@ class Assembler {
 		int positionCount;
 		int lineCount;
 		bool successAssemble;
+
+		bool hasBegin;
+		bool hasStop;
 
 		unsigned char sectionFlags;
 		enum SectionFlags {
@@ -40,5 +43,7 @@ class Assembler {
 		///	calculados na tabela de simbolos
 		/// </summary>
 		void setDefinitionTableValues();
+
+		/*void CheckBeforeInsertingSymbol(string label, int position, bool isExtern);*/
 };
 

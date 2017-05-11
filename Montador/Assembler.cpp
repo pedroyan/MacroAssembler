@@ -17,7 +17,7 @@ int Assembler::GetLine() {
 	return lineCount;
 }
 
-int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info, vector<string> operands) {
+int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info, vector<string> operands, SymbolInfo* symbol) {
 	int positionSkip = 0;
 	int opsize = operands.size();
 
@@ -42,13 +42,19 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 			}
 		}
 	} else if (directiveName == "extern") {
-		// Insere o rotulo passado na tabela de simbolos com o valor 0
+		// Modifica o rotulo passado na tabela de simbolos com o valor 0
 		// e com a flag externa setada
-		TableManager::InsertSymbol(operands[0], SymbolInfo(0, true));
+		if (symbol == nullptr) {
+			ShowError("Nenhum rótulo foi definido para a diretiva Extern",Syntatic);
+		}
+		symbol->vlr = 0;
+		symbol->externo = true;
 	} else if (directiveName == "public") {
 		//insere o operando na tabela de definicoes
-
-	} else if (directiveName == "begin" || directiveName == "end") {
+		TableManager::InsertDefinition(operands[0]);
+	} else if (directiveName == "begin") {
+		
+	} else if (directiveName == "end") {
 
 	} else {
 		positionSkip = info->size;
@@ -71,12 +77,13 @@ void Assembler::firstPass() {
 			continue;
 		}
 		
+		SymbolInfo* symbol = nullptr;
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
 			if (symbol != nullptr) {
 				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Semantic);
 			} else {
-				TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount,false));
+				symbol = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false));
 			}
 		}
 
@@ -86,7 +93,7 @@ void Assembler::firstPass() {
 		} else {
 			auto directive = TableManager::GetDirective(dto.Operacao);
 			if (directive != nullptr) {
-				positionCount += ExecuteDirective(dto.Operacao, directive,dto.Operandos); // IMPLEMENTAR
+				positionCount += ExecuteDirective(dto.Operacao, directive,dto.Operandos,symbol); // IMPLEMENTAR
 			} else {
 				ShowError("Operacao " + dto.Operacao + " nao identificada", ErrorType::Syntatic);
 			}
@@ -154,3 +161,12 @@ void Assembler::setDefinitionTableValues() {
 		}
 	}
 }
+//
+//void Assembler::CheckBeforeInsertingSymbol(string label, int position, bool isExtern) {
+//	auto symbol = TableManager::GetSymbol(label);
+//	if (symbol != nullptr) {
+//		ShowError("Simbolo " + label + "redefinido", ErrorType::Semantic);
+//	} else {
+//		TableManager::InsertSymbol(label, SymbolInfo(position, isExtern));
+//	}
+//}

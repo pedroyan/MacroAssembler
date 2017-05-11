@@ -53,7 +53,7 @@ DirectiveInfo const * TableManager::GetDirective(string directive) {
 	}
 }
 
-SymbolInfo const* TableManager::GetSymbol(string symbol) {
+SymbolInfo * TableManager::GetSymbol(string symbol) {
 	auto iterator = SymbolTable.find(symbol);
 	if (iterator == SymbolTable.end()) {
 		return nullptr;
@@ -62,8 +62,9 @@ SymbolInfo const* TableManager::GetSymbol(string symbol) {
 	}
 }
 
-void TableManager::InsertSymbol(string symbolName, SymbolInfo info) {
+SymbolInfo * TableManager::InsertSymbol(string symbolName, SymbolInfo info) {
 	SymbolTable.insert(std::make_pair(symbolName, info));
+	return &SymbolTable.find(symbolName)->second;
 }
 
 void TableManager::InsertDefinition(string symbolName) {
