@@ -44,8 +44,10 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 	} else if (directiveName == "extern") {
 		// Insere o rotulo passado na tabela de simbolos com o valor 0
 		// e com a flag externa setada
+		TableManager::InsertSymbol(operands[0], SymbolInfo(0, true));
 	} else if (directiveName == "public") {
 		//insere o operando na tabela de definicoes
+
 	} else if (directiveName == "begin" || directiveName == "end") {
 
 	} else {
@@ -93,6 +95,7 @@ void Assembler::firstPass() {
 	}
 	//preenche a tabela de definicoes com os valores dos simbolos
 	//publicos calculados na tabela de simbolos
+	setDefinitionTableValues();
 	TableManager::Diagnostic_PrintSymbols();
 }
 
@@ -136,5 +139,18 @@ bool Assembler::TryStringToInt(string s, int* result) {
 		return true;
 	} else {
 		return false;
+	}
+}
+
+void Assembler::setDefinitionTableValues() {
+	auto table = TableManager::GetDefinitionTable();
+	for (auto& it : table) {
+		auto symbol = TableManager::GetSymbol(it.first);
+
+		if (symbol != nullptr) {
+			it.second = symbol->vlr;
+		} else {
+			ShowError("O simbolo publico " + it.first + " não foi definido", Semantic);
+		}
 	}
 }

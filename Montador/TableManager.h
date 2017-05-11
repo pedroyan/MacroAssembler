@@ -49,7 +49,7 @@ class TableManager {
 		/// </summary>
 		/// <param name="symbol">simobolo procurado</param>
 		/// <returns>informacoes de um símbolo</returns>
-		static SymbolInfo* GetSymbol(string symbol);
+		static SymbolInfo const * GetSymbol(string symbol);
 
 		/// <summary>
 		/// Insere um simbolo na tabela de simbolos
@@ -59,6 +59,22 @@ class TableManager {
 		static void InsertSymbol(string symbolName, SymbolInfo info);
 
 		/// <summary>
+		/// Insere um simbolo na tabela de definição com o valor 0
+		/// </summary>
+		/// <param name="symbolName">Nome do simbolo a ser inserido</param>
+		static void InsertDefinition(string symbolName);
+
+		/// <summary>
+		/// Busca o valor de um símbolo na tabela de definição. Retorna nullptr caso o simbolo
+		/// não seja encontrado
+		/// </summary>
+		/// <param name="symbolName">Nome do simbolo procurado</param>
+		/// <returns>Uma referência para o int que determina o valor do simbolo.</returns>
+		static int* GetDefinitionValue(string symbolName);
+
+		static unordered_map<string, int>& GetDefinitionTable();
+
+		/// <summary>
 		/// Imprime os simbolos na tabela de simbolos
 		/// </summary>
 		static void Diagnostic_PrintSymbols();
@@ -66,5 +82,8 @@ class TableManager {
 		static unordered_map<string, InstructionInfo> InstructionTable;
 		static unordered_map<string, DirectiveInfo> DirectiveTable;
 		static unordered_map<string, SymbolInfo> SymbolTable;
+
+		static unordered_map<string, int> DefinitionTable;
+		static unordered_map<string, int> UseTable;
 };
 

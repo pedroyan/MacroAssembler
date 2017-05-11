@@ -32,6 +32,8 @@ unordered_map<string, DirectiveInfo> TableManager::DirectiveTable{
 };
 
 unordered_map<string, SymbolInfo> TableManager::SymbolTable;
+unordered_map<string, int> TableManager::DefinitionTable;
+unordered_map<string, int> TableManager::UseTable;
 
 InstructionInfo const * TableManager::GetInstruction(string name) {
 	auto iterator = InstructionTable.find(name);
@@ -51,7 +53,7 @@ DirectiveInfo const * TableManager::GetDirective(string directive) {
 	}
 }
 
-SymbolInfo* TableManager::GetSymbol(string symbol) {
+SymbolInfo const* TableManager::GetSymbol(string symbol) {
 	auto iterator = SymbolTable.find(symbol);
 	if (iterator == SymbolTable.end()) {
 		return nullptr;
@@ -64,12 +66,29 @@ void TableManager::InsertSymbol(string symbolName, SymbolInfo info) {
 	SymbolTable.insert(std::make_pair(symbolName, info));
 }
 
+void TableManager::InsertDefinition(string symbolName) {
+	DefinitionTable.insert(std::make_pair(symbolName, 0));
+}
+
 struct Symbol {
 	string name;
 	SymbolInfo info;
 };
 bool sortByValor(const Symbol &lhs, const Symbol &rhs) { return lhs.info.vlr < rhs.info.vlr; }
 //bool sortByName(const Person &lhs, const Person &rhs) { return lhs.name < rhs.name; }
+
+int * TableManager::GetDefinitionValue(string symbolName) {
+	auto iterator = DefinitionTable.find(symbolName);
+	if (iterator == DefinitionTable.end()) {
+		return nullptr;
+	} else {
+		return &iterator->second;
+	}
+}
+
+unordered_map<string, int>& TableManager::GetDefinitionTable() {
+	return DefinitionTable;
+}
 
 void TableManager::Diagnostic_PrintSymbols() {
 	vector<Symbol> vec;

@@ -22,6 +22,7 @@ class Assembler {
 		int positionCount;
 		int lineCount;
 		bool successAssemble;
+
 		unsigned char sectionFlags;
 		enum SectionFlags {
 			None = 0,
@@ -33,5 +34,11 @@ class Assembler {
 		void ShowError(string message, ErrorType type);
 		int ExecuteSection(vector<string> operands);
 		bool TryStringToInt(string s, int* result);
+
+		/// <summary>
+		///	Preenche a tabela de definicoes com os valores dos simbolos publicos
+		///	calculados na tabela de simbolos
+		/// </summary>
+		void setDefinitionTableValues();
 };
 
