@@ -115,16 +115,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\SharedCode\FileLibrary.cpp" />
-    <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp" />
+    <ClCompile Include="..\SharedCode\StringLibrary.cpp" />
+    <ClCompile Include="Assembler.cpp" />
     <ClCompile Include="ErrorPrinter.cpp" />
     <ClCompile Include="LexicalScanner.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PreProcessor.cpp" />
+    <ClCompile Include="TableManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Assembler.h" />
     <ClInclude Include="ErrorPrinter.h" />
     <ClInclude Include="LexicalScanner.h" />
     <ClInclude Include="PreProcessor.h" />
+    <ClInclude Include="TableManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 #include "ModuleEngine.h"
 #include <fstream>
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include "FileLibrary.h"
 using std::ifstream;
 

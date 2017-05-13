@@ -3,9 +3,10 @@
 
 using std::string;
 
+enum ErrorType { Lexic, Syntatic, Semantic };
+
 class ErrorPrinter {
 	public:
-		enum ErrorType{Lexic, Syntatic, Semantic};
 
 		/// <summary>
 		/// Exibe um erro no console

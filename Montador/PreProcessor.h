@@ -50,11 +50,6 @@ class PreProcessor {
 		bool EvaluateIf(string& line, istream & stream);
 
 		/// <summary>
-		/// Remove os comentarios da linha passada
-		/// </summary>
-		void removeComments(string& line);
-
-		/// <summary>
 		/// Pega a proxima linha da stream, já removendo espaços excessivos
 		/// </summary>
 		/// <param name="stream">stream sendo lida</param>
@@ -66,7 +61,7 @@ class PreProcessor {
 		/// </summary>
 		/// <param name="message">mensagem a ser exibida</param>
 		/// <param name="type">Tipo do erro</param>
-		void printError(string message, ErrorPrinter::ErrorType type);
+		void printError(string message, ErrorType type);
 
 		void saveFile();
 		bool failed;

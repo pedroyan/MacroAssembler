@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <string>
 #include <fstream>
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include "FileLibrary.h"
 #include "PreProcessor.h"
+#include "Assembler.h"
 
 using std::string;
 using std::ifstream;
@@ -15,8 +16,8 @@ int main(int argc, char *argv[]) {
 
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
-	argv[1] = "-p";
-	argv[2] = "assemblyTest.asm";
+	argv[1] = "-o";
+	argv[2] = "SlideModuleB.asm";
 	argv[3] = "middleFile";
 	#else
 	//pega os argumentos da linha de comando em modo release
@@ -36,9 +37,10 @@ int main(int argc, char *argv[]) {
 			PreProcessor processor(argv[2], argv[3]);
 			processor.PreProcessPass(fileStream);
 		} else if (tipoOperacao == "-o") {
-			PreProcessor processor(argv[2], argv[2]);
+			PreProcessor processor(argv[2], argv[3]);
 			if (processor.PreProcessPass(fileStream)) {
-
+				Assembler assembler(argv[3]);
+				assembler.Assemble();
 			}
 		} else {
 			printf("tipo de operacao nao especificada");

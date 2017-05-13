@@ -15,10 +15,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)FileLibrary.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)MacroAssemblerLibraries.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)StringLibrary.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)FileLibrary.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)MacroAssemblerLibraries.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)StringLibrary.h" />
   </ItemGroup>
 </Project>

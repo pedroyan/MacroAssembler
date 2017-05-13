@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <fstream>
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include <stdlib.h>
 #include <string>
 #include "LinkerEngine.h"
@@ -25,8 +25,8 @@ int main(int argc, char *argv[]) {
 #else
 	//pega os argumentos da linha de comando em modo release
 	if (argc > 5 || argc < 4) {
-		printf("Selecione ate 3 arquivos objetos para o ligador,juntamente com o arquivo .e ligador:\n");
-		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2><Arquivo de Entrada3> <Arquivo de Saida>\n");
+		printf("Selecione entre 2 e 3 arquivos objetos e a saida\n");
+		printf("cmd>Ligador <Arquivo de Entrada1> <Arquivo de Entrada2> (<Arquivo de Entrada3> opcional) <Arquivo de Saida>\n");
 		return 1;
 	}
 #endif // DEBUG

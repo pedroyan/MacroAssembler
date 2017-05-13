@@ -4,13 +4,13 @@
 void ErrorPrinter::ShowError(ErrorType type, string file, int lineNumber, string message) {
 	string errorType;
 	switch (type) {
-		case ErrorPrinter::Lexic:
+		case ErrorType::Lexic:
 			errorType = "Lexico";
 			break;
-		case ErrorPrinter::Syntatic:
+		case ErrorType::Syntatic:
 			errorType = "Sintatico";
 			break;
-		case ErrorPrinter::Semantic:
+		case ErrorType::Semantic:
 			errorType = "Semantico";
 			break;
 	}

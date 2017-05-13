@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Shared">
       <UniqueIdentifier>{755929bc-0622-43ff-8f27-4cee55f8ece3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Assembler">
+      <UniqueIdentifier>{75a362c3-eea8-49d5-aed9-603398c16200}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -30,13 +33,19 @@
     <ClCompile Include="ErrorPrinter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LexicalScanner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\SharedCode\MacroAssemblerLibraries.cpp">
+    <ClCompile Include="..\SharedCode\FileLibrary.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="..\SharedCode\FileLibrary.cpp">
+    <ClCompile Include="LexicalScanner.cpp">
+      <Filter>Source Files\Assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="Assembler.cpp">
+      <Filter>Source Files\Assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="TableManager.cpp">
+      <Filter>Source Files\Assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SharedCode\StringLibrary.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,7 +57,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LexicalScanner.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="Assembler.h">
+      <Filter>Header Files\Assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="TableManager.h">
+      <Filter>Header Files\Assembler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

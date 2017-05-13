@@ -1,5 +1,6 @@
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
 #include <regex>
+#include <sstream>
 
 using std::regex;
 
@@ -59,6 +60,24 @@ bool StringLibrary::IsInteger(string s) {
 	strtol(s.c_str(), &p, 10);
 
 	return (*p == 0);
+}
+bool StringLibrary::IsHexadecimal(string s) {
+	regex hexRegex("(0x)?([[:xdigit:]]+)");
+	return std::regex_match(s,hexRegex);
+}
+int StringLibrary::ConvertHexaToInt(string s) {
+	s = StringLibrary::ToLower(s);
+
+	auto index = s.find("0x");
+	if (index != string::npos) {
+		s = s.replace(0, index, "");
+	}
+
+	std::stringstream converter(s);
+	unsigned int toReturn;
+	converter >> std::hex >> toReturn;
+
+	return toReturn;
 }
 bool StringLibrary::CompareInsensitive(string a, string b) {
 	return ToLower(a) == ToLower(b);

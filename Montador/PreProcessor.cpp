@@ -1,5 +1,6 @@
 #include "PreProcessor.h"
-#include "MacroAssemblerLibraries.h"
+#include "StringLibrary.h"
+#include "LexicalScanner.h"
 #include <sstream>
 #include <regex>
 #include <cctype>
@@ -33,7 +34,6 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		writeThisDown = true;
 
 		line = getNextLine(stream);
-		removeComments(line);
 
 		StringLibrary::Tokenize(line, " ",tokens);
 
@@ -42,7 +42,7 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		}
 
 		if (preProcessingZone && tokens.size() >1) {
-			preProcessingZone = !(StringLibrary::CompareInsensitive(tokens[0],"section") || (StringLibrary::CompareInsensitive(tokens[0],"begin") || StringLibrary::CompareInsensitive(tokens[1], "begin")));
+			preProcessingZone = !((tokens[0] == "section") || (tokens[0] == "begin" || tokens[1] == "begin"));
 		}
 
 		if (IsEQU(tokens)) {
@@ -56,7 +56,12 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		line = StringLibrary::Trim(line);
 
 		if (writeThisDown && line != "") {
-			outputContent << line + "\n";
+			if (outputContent.rdbuf() -> in_avail() == 0) {
+				outputContent << line;
+			} else {
+				outputContent << "\n" + line;
+			}
+			
 		}
 	}
 
@@ -67,7 +72,7 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		return false;
 	} 
 		
-	printf("arquivo %s.pre gerado com sucesso", outputFileName.c_str());
+	printf("arquivo %s.pre gerado com sucesso\n", outputFileName.c_str());
 	saveFile();
 	return true;
 }
@@ -75,34 +80,34 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 void PreProcessor::EvaluateEQU(const vector<string>& equTokens) {
 
 	if (!preProcessingZone) {
-		printError("Diretiva EQU precisa ser definida no inicio do codigo", ErrorPrinter::ErrorType::Syntatic);
+		printError("Diretiva EQU precisa ser definida no inicio do codigo", ErrorType::Syntatic);
 		return;
 	}
 
 	string identifier = equTokens[0].substr(0, equTokens[0].find(':'));
 	if (valueTable.find(identifier) != valueTable.end()) {
 		string errorMessage = "Simbolo textual " + identifier + " ja definido.";
-		printError(errorMessage,ErrorPrinter::ErrorType::Semantic);
+		printError(errorMessage,ErrorType::Semantic);
 		return;
 	}
 
 	if (isdigit(identifier[0])) {
 		string errorMessage = "Identificador " + identifier + " invalido. Primeiro caractere nao pode ser um digito";
-		printError(errorMessage,ErrorPrinter::ErrorType::Lexic);
+		printError(errorMessage, ErrorType::Lexic);
 	}
 
 	if (identifier.size() > 50) {
 		string errorMessage = "Simbolo textual nao deve possuir mais de 50 caracteres.";
-		printError(errorMessage,ErrorPrinter::ErrorType::Lexic);
+		printError(errorMessage,ErrorType::Lexic);
 	}
 
 	if (equTokens.size() > 3) {
-		printError("EQU deve possuir apenas 1 operando", ErrorPrinter::ErrorType::Syntatic);
+		printError("EQU deve possuir apenas 1 operando", ErrorType::Syntatic);
 		return;
 	}
 
 	if (!StringLibrary::IsInteger(equTokens[2])) {
-		printError("Operando do EQU precisa ser um inteiro", ErrorPrinter::ErrorType::Semantic);
+		printError("Operando do EQU precisa ser um inteiro", ErrorType::Semantic);
 		return;
 	}
 
@@ -121,14 +126,14 @@ bool PreProcessor::EvaluateIf(string & line, istream & stream) {
 
 	if (members.size() != 2) {
 		string errorMessage = "A diretiva if deve possuir somente 1 operando";
-		printError(errorMessage,ErrorPrinter::ErrorType::Semantic);
+		printError(errorMessage,ErrorType::Semantic);
 		return false;
 	}
 
 	auto element = valueTable.find(members[1]);
 	if (element == valueTable.end()) {
 		string errorMessage = "Simbolo " + members[1] + " nao definido";
-		printError(errorMessage,ErrorPrinter::ErrorType::Semantic);
+		printError(errorMessage,ErrorType::Semantic);
 		return false;
 	}
 	line = getNextLine(stream);
@@ -136,28 +141,24 @@ bool PreProcessor::EvaluateIf(string & line, istream & stream) {
 	vector<string> tokens;
 	StringLibrary::Tokenize(line, " ", tokens);
 	if (IsEQU(tokens)) {
-		printError("Diretiva EQU precisa ser definida no inicio do codigo",ErrorPrinter::ErrorType::Semantic);
+		printError("Diretiva EQU precisa ser definida no inicio do codigo",ErrorType::Semantic);
 	}
 
 	return element->second == 1;
 }
 
-void PreProcessor::removeComments(string & line) {
-	auto index = line.find(';');
-	if (index != string::npos) {
-		line = line.substr(0, index);
-	}
-}
 
 string PreProcessor::getNextLine(istream & stream) {
 	lineCount++;
 
 	string formatedLine;
 	std::getline(stream, formatedLine);
+	formatedLine = StringLibrary::ToLower(formatedLine);
+	LexicalScanner::RemoveComments(formatedLine);
 	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
 }
 
-void PreProcessor::printError(string message, ErrorPrinter::ErrorType type) {
+void PreProcessor::printError(string message, ErrorType type) {
 	failed = true;
 	ErrorPrinter::ShowError(type, inputFileName, lineCount, message);
 }
