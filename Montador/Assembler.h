@@ -1,5 +1,6 @@
 #pragma once
 #include<string>
+#include <vector>
 #include"LexicalScanner.h"
 #include "TableManager.h"
 
@@ -52,6 +53,8 @@ class Assembler {
 		///	calculados na tabela de simbolos
 		/// </summary>
 		void setDefinitionTableValues();
+
+		vector<int> GetOperandsValue(const vector<string>& operands);
 
 		operandTypes GetType(string operand);
 };

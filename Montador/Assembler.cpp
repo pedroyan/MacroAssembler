@@ -134,6 +134,8 @@ void Assembler::secondPass() {
 
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
+		GetOperandsValue(dto.Operandos);
+		
 		//Para cada operando que é símbolo -> Procura operando na TS -> Se não achou:Erro, símbolo indefinido
 	}
 }
@@ -192,6 +194,21 @@ void Assembler::setDefinitionTableValues() {
 			ShowError("O simbolo publico " + it.first + " não foi definido", Semantic);
 		}
 	}
+}
+
+vector<int> Assembler::GetOperandsValue(const vector<string>& operands) {
+	// Vai inserir o valor calculado de cada operando para a geração do codigo objeto
+	for (auto& operando : operands) {
+		auto type = GetType(operando);
+		if (type == label) {
+			auto symbol = TableManager::GetSymbol(operando);
+			if (symbol == nullptr) {
+				ShowError("Simbolo indefinido", Syntatic);
+			}
+		}
+	}
+
+	return vector<int>();
 }
 
 Assembler::operandTypes Assembler::GetType(string operand) {
