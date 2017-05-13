@@ -140,8 +140,20 @@ void Assembler::secondPass() {
 
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
-		if (!CheckLabels(dto.Operandos)) {
+		if (!CheckLabels(dto.Operandos) || dto.Operacao=="") {
 			continue;
+		}
+
+		auto instruction = TableManager::GetInstruction(dto.Operacao);
+		if (instruction != nullptr) {
+			positionCount += instruction->operandCount + 1;
+			ValidateAndWriteInstruction(instruction, dto.Operandos);
+		} else {
+			auto directive = TableManager::GetDirective(dto.Operacao);
+			if (directive == nullptr) {
+				ShowError("Operacao " + dto.Operacao + " nao identificada", Syntatic);
+			}
+			//so escreve alguma coisa no codigo objeto quando se tem SPACE e CONST
 		}
 		
 		//Para cada operando que é símbolo -> Procura operando na TS -> Se não achou:Erro, símbolo indefinido
@@ -221,10 +233,55 @@ bool Assembler::CheckLabels(const vector<string>& operands) {
 	return success;
 }
 
+void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const vector<string>& operands) {
+	vector<string> operationSides;
+	vector<int> calculatedOperands;
+
+	//calcula o valor real dos operandos analisando os +
+	for (auto operand : operands) {
+		#pragma region calculateRealValue
+
+		StringLibrary::Tokenize(operand, "+", operationSides);
+
+		for (auto plusOperand : operationSides) {
+			auto type = GetType(plusOperand);
+
+			int extractedNumber;
+			switch (type) {
+			case Assembler::number:
+				if (!TryStringToInt(plusOperand, &extractedNumber)) {
+					ShowError("valor invalido fornecido para opercação +", Semantic);
+					return;
+				}
+				break;
+			case Assembler::label:
+				auto symbol = TableManager::GetSymbol(plusOperand);
+				if (symbol == nullptr) {
+					ShowError("Label " + plusOperand + " nao encontrada", Semantic);
+					return;
+				}
+				extractedNumber = symbol->vlr;
+				break;
+			case Assembler::operation:
+				ShowError("valor invalido fornecido para opercação +", Semantic);
+				return;
+			}
+			calculatedOperands.push_back(extractedNumber);
+		}
+
+		//soma os valores do calculated operands.
+	#pragma endregion
+	}
+
+	if (info->operandCount != operands.size()) {
+		//ShowError("")
+	}
+}
+
 Assembler::operandTypes Assembler::GetType(string operand) {
 	regex numberRegex("[0-9]+");
 	regex operatorRegex("[\\+-]");
-	if (regex_match(operand,numberRegex)) {
+	if (regex_match(operand,numberRegex) || StringLibrary::IsHexadecimal(operand)) {
 		return operandTypes::number;
 	}
 

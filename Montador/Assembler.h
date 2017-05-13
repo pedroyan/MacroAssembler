@@ -55,6 +55,7 @@ class Assembler {
 		void setDefinitionTableValues();
 		
 		bool CheckLabels(const vector<string>& operands);
+		void ValidateAndWriteInstruction(const InstructionInfo* info, const vector<string>& operands);
 
 		operandTypes GetType(string operand);
 };
