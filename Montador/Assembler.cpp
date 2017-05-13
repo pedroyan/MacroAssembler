@@ -13,6 +13,7 @@ Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
 	successAssemble = true;
 	sectionFlags = 0;
 	beginFlags = 0;
+	hasStop = false;
 }
 
 Assembler::~Assembler() {
@@ -118,6 +119,9 @@ void Assembler::firstPass() {
 		auto instruction = TableManager::GetInstruction(dto.Operacao);
 		if (instruction != nullptr) {
 			positionCount += instruction->operandCount + 1;
+			if (dto.Operacao == "stop") {
+				hasStop = true;
+			}
 		} else {
 			auto directive = TableManager::GetDirective(dto.Operacao);
 			if (directive != nullptr) {
@@ -130,6 +134,7 @@ void Assembler::firstPass() {
 	}
 
 	setDefinitionTableValues();
+	FirstPassLastChecks();
 	TableManager::Diagnostic_PrintSymbols();
 	TableManager::Diagnostic_PrintDefinitions();
 }
@@ -140,7 +145,7 @@ void Assembler::secondPass() {
 
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
-		if (!CheckLabels(dto.Operandos) || dto.Operacao=="") {
+		if (dto.Operacao=="" || (dto.Operacao != "section" && !CheckLabels(dto.Operandos))) {
 			continue;
 		}
 
@@ -201,6 +206,22 @@ bool Assembler::TryStringToInt(string s, int* result) {
 		return true;
 	} else {
 		return false;
+	}
+}
+
+void Assembler::FirstPassLastChecks() {
+	if (!(sectionFlags & SectionFlags::Text)) {
+		ShowError("Secao Text nao encontrada", Semantic);
+	}
+
+	bool isModule = (beginFlags & BeginFlags::Begin) && (beginFlags & BeginFlags::End);
+
+	if ((beginFlags & BeginFlags::Begin) && !isModule) {
+		ShowError("Diretiva END nao encontrada", Semantic);
+	}
+
+	if (!isModule && !hasStop) {
+		ShowError("Instrucao STOP nao encontrada", Semantic);
 	}
 }
 
