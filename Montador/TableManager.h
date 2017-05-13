@@ -17,7 +17,7 @@ struct DirectiveInfo {
 	int operandCount;
 
 	/// <summary>
-	/// -1 significa tamanho variável
+	/// -1 significa tamanho variável. 
 	/// </summary>
 	int size;
 };
@@ -25,7 +25,9 @@ struct DirectiveInfo {
 struct SymbolInfo {
 	int vlr;
 	bool externo;
-	SymbolInfo(int valor, bool ext) : vlr(valor), externo(ext) {};
+	int spaceCount;
+
+	SymbolInfo(int valor, bool ext) : vlr(valor), externo(ext), spaceCount(1) {};
 };
 
 class TableManager {

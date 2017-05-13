@@ -53,8 +53,8 @@ class Assembler {
 		///	calculados na tabela de simbolos
 		/// </summary>
 		void setDefinitionTableValues();
-
-		vector<int> GetOperandsValue(const vector<string>& operands);
+		
+		bool CheckLabels(const vector<string>& operands);
 
 		operandTypes GetType(string operand);
 };

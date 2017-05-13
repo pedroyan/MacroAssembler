@@ -34,6 +34,11 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 	if (directiveName  == "section") {
 		positionSkip = ExecuteSection(operands);
 	} else if (directiveName == "space") {
+		if (symbol == nullptr) {
+			ShowError("Nenhum rotulo definido para a diretiva space", Syntatic);
+			return 0;
+		}
+
 		if (opsize == 0) {
 			positionSkip = 1;
 		} else {
@@ -41,6 +46,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 			int toReturn;
 
 			if (TryStringToInt(argument, &toReturn)) {
+				symbol->spaceCount = toReturn;
 				return toReturn;
 			} else {
 				ShowError("Operando Invalido:" + argument, Syntatic);
@@ -134,7 +140,9 @@ void Assembler::secondPass() {
 
 	while (scanner.CanRead()) {
 		auto dto = scanner.GetNextTokens();
-		GetOperandsValue(dto.Operandos);
+		if (!CheckLabels(dto.Operandos)) {
+			continue;
+		}
 		
 		//Para cada operando que é símbolo -> Procura operando na TS -> Se não achou:Erro, símbolo indefinido
 	}
@@ -196,19 +204,21 @@ void Assembler::setDefinitionTableValues() {
 	}
 }
 
-vector<int> Assembler::GetOperandsValue(const vector<string>& operands) {
+bool Assembler::CheckLabels(const vector<string>& operands) {
+
 	// Vai inserir o valor calculado de cada operando para a geração do codigo objeto
+	bool success = true;
 	for (auto& operando : operands) {
 		auto type = GetType(operando);
 		if (type == label) {
 			auto symbol = TableManager::GetSymbol(operando);
 			if (symbol == nullptr) {
-				ShowError("Simbolo indefinido", Syntatic);
+				ShowError("Simbolo indefinido: " + operando, Syntatic); 
+				success = false;
 			}
 		}
 	}
-
-	return vector<int>();
+	return success;
 }
 
 Assembler::operandTypes Assembler::GetType(string operand) {
