@@ -156,6 +156,7 @@ void Assembler::secondPass() {
 			//so escreve alguma coisa no codigo objeto quando se tem SPACE e CONST
 		}
 		
+		lineCount++;
 		//Para cada operando que é símbolo -> Procura operando na TS -> Se não achou:Erro, símbolo indefinido
 	}
 }
@@ -218,15 +219,19 @@ void Assembler::setDefinitionTableValues() {
 
 bool Assembler::CheckLabels(const vector<string>& operands) {
 
-	// Vai inserir o valor calculado de cada operando para a geração do codigo objeto
 	bool success = true;
 	for (auto& operando : operands) {
-		auto type = GetType(operando);
-		if (type == label) {
-			auto symbol = TableManager::GetSymbol(operando);
-			if (symbol == nullptr) {
-				ShowError("Simbolo indefinido: " + operando, Syntatic); 
-				success = false;
+
+		auto plusOperands = StringLibrary::Tokenize(operando, "+");
+		for (auto& plusOperand : plusOperands) {
+
+			auto type = GetType(plusOperand);
+			if (type == label) {
+				auto symbol = TableManager::GetSymbol(plusOperand);
+				if (symbol == nullptr) {
+					ShowError("Simbolo indefinido: " + plusOperand, Syntatic);
+					success = false;
+				}
 			}
 		}
 	}
@@ -237,45 +242,73 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 	vector<string> operationSides;
 	vector<int> calculatedOperands;
 
-	//calcula o valor real dos operandos analisando os +
-	for (auto operand : operands) {
-		#pragma region calculateRealValue
-
-		StringLibrary::Tokenize(operand, "+", operationSides);
-
-		for (auto plusOperand : operationSides) {
-			auto type = GetType(plusOperand);
-
-			int extractedNumber;
-			switch (type) {
-			case Assembler::number:
-				if (!TryStringToInt(plusOperand, &extractedNumber)) {
-					ShowError("valor invalido fornecido para opercação +", Semantic);
-					return;
-				}
-				break;
-			case Assembler::label:
-				auto symbol = TableManager::GetSymbol(plusOperand);
-				if (symbol == nullptr) {
-					ShowError("Label " + plusOperand + " nao encontrada", Semantic);
-					return;
-				}
-				extractedNumber = symbol->vlr;
-				break;
-			case Assembler::operation:
-				ShowError("valor invalido fornecido para opercação +", Semantic);
-				return;
-			}
-			calculatedOperands.push_back(extractedNumber);
-		}
-
-		//soma os valores do calculated operands.
-	#pragma endregion
-	}
-
 	if (info->operandCount != operands.size()) {
-		//ShowError("")
+		ShowError("Numero invalido de parametros para instrucao", Semantic);
 	}
+
+	int i = 0;
+	for (auto operand : operands) {
+		auto sumResult = CalculateAndCheckArrayBoundaries(operand);
+		calculatedOperands.push_back(sumResult);
+	}
+
+}
+
+bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValue, SymbolInfo** symbol) {
+	auto type = GetType(operand);
+
+	int extractedNumber = 0;
+	switch (type) {
+		case Assembler::number:
+			if (!TryStringToInt(operand, &extractedNumber)) {
+				ShowError("argumento invalido fornecido para operacao +", Semantic);
+				return false;
+			}
+			break;
+		case Assembler::label:
+			if ((*symbol) != nullptr) {
+				ShowError("Nao e possivel utilizar simbolo " + operand +  " como indice de vetor.", Syntatic);
+				return false;
+			}
+
+			*symbol = TableManager::GetSymbol(operand);
+			if ((*symbol) == nullptr) {
+				ShowError("Label " + operand + " nao encontrada", Semantic);
+				return false;
+			} else {
+				extractedNumber = (*symbol)->vlr;
+			}
+			break;
+		case Assembler::operation:
+			ShowError("argumento invalido fornecido para operacacao +", Semantic);
+			return false;
+	}
+	extractedValue = extractedNumber;
+	return true;
+}
+
+int Assembler::CalculateAndCheckArrayBoundaries(const string& operand) {
+	int sumResult = 0;
+	SymbolInfo* symbol = nullptr;
+	auto operationSides = StringLibrary::Tokenize(operand, "+");
+
+	for (auto plusOperand : operationSides) {
+		int extractedValue;
+		if (!TryCalculateOperandRealValue(plusOperand, extractedValue, &symbol)) {
+			return 0;
+		}
+		sumResult += extractedValue;
+	}
+	if (operationSides.size() > 1 && symbol == nullptr) {
+		ShowError("uso de indices sem vetor", Syntatic);
+		return 0;
+	}
+
+	if (symbol!=nullptr && symbol->spaceCount - 1 < sumResult - symbol->vlr) {
+		ShowError("Uso de Endereco de memoria nao reservado em " + operand, Semantic);
+		return 0;
+	}
+	return sumResult;
 }
 
 Assembler::operandTypes Assembler::GetType(string operand) {

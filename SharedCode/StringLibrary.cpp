@@ -39,7 +39,13 @@ string StringLibrary::RemoveExcessiveSpaces(string original) {
 	 free(dup);
 }
 
-string StringLibrary::Trim(string s) {
+ vector<string> StringLibrary::Tokenize(const string & s, const char * delim) {
+	 vector<string> toReturn;
+	 Tokenize(s, delim, toReturn);
+	 return toReturn;
+ }
+
+ string StringLibrary::Trim(string s) {
 	string whitespace = " \t";
 
 	const auto strBegin = s.find_first_not_of(whitespace);

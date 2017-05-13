@@ -56,6 +56,8 @@ class Assembler {
 		
 		bool CheckLabels(const vector<string>& operands);
 		void ValidateAndWriteInstruction(const InstructionInfo* info, const vector<string>& operands);
+		bool TryCalculateOperandRealValue(string operand, int& extractedValue, SymbolInfo** symbol);
+		int CalculateAndCheckArrayBoundaries(const string& operationSides);
 
 		operandTypes GetType(string operand);
 };

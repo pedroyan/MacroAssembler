@@ -42,6 +42,15 @@ class StringLibrary {
 	static void Tokenize(const string &s, const char* delim, vector<string> &v);
 
 	/// <summary>
+	/// Divide a string pelos delimitadores passados.
+	/// 
+	/// </summary>
+	/// <param name="s">String a ser dividida</param>
+	/// <param name="delim">Delimitador</param>
+	/// <returns>Vetor com as strings dividadas</returns>
+	static vector<string> Tokenize(const string &s, const char* delim);
+
+	/// <summary>
 	/// Remove todos os espaços em branco no começo e no fim de um string
 	/// </summary>
 	/// <param name="s">string que será reduzida</param>
