@@ -100,6 +100,25 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 			if (!validateToken(tokens[i], Operand)) {
 				throwError("Token de operando " + tokens[i] + " invalido", Lexic);
 			}
+
+			if (dto.Operacao == "copy") {
+				vector<string> copyArguments;
+				StringLibrary::Tokenize(tokens[i], ",", copyArguments);
+
+				if (tokens[i].find(',') == string::npos) {
+					throwError("Instrucao copy precisa ter os seus argumentos separados por virgula, sem espaco entre eles", Semantic);
+				}
+
+				if (copyArguments.size() != 2) {
+					throwError("Instrucao copy possui somente 2 argumentos separados por virgula", Semantic);
+				}
+
+				if (!dto.Operandos.empty()) {
+					throwError("Instrucao copy não pode ter argumentos separados por espaço", Semantic);
+				}
+			}
+
+			vector<string> copyArguments;
 			StringLibrary::Tokenize(tokens[i], ",", dto.Operandos);
 		} else {
 			if (!validateToken(tokens[i], Operation)) {
