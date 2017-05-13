@@ -101,12 +101,26 @@ TokensDTO LexicalScanner::organizeTokens(vector<string> tokens) {
 				throwError("Token de operando " + tokens[i] + " invalido", Lexic);
 			}
 
+			//analisa se existe sinal de + como um token isolado
+			auto plus = std::find(tokens.begin(), tokens.end(), "+");
+			if (plus != tokens.end()) {
+				throwError("Operador + nao pode ter espaco separando seus operandos", Lexic);
+			}
+
+			//analisa no token atual se tem algum sinal de + no seu começo ou no seu final
+			auto plusIndexBegin = tokens[i].find_first_of("+");
+			auto plusIndexEnd = tokens[i].find_last_of("+");
+			if (plusIndexBegin == 0 || plusIndexEnd == tokens[i].size() - 1) {
+				throwError("Operador + nao pode ter espaco separando seus operandos", Lexic);
+			}
+
+
 			if (dto.Operacao == "copy") {
 				vector<string> copyArguments;
 				StringLibrary::Tokenize(tokens[i], ",", copyArguments);
 
 				if (tokens[i].find(',') == string::npos) {
-					throwError("Instrucao copy precisa ter os seus argumentos separados por virgula, sem espaco entre eles", Semantic);
+					throwError("Instrucao copy precisa ter os seus argumentos separados por virgula, sem espaco entre eles\n", Semantic);
 				}
 
 				if (copyArguments.size() != 2) {
@@ -140,14 +154,12 @@ void LexicalScanner::ShowError(string message) {
 }
 
 bool LexicalScanner::validateToken(string token, LexicalScanner::TokenType type) {
-	string tokenRegex = type != Label ? "([a-zA-Z0-9,_]+)" : "([a-zA-Z0-9,_\\:]+)";
-	regex operatorRgx("[\\+-]");
+	string tokenRegex = type != Label ? "([a-zA-Z0-9,_\\+]+)" : "([a-zA-Z0-9,_\\:]+)";
 	regex rgx(tokenRegex.c_str());
 
 	bool tokenMatch = std::regex_match(token, rgx);
-	bool operatorMatch = std::regex_match(token, operatorRgx);
 
-	return token.size() <= 50 && (tokenMatch || operatorMatch) && (type == TokenType::Operand || !isdigit(token[0]));
+	return token.size() <= 50 && tokenMatch && (type == TokenType::Operand || !isdigit(token[0]));
 }
 
 
