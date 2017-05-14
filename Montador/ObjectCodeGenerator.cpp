@@ -2,7 +2,7 @@
 #include "TableManager.h"
 
 ObjectCodeGenerator::ObjectCodeGenerator(string objectFileName) {
-	outputFileName = objectFileName;
+	outputFileName = objectFileName.append(".o");
 }
 
 ObjectCodeGenerator::~ObjectCodeGenerator() {
@@ -39,6 +39,22 @@ void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vl
 	}
 }
 
+void ObjectCodeGenerator::GenerateFile(GenerationType type) {
+	fstream file;
+	file.open(outputFileName, std::fstream::out);
+
+	switch (type) {
+		case ObjectCodeGenerator::Direct:
+			file << code.rdbuf();
+			break;
+		case ObjectCodeGenerator::Modular:
+			GenerateModularFile(file);
+			break;
+		default:
+			break;
+	}
+}
+
 void ObjectCodeGenerator::WriteTableDefinition() {
 	const auto& defTable = TableManager::GetDefinitionTable();
 	for (auto definition : defTable) {
@@ -51,4 +67,7 @@ void ObjectCodeGenerator::WriteTableUse() {
 	for (auto use : useTable) {
 		tableDefinition << use.first + " " + std::to_string(use.second) + "\n";
 	}
+}
+
+void ObjectCodeGenerator::GenerateModularFile(fstream & file) {
 }

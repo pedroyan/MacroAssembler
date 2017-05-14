@@ -55,6 +55,12 @@ class Assembler {
 		/// </summary>
 		void setDefinitionTableValues();
 		
+		/// <summary>
+		/// Checa se todos os operandos que possuem labels tenham as mesmas declaradas
+		/// na tabela de simbolos
+		/// </summary>
+		/// <param name="operands">Operandos analisados</param>
+		/// <returns>Uma flag booleana indicando se todas as labels foram declaradas</returns>
 		bool CheckLabels(const vector<string>& operands);
 		void ValidateAndWriteInstruction(const InstructionInfo* info, const vector<string>& operands);
 		bool TryCalculateOperandRealValue(string operand, int& extractedValue, SymbolInfo** symbol);

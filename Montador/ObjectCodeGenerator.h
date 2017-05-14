@@ -8,6 +8,7 @@ using std::stringstream;
 using std::ifstream;
 using std::string;
 using std::vector;
+using std::fstream;
 
 struct ArgumentInfo {
 	/// <summary>
@@ -53,6 +54,8 @@ class ObjectCodeGenerator {
 		/// <param name="vlr">Valor da diretiva</param>
 		void WriteDirective(WrittenDirectivesType directive, int vlr);
 
+		void GenerateFile(GenerationType type);
+
 	private:
 		GenerationType type;
 
@@ -71,6 +74,8 @@ class ObjectCodeGenerator {
 		/// Escreve a tabela de uso
 		/// </summary>
 		void WriteTableUse();
+
+		void GenerateModularFile(fstream& file);
 
 };
 
