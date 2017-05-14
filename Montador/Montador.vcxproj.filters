@@ -48,6 +48,9 @@
     <ClCompile Include="..\SharedCode\StringLibrary.cpp">
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectCodeGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreProcessor.h">
@@ -64,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="TableManager.h">
       <Filter>Header Files\Assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectCodeGenerator.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

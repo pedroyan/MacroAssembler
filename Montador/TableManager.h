@@ -23,11 +23,11 @@ struct DirectiveInfo {
 };
 
 struct SymbolInfo {
-	int vlr;
+	int address;
 	bool externo;
 	int spaceCount;
 
-	SymbolInfo(int valor, bool ext) : vlr(valor), externo(ext), spaceCount(1) {};
+	SymbolInfo(int valor, bool ext) : address(valor), externo(ext), spaceCount(1) {};
 };
 
 class TableManager {
@@ -76,6 +76,8 @@ class TableManager {
 		static int* GetDefinitionValue(string symbolName);
 
 		static unordered_map<string, int>& GetDefinitionTable();
+
+		static unordered_map<string, int>& GetUseTable();
 
 		/// <summary>
 		/// Imprime os simbolos na tabela de simbolos

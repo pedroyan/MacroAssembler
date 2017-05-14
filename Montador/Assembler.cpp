@@ -6,8 +6,7 @@
 using std::regex;
 using std::regex_match;
 
-Assembler::Assembler(string outFileName) : scanner(outFileName,this) {
-	outputFileName = outFileName;
+Assembler::Assembler(string outFileName) : scanner(outFileName,this), generator(outFileName){
 	positionCount = 0;
 	lineCount = 1;
 	successAssemble = true;
@@ -60,7 +59,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 			ShowError("Nenhum rótulo foi definido para a diretiva Extern",Syntatic);
 			return 0;
 		}
-		symbol->vlr = 0;
+		symbol->address = 0;
 		symbol->externo = true;
 	} else if (directiveName == "public") {
 		//insere o operando na tabela de definicoes
@@ -231,7 +230,7 @@ void Assembler::setDefinitionTableValues() {
 		auto symbol = TableManager::GetSymbol(it.first);
 
 		if (symbol != nullptr) {
-			it.second = symbol->vlr;
+			it.second = symbol->address;
 		} else {
 			ShowError("O simbolo publico " + it.first + " não foi definido", Semantic);
 		}
@@ -297,7 +296,7 @@ bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValu
 				ShowError("Label " + operand + " nao encontrada", Semantic);
 				return false;
 			} else {
-				extractedNumber = (*symbol)->vlr;
+				extractedNumber = (*symbol)->address;
 			}
 			break;
 		case Assembler::operation:
@@ -325,10 +324,12 @@ int Assembler::CalculateAndCheckArrayBoundaries(const string& operand) {
 		return 0;
 	}
 
-	if (symbol!=nullptr && symbol->spaceCount - 1 < sumResult - symbol->vlr) {
+	if (symbol!=nullptr && symbol->spaceCount - 1 < sumResult - symbol->address) {
 		ShowError("Uso de Endereco de memoria nao reservado em " + operand, Semantic);
 		return 0;
 	}
+
+	//retorna também o symbolInfo para colocat na tabela de realocação
 	return sumResult;
 }
 

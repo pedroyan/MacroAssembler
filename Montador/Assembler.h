@@ -3,6 +3,7 @@
 #include <vector>
 #include"LexicalScanner.h"
 #include "TableManager.h"
+#include "ObjectCodeGenerator.h"
 
 using std::string;
 
@@ -19,7 +20,7 @@ class Assembler {
 		void secondPass();
 
 		LexicalScanner scanner;
-		string outputFileName;
+		ObjectCodeGenerator generator;
 
 		int positionCount;
 		int lineCount;

@@ -75,7 +75,7 @@ struct Symbol {
 	string name;
 	SymbolInfo info;
 };
-bool sortByValor(const Symbol &lhs, const Symbol &rhs) { return lhs.info.vlr < rhs.info.vlr; }
+bool sortByValor(const Symbol &lhs, const Symbol &rhs) { return lhs.info.address < rhs.info.address; }
 
 int * TableManager::GetDefinitionValue(string symbolName) {
 	auto iterator = DefinitionTable.find(symbolName);
@@ -88,6 +88,10 @@ int * TableManager::GetDefinitionValue(string symbolName) {
 
 unordered_map<string, int>& TableManager::GetDefinitionTable() {
 	return DefinitionTable;
+}
+
+unordered_map<string, int>& TableManager::GetUseTable() {
+	return UseTable;
 }
 
 void TableManager::Diagnostic_PrintSymbols() {
@@ -103,7 +107,7 @@ void TableManager::Diagnostic_PrintSymbols() {
 	
 
 	for (auto symbol : vec) {
-		printf("\n%s\t%d\t%d",symbol.name.c_str(),symbol.info.vlr,symbol.info.externo);
+		printf("\n%s\t%d\t%d",symbol.name.c_str(),symbol.info.address,symbol.info.externo);
 	}
 	printf("\n ----------------------------------------- \n");
 }
