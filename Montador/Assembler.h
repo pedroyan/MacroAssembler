@@ -57,7 +57,14 @@ class Assembler {
 		bool CheckLabels(const vector<string>& operands);
 		void ValidateAndWriteInstruction(const InstructionInfo* info, const vector<string>& operands);
 		bool TryCalculateOperandRealValue(string operand, int& extractedValue, SymbolInfo** symbol);
-		int CalculateAndCheckArrayBoundaries(const string& operationSides);
+
+		/// <summary>
+		/// Calcula o valor numerico do operando passado e faz checagem de indice de vetores
+		/// com operador +
+		/// </summary>
+		/// <param name="operand"></param>
+		/// <returns></returns>
+		int CalculateAndCheckArrayBoundaries(const string& operand);
 
 		operandTypes GetType(string operand);
 };
