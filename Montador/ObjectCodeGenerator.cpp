@@ -29,10 +29,12 @@ void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vl
 		case ObjectCodeGenerator::SPACE:
 			for (size_t i = 0; i < vlr; i++) {
 				code << " 00";
+				tableRealocation << "0";
 			}
 			break;
 		case ObjectCodeGenerator::CONST:
 			code << " "+std::to_string(vlr);
+			tableRealocation << "0";
 			break;
 		default:
 			break;
@@ -53,6 +55,7 @@ void ObjectCodeGenerator::GenerateFile(GenerationType type) {
 		default:
 			break;
 	}
+	file.close();
 }
 
 void ObjectCodeGenerator::WriteTableDefinition() {
@@ -70,4 +73,16 @@ void ObjectCodeGenerator::WriteTableUse() {
 }
 
 void ObjectCodeGenerator::GenerateModularFile(fstream & file) {
+	WriteTableDefinition();
+	WriteTableUse();
+
+	file << "TABLE USE\n";
+	file << tableUse.rdbuf();
+	file << "\nTABLE DEFINITION\n";
+	file << tableDefinition.rdbuf();
+	file << "\nTABLE REALOCATION\n";
+	file << tableRealocation.rdbuf();
+	file << "\nCODE\n";
+	file << code.rdbuf();
+
 }
