@@ -31,3 +31,16 @@ string FileLibrary::GetNextLine(istream & stream){
 	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
 	
 }
+
+string FileLibrary::JumpForNextLine(vector<string> members, ifstream & fp){
+	string line;
+	FileLibrary leitor;
+		do {
+			line = leitor.GetNextLine(fp);
+			StringLibrary::Tokenize(line, " ", members);
+		} while (members.size() == 0);
+	
+
+	return line;
+}
+
