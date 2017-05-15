@@ -24,18 +24,19 @@ struct ArgumentInfo {
 	ArgumentInfo(int realValue, bool isExtern) : Extern(isExtern), RealValue(realValue){}
 };
 
+enum class GenerationType {
+	Direct,
+	Modular
+};
+
+enum class WrittenDirectivesType {
+	SPACE,
+	CONST
+};
+
+
 class ObjectCodeGenerator {
 	public:
-		enum GenerationType {
-			Direct,
-			Modular
-		};
-
-		enum WrittenDirectivesType {
-			SPACE,
-			CONST
-		};
-
 
 		ObjectCodeGenerator(string objectFileName);
 		~ObjectCodeGenerator();

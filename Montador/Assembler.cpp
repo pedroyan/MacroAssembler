@@ -89,9 +89,12 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 
 void Assembler::Assemble() {
 	firstPass();
+
 	scanner.RestartStream();
 	scanner.SuppressErrors = true;
+
 	secondPass();
+	generateObjectFile();
 }
 
 void Assembler::firstPass() {
@@ -260,7 +263,7 @@ bool Assembler::CheckLabels(const vector<string>& operands) {
 
 void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const vector<string>& operands) {
 	vector<string> operationSides;
-	vector<int> calculatedOperands;
+	vector<ArgumentInfo> arguments;
 
 	if (info->operandCount != operands.size()) {
 		ShowError("Numero invalido de parametros para instrucao", Semantic);
@@ -268,10 +271,11 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 
 	int i = 0;
 	for (auto operand : operands) {
-		auto sumResult = CalculateAndCheckArrayBoundaries(operand);
-		calculatedOperands.push_back(sumResult);
+		auto checkedArgument = CalculateAndCheckArrayBoundaries(operand);
+		arguments.push_back(checkedArgument);
 	}
 
+	generator.WriteInstruction(info->opCode, arguments);
 }
 
 bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValue, SymbolInfo** symbol) {
@@ -307,30 +311,33 @@ bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValu
 	return true;
 }
 
-int Assembler::CalculateAndCheckArrayBoundaries(const string& operand) {
+ArgumentInfo Assembler::CalculateAndCheckArrayBoundaries(const string& operand) {
 	int sumResult = 0;
+	ArgumentInfo toReturn(0,false);
 	SymbolInfo* symbol = nullptr;
 	auto operationSides = StringLibrary::Tokenize(operand, "+");
 
 	for (auto plusOperand : operationSides) {
 		int extractedValue;
 		if (!TryCalculateOperandRealValue(plusOperand, extractedValue, &symbol)) {
-			return 0;
+			return toReturn;
 		}
 		sumResult += extractedValue;
 	}
 	if (operationSides.size() > 1 && symbol == nullptr) {
 		ShowError("uso de indices sem vetor", Syntatic);
-		return 0;
+		return toReturn;
 	}
 
 	if (symbol!=nullptr && symbol->spaceCount - 1 < sumResult - symbol->address) {
 		ShowError("Uso de Endereco de memoria nao reservado em " + operand, Semantic);
-		return 0;
+		return toReturn;
 	}
 
 	//retorna também o symbolInfo para colocat na tabela de realocação
-	return sumResult;
+	toReturn.RealValue = sumResult;
+	toReturn.Extern = symbol->externo;
+	return toReturn;
 }
 
 Assembler::operandTypes Assembler::GetType(string operand) {
@@ -345,5 +352,18 @@ Assembler::operandTypes Assembler::GetType(string operand) {
 	}
 
 	return operandTypes::label;
+}
+
+void Assembler::generateObjectFile() {
+	if (!successAssemble) {
+		printf("Existem erros de montagem presentes. Arquivo .o nao foi gerado");
+		return;
+	}
+
+	if (beginFlags&BeginFlags::Begin) {
+		generator.GenerateFile(GenerationType::Modular);
+	} else {
+		generator.GenerateFile(GenerationType::Direct);
+	}
 }
 

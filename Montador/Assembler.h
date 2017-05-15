@@ -71,8 +71,10 @@ class Assembler {
 		/// </summary>
 		/// <param name="operand"></param>
 		/// <returns></returns>
-		int CalculateAndCheckArrayBoundaries(const string& operand);
+		ArgumentInfo CalculateAndCheckArrayBoundaries(const string& operand);
 
 		operandTypes GetType(string operand);
+
+		void generateObjectFile();
 };
 

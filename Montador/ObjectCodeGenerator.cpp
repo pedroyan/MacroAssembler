@@ -11,9 +11,9 @@ ObjectCodeGenerator::~ObjectCodeGenerator() {
 void ObjectCodeGenerator::WriteInstruction(int opCode, const vector<ArgumentInfo>& arguments) {
 	string line = "";
 	tableRealocation << "0"; //do opcode
-
+	line = std::to_string(opCode);
 	for (auto arg : arguments) {
-		line += line.empty() ? std::to_string(arg.RealValue) : " " + std::to_string(arg.RealValue);
+		line +=  " " + std::to_string(arg.RealValue);
 		tableRealocation << arg.Extern ? "0" : "1";
 	}
 
@@ -26,13 +26,13 @@ void ObjectCodeGenerator::WriteInstruction(int opCode, const vector<ArgumentInfo
 
 void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vlr) {
 	switch (directive) {
-		case ObjectCodeGenerator::SPACE:
+		case WrittenDirectivesType::SPACE:
 			for (size_t i = 0; i < vlr; i++) {
 				code << " 00";
 				tableRealocation << "0";
 			}
 			break;
-		case ObjectCodeGenerator::CONST:
+		case WrittenDirectivesType::CONST:
 			code << " "+std::to_string(vlr);
 			tableRealocation << "0";
 			break;
@@ -46,10 +46,10 @@ void ObjectCodeGenerator::GenerateFile(GenerationType type) {
 	file.open(outputFileName, std::fstream::out);
 
 	switch (type) {
-		case ObjectCodeGenerator::Direct:
+		case GenerationType::Direct:
 			file << code.rdbuf();
 			break;
-		case ObjectCodeGenerator::Modular:
+		case GenerationType::Modular:
 			GenerateModularFile(file);
 			break;
 		default:
