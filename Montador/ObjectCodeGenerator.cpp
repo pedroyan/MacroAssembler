@@ -14,7 +14,11 @@ void ObjectCodeGenerator::WriteInstruction(int opCode, const vector<ArgumentInfo
 	line = std::to_string(opCode);
 	for (auto arg : arguments) {
 		line +=  " " + std::to_string(arg.RealValue);
-		tableRealocation << arg.Extern ? "0" : "1";
+		if (arg.Extern) {
+			tableRealocation << "0";
+		} else {
+			tableRealocation << "1";
+		}
 	}
 
 	if(code.rdbuf() -> in_avail() == 0) {
@@ -77,12 +81,12 @@ void ObjectCodeGenerator::GenerateModularFile(fstream & file) {
 	WriteTableUse();
 
 	file << "TABLE USE\n";
-	file << tableUse.rdbuf();
+	file << tableUse.str().c_str();
 	file << "\nTABLE DEFINITION\n";
-	file << tableDefinition.rdbuf();
+	file << tableDefinition.str().c_str();
 	file << "\nTABLE REALOCATION\n";
-	file << tableRealocation.rdbuf();
-	file << "\nCODE\n";
-	file << code.rdbuf();
+	file << tableRealocation.str().c_str();
+	file << "\n\nCODE\n";
+	file << code.str().c_str();
 
 }

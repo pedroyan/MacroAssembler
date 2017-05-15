@@ -81,6 +81,8 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 			return 0;
 		}
 
+		beginFlags = beginFlags | BeginFlags::End;
+
 	} else {
 		positionSkip = info->size;
 	}
