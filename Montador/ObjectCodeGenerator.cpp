@@ -65,14 +65,14 @@ void ObjectCodeGenerator::GenerateFile(GenerationType type) {
 void ObjectCodeGenerator::WriteTableDefinition() {
 	const auto& defTable = TableManager::GetDefinitionTable();
 	for (auto definition : defTable) {
-		tableUse << definition.first + " " + std::to_string(definition.second) + "\n";
+		tableDefinition << definition.first + " " + std::to_string(definition.second) + "\n";
 	}
 }
 
 void ObjectCodeGenerator::WriteTableUse() {
 	const auto& useTable = TableManager::GetUseTable();
 	for (auto use : useTable) {
-		tableDefinition << use.first + " " + std::to_string(use.second) + "\n";
+		tableUse << use.first + " " + std::to_string(use.second) + "\n";
 	}
 }
 
