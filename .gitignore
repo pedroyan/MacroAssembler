@@ -250,3 +250,5 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+Codes/middleFile.o
+Codes/middleFile.pre

@@ -1,9 +1,11 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 using std::unordered_map;
 using std::string;
+using std::vector;
 
 struct InstructionInfo {
 	int operandCount;
@@ -67,6 +69,8 @@ class TableManager {
 		/// <param name="symbolName">Nome do simbolo a ser inserido</param>
 		static void InsertDefinition(string symbolName);
 
+		static void InsertUse(string externalSymbolName, int address);
+
 		/// <summary>
 		/// Busca o valor de um símbolo na tabela de definição. Retorna nullptr caso o simbolo
 		/// não seja encontrado
@@ -77,7 +81,7 @@ class TableManager {
 
 		static unordered_map<string, int>& GetDefinitionTable();
 
-		static unordered_map<string, int>& GetUseTable();
+		static vector<std::pair<string, int>>& GetUseTable();
 
 		/// <summary>
 		/// Imprime os simbolos na tabela de simbolos
@@ -88,12 +92,13 @@ class TableManager {
 		/// Imprime a tabela de definições
 		/// </summary>
 		static void Diagnostic_PrintDefinitions();
+
 	private:
 		static unordered_map<string, InstructionInfo> InstructionTable;
 		static unordered_map<string, DirectiveInfo> DirectiveTable;
 		static unordered_map<string, SymbolInfo> SymbolTable;
 
 		static unordered_map<string, int> DefinitionTable;
-		static unordered_map<string, int> UseTable;
+		static vector<std::pair<string, int>> UseTable;
 };
 

@@ -49,7 +49,7 @@
       <Filter>Source Files\Shared</Filter>
     </ClCompile>
     <ClCompile Include="ObjectCodeGenerator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Assembler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

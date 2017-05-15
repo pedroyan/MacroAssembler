@@ -21,6 +21,11 @@ struct ArgumentInfo {
 	/// </summary>
 	int RealValue;
 
+	/// <summary>
+	/// Nome do simbolo avaliado
+	/// </summary>
+	string SymbolName;
+
 	ArgumentInfo(int realValue, bool isExtern) : Extern(isExtern), RealValue(realValue){}
 };
 

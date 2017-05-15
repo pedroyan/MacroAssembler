@@ -1,8 +1,5 @@
 #include "TableManager.h"
-#include <vector>
 #include <algorithm>
-
-using std::vector;
 
 unordered_map<string, InstructionInfo> TableManager::InstructionTable{
 	{"add", {1,1}},
@@ -33,7 +30,7 @@ unordered_map<string, DirectiveInfo> TableManager::DirectiveTable{
 
 unordered_map<string, SymbolInfo> TableManager::SymbolTable;
 unordered_map<string, int> TableManager::DefinitionTable;
-unordered_map<string, int> TableManager::UseTable;
+vector<std::pair<string, int>> TableManager::UseTable;
 
 InstructionInfo const * TableManager::GetInstruction(string name) {
 	auto iterator = InstructionTable.find(name);
@@ -71,6 +68,10 @@ void TableManager::InsertDefinition(string symbolName) {
 	DefinitionTable.insert(std::make_pair(symbolName, 0));
 }
 
+void TableManager::InsertUse(string externalSymbolName, int address) {
+	UseTable.push_back(std::make_pair(externalSymbolName, address));
+}
+
 struct Symbol {
 	string name;
 	SymbolInfo info;
@@ -90,7 +91,7 @@ unordered_map<string, int>& TableManager::GetDefinitionTable() {
 	return DefinitionTable;
 }
 
-unordered_map<string, int>& TableManager::GetUseTable() {
+vector<std::pair<string, int>>& TableManager::GetUseTable() {
 	return UseTable;
 }
 

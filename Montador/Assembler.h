@@ -63,7 +63,7 @@ class Assembler {
 		/// <returns>Uma flag booleana indicando se todas as labels foram declaradas</returns>
 		bool CheckLabels(const vector<string>& operands);
 		void ValidateAndWriteInstruction(const InstructionInfo* info, const vector<string>& operands);
-		bool TryCalculateOperandRealValue(string operand, int& extractedValue, SymbolInfo** symbol);
+		bool TryCalculateOperandRealValue(string operand, int& extractedValue, SymbolInfo** symbol, string& symbolName);
 
 		/// <summary>
 		/// Calcula o valor numerico do operando passado e faz checagem de indice de vetores

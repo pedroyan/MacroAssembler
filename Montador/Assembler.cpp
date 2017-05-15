@@ -155,7 +155,7 @@ void Assembler::secondPass() {
 
 		auto instruction = TableManager::GetInstruction(dto.Operacao);
 		if (instruction != nullptr) {
-			positionCount += instruction->operandCount + 1;
+			//positionCount += instruction->operandCount + 1;
 			ValidateAndWriteInstruction(instruction, dto.Operandos);
 		} else {
 			auto directive = TableManager::GetDirective(dto.Operacao);
@@ -280,17 +280,21 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 	if (info->operandCount != operands.size()) {
 		ShowError("Numero invalido de parametros para instrucao", Semantic);
 	}
+	positionCount++; //Posicao da instrucao
 
-	int i = 0;
 	for (auto operand : operands) {
 		auto checkedArgument = CalculateAndCheckArrayBoundaries(operand);
+		if (checkedArgument.Extern) {
+			TableManager::InsertUse(checkedArgument.SymbolName, positionCount);
+		}
 		arguments.push_back(checkedArgument);
+		positionCount++;
 	}
 
 	generator.WriteInstruction(info->opCode, arguments);
 }
 
-bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValue, SymbolInfo** symbol) {
+bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValue, SymbolInfo** symbol, string& symbolName) {
 	auto type = GetType(operand);
 
 	int extractedNumber = 0;
@@ -313,6 +317,7 @@ bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValu
 				return false;
 			} else {
 				extractedNumber = (*symbol)->address;
+				symbolName = operand;
 			}
 			break;
 		case Assembler::operation:
@@ -327,11 +332,13 @@ ArgumentInfo Assembler::CalculateAndCheckArrayBoundaries(const string& operand) 
 	int sumResult = 0;
 	ArgumentInfo toReturn(0,false);
 	SymbolInfo* symbol = nullptr;
+	string symbolName;
+
 	auto operationSides = StringLibrary::Tokenize(operand, "+");
 
 	for (auto plusOperand : operationSides) {
 		int extractedValue;
-		if (!TryCalculateOperandRealValue(plusOperand, extractedValue, &symbol)) {
+		if (!TryCalculateOperandRealValue(plusOperand, extractedValue, &symbol, symbolName)) {
 			return toReturn;
 		}
 		sumResult += extractedValue;
@@ -341,7 +348,7 @@ ArgumentInfo Assembler::CalculateAndCheckArrayBoundaries(const string& operand) 
 		return toReturn;
 	}
 
-	if (symbol!=nullptr && symbol->spaceCount - 1 < sumResult - symbol->address) {
+	if (symbol!=nullptr && symbol->spaceCount - 1 < sumResult - symbol->address && !symbol->externo) {
 		ShowError("Uso de Endereco de memoria nao reservado em " + operand, Semantic);
 		return toReturn;
 	}
@@ -349,6 +356,7 @@ ArgumentInfo Assembler::CalculateAndCheckArrayBoundaries(const string& operand) 
 	//retorna também o symbolInfo para colocat na tabela de realocação
 	toReturn.RealValue = sumResult;
 	toReturn.Extern = symbol->externo;
+	toReturn.SymbolName = symbolName;
 	return toReturn;
 }
 
