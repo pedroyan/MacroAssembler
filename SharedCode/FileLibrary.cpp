@@ -4,6 +4,10 @@
 bool FileLibrary::VerifyFile(const char * fileName, const char * extension, const char * extensionErrorMessage, ifstream* stream) {
 	string fileNameS(fileName);
 	size_t extensionIndex = fileNameS.find_last_of(".");
+	if (extensionIndex == string::npos) {
+		printf("O arquivo passado nao possui extensao. ");
+		return false;
+	}
 
 	string fileExtension = StringLibrary::ToLower(fileNameS.substr(extensionIndex + 1));
 
