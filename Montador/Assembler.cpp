@@ -160,7 +160,17 @@ void Assembler::secondPass() {
 			if (directive == nullptr) {
 				ShowError("Operacao " + dto.Operacao + " nao identificada", Syntatic);
 			}
-			//so escreve alguma coisa no codigo objeto quando se tem SPACE e CONST
+			if (dto.Operacao == "space") {
+				auto symbol = TableManager::GetSymbol(dto.Rotulo);
+				generator.WriteDirective(WrittenDirectivesType::SPACE, symbol->spaceCount);
+			} else if (dto.Operacao=="const") {
+				int result;
+				if (TryStringToInt(dto.Operandos[0],&result)) {
+					generator.WriteDirective(WrittenDirectivesType::CONST, result);
+				} else {
+					ShowError("Nao foi possivel converter valor passado para operador CONST para um inteiro", Semantic);
+				}		
+			}
 		}
 		
 		lineCount++;
