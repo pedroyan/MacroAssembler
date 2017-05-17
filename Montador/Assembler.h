@@ -41,8 +41,7 @@ class Assembler {
 		};
 		enum operandTypes {
 			number,
-			label,
-			operation
+			label
 		};
 
 		void ShowError(string message, ErrorType type);

@@ -283,7 +283,31 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 
 	if (info->operandCount != operands.size()) {
 		ShowError("Numero invalido de parametros para instrucao", Semantic);
+		return;
 	}
+
+	if (info->opCode == OpCodes::DIV) {
+		auto operandType = GetType(operands[0]);
+		switch (operandType) {
+			case Assembler::number:
+				int number;
+
+				if (!TryStringToInt(operands[0],&number)) {
+					ShowError("Nao foi possivel converter " + operands[0] + " para um numero", Semantic);
+					return;
+				}
+
+				if (number == 0) {
+					ShowError("Divisão por 0", Syntatic);
+					return;
+				}
+				break;
+			case Assembler::label:
+
+				break;
+		}
+	}
+
 	positionCount++; //Posicao da instrucao
 
 	for (auto operand : operands) {
@@ -324,9 +348,6 @@ bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValu
 				symbolName = operand;
 			}
 			break;
-		case Assembler::operation:
-			ShowError("argumento invalido fornecido para operacacao +", Semantic);
-			return false;
 	}
 	extractedValue = extractedNumber;
 	return true;
@@ -366,13 +387,8 @@ ArgumentInfo Assembler::CalculateAndCheckArrayBoundaries(const string& operand) 
 
 Assembler::operandTypes Assembler::GetType(string operand) {
 	regex numberRegex("[0-9]+");
-	regex operatorRegex("[\\+-]");
 	if (regex_match(operand,numberRegex) || StringLibrary::IsHexadecimal(operand)) {
 		return operandTypes::number;
-	}
-
-	if (regex_match(operand, operatorRegex)) {
-		return operandTypes::operation;
 	}
 
 	return operandTypes::label;
