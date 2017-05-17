@@ -48,18 +48,27 @@ void ModuleEngine::SetTableRealocation(string newTable){
 
 }
 
-vector<string> ModuleEngine::GetFirstNonEmptyLine(ifstream & file) {
+vector<string> ModuleEngine::GetFirstNonEmptyLine(ifstream & file, string& lineBuffer) {
 	vector<string> toReturn;
-	string line;
 
-	line = FileLibrary::GetNextLine(file);
-	StringLibrary::Tokenize(line, " ", toReturn);
+	lineBuffer = FileLibrary::GetNextLine(file);
+	StringLibrary::Tokenize(lineBuffer, " ", toReturn);
 	if (toReturn.size() == 0) {
-		line = FileLibrary::JumpForNextLine(toReturn, file);
-		StringLibrary::Tokenize(line, " ", toReturn);
+		lineBuffer = FileLibrary::JumpForNextLine(toReturn, file);
+		StringLibrary::Tokenize(lineBuffer, " ", toReturn);
 	}
 
 	return toReturn;
+}
+
+void ModuleEngine::FillObjectTable(vector<ObjectTable>& table, ifstream& file, string& lineBuffer) {
+	vector<string> members;
+	do {
+		members = GetFirstNonEmptyLine(file,lineBuffer);
+		if (StringLibrary::ToLower(members[0]) != string("table")) {
+			table.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
+		}
+	} while (StringLibrary::ToLower(members[0]) != string("table"));
 }
 
 void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
@@ -67,36 +76,24 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 
 	fp.open(this->fileName);
 	vector<string> members;
-	vector<ObjectTable> tableUse, tableDefinition;
+	vector<ObjectTable> tableUseV, tableDefinitionV;
 	vector<ObjectCode> objectCode;
 
 	auto line = FileLibrary::GetNextLine(fp);
 	StringLibrary::Tokenize(line, " ", members);
 
 	if (StringLibrary::ToLower(members[1]) == string("use")) {
-		do {
-			members = GetFirstNonEmptyLine(fp);
-			if (StringLibrary::ToLower(members[0]) != string("table")) {
-				tableUse.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
-			}
-
-
-		} while (StringLibrary::ToLower(members[0]) != string("table"));
-		SetTableUse(tableUse);
+		FillObjectTable(tableUseV, fp,line);
+		SetTableUse(tableUseV);
 	}
 
-	StringLibrary::Tokenize(line, " ", members);
+	members = StringLibrary::Tokenize(line, " ");
 	if (StringLibrary::ToLower(members[1]) == string("definition")) {
-		do {
-			members = GetFirstNonEmptyLine(fp);
-			if (StringLibrary::ToLower(members[0]) != string("table")) {
-				tableDefinition.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
-			}
-
-		} while (StringLibrary::ToLower(members[0]) != string("table"));
-		 SetTableDefenition(tableDefinition);
+		FillObjectTable(tableDefinitionV, fp, line);
+		SetTableDefenition(tableDefinitionV);
 	}
-	StringLibrary::Tokenize(line, " ", members);
+
+	members = StringLibrary::Tokenize(line, " ");
 	if (StringLibrary::ToLower(members[1]) == string("realocation")) {
 		do {
 			members.clear();

@@ -32,7 +32,8 @@ private:
 	vector<char> tableRealocation;
 	vector<ObjectCode> listaObjectCode;
 	string fileName;
-	vector<string> GetFirstNonEmptyLine(ifstream& file);
+	vector<string> GetFirstNonEmptyLine(ifstream& file, string& lineBuffer);
+	void FillObjectTable(vector<ObjectTable>& table, ifstream& file, string& lineBuffer);
 
 
 };
