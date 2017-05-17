@@ -32,12 +32,12 @@ class StringLibrary {
 	static string RemoveExcessiveSpaces(string original);
 
 	/// <summary>
-	/// Divide a string pelos delimitadores passados.
+	/// Divide a string pelos delimitadores passados numa string.
 	/// 
 	/// Implementada originalmente em: http://ysonggit.github.io/coding/2014/12/16/split-a-string-using-c.html
 	/// </summary>
 	/// <param name="s">String a ser dividida</param>
-	/// <param name="delim">Delimitador</param>
+	/// <param name="delim">Delimitadores passados na string. i.e "+-_ "</param>
 	/// <param name="v">Vetor onde serão inseridas as string divididas</param>
 	static void Tokenize(const string &s, const char* delim, vector<string> &v);
 

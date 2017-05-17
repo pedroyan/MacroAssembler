@@ -27,6 +27,8 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 	string line;
 	bool writeThisDown;
 	vector<string> tokens;
+	
+
 
 	while (stream.good()) {
 
@@ -54,13 +56,29 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 
 		
 		line = StringLibrary::Trim(line);
+	
 
 		if (writeThisDown && line != "") {
+			auto newTokens = StringLibrary::Tokenize(line, " ");
+			for (auto& toke : newTokens){
+				toke = transformEQU(toke);
+			}
+			line = "";
+			
+			for (size_t i = 0; i < newTokens.size();) {
+				line.append(newTokens[i]);
+				i++;
+				if (i<newTokens.size()) {
+					line.append(" ");
+				}
+			}
+
 			if (outputContent.rdbuf() -> in_avail() == 0) {
 				outputContent << line;
 			} else {
 				outputContent << "\n" + line;
 			}
+			tokens.clear();
 			
 		}
 	}
@@ -162,6 +180,42 @@ void PreProcessor::printError(string message, ErrorType type) {
 	failed = true;
 	ErrorPrinter::ShowError(type, inputFileName, lineCount, message);
 }
+
+string PreProcessor::transformEQU(string token) {
+	auto tokensT = StringLibrary::Tokenize(token, "+");
+	
+	for (auto& toke : tokensT) {
+		auto& iterator = valueTable.find(toke);
+		if (iterator != valueTable.end()) {
+			toke = std::to_string(iterator->second);
+		}
+	}
+
+	string resultString;
+	int tokenSize = tokensT.size();
+	for (size_t i = 0; i < tokenSize;) {
+		resultString.append(tokensT[i]);
+		i++;
+
+		if (i<tokenSize) {
+			resultString.append("+");
+		}
+	}
+
+	return resultString;
+
+	//if (tokensT.size == 1) {
+	//	auto iterator = valueTable.find(token);
+	//	if (iterator == valueTable.end()) {
+	//		return token;
+	//	} else {
+	//		return std::to_string(iterator->second);
+	//	}
+	//}
+	/*tokensT.clear();*/
+}
+
+
 
 void PreProcessor::saveFile() {
 	fstream outputStream;

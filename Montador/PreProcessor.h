@@ -63,6 +63,8 @@ class PreProcessor {
 		/// <param name="type">Tipo do erro</param>
 		void printError(string message, ErrorType type);
 
+		string transformEQU(string token);
+
 		void saveFile();
 		bool failed;
 
