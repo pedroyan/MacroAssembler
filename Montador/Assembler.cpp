@@ -295,7 +295,7 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 		positionCount++;
 	}
 
-	generator.WriteInstruction(info->opCode, arguments);
+	generator.WriteInstruction((int)info->opCode, arguments);
 }
 
 bool Assembler::TryCalculateOperandRealValue(string operand, int & extractedValue, SymbolInfo** symbol, string& symbolName) {

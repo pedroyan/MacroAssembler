@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "-o";
-	argv[2] = "SlideModuleB.asm";
+	argv[2] = "SlideModuleA.asm";
 	argv[3] = "middleFile";
 	argc = 4;
 	#else

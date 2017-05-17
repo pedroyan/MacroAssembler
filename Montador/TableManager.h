@@ -7,9 +7,26 @@ using std::unordered_map;
 using std::string;
 using std::vector;
 
+enum class OpCodes {
+	ADD = 1,
+	SUB,
+	MULT,
+	DIV,
+	JMP,
+	JMPN,
+	JMPP,
+	JMPZ,
+	COPY,
+	LOAD,
+	STORE,
+	INPUT,
+	OUTPUT,
+	STOP
+};
+
 struct InstructionInfo {
 	int operandCount;
-	int opCode;
+	OpCodes opCode;
 };
 
 struct DirectiveInfo {
@@ -30,23 +47,6 @@ struct SymbolInfo {
 	int spaceCount;
 
 	SymbolInfo(int valor, bool ext) : address(valor), externo(ext), spaceCount(1) {};
-};
-
-enum class OpCodes {
-	ADD = 1,
-	SUB,
-	MULT,
-	DIV,
-	JMP,
-	JMPN,
-	JMPP,
-	JMPZ,
-	COPY,
-	LOAD,
-	STORE,
-	INPUT,
-	OUTPUT,
-	STOP
 };
 
 class TableManager {

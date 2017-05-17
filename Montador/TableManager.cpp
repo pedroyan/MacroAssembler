@@ -2,20 +2,20 @@
 #include <algorithm>
 
 unordered_map<string, InstructionInfo> TableManager::InstructionTable{
-	{"add", {1,1}},
-	{"sub", {1,2}},
-	{"mult",{1,3}},
-	{"div", {1,4}},
-	{"jmp", {1,5}},
-	{"jmpn", {1,6}},
-	{"jmpp", {1,7}},
-	{"jmpz", {1,8}},
-	{"copy", {2,9}},
-	{"load", {1,10}},
-	{"store", {1,11}},
-	{"input", {1,12}},
-	{"output", {1,13}},
-	{"stop", {0, 14}}
+	{"add", {1,OpCodes::ADD}},
+	{"sub", {1,OpCodes::SUB}},
+	{"mult",{1,OpCodes::MULT}},
+	{"div", {1,OpCodes::DIV}},
+	{"jmp", {1,OpCodes::JMP}},
+	{"jmpn", {1,OpCodes::JMPN}},
+	{"jmpp", {1,OpCodes::JMPP}},
+	{"jmpz", {1,OpCodes::JMPZ}},
+	{"copy", {2,OpCodes::COPY}},
+	{"load", {1,OpCodes::LOAD}},
+	{"store", {1,OpCodes::STORE}},
+	{"input", {1,OpCodes::INPUT}},
+	{"output", {1,OpCodes::OUTPUT}},
+	{"stop", {0, OpCodes::STOP}}
 };
 
 unordered_map<string, DirectiveInfo> TableManager::DirectiveTable{
