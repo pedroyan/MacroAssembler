@@ -32,6 +32,23 @@ struct SymbolInfo {
 	SymbolInfo(int valor, bool ext) : address(valor), externo(ext), spaceCount(1) {};
 };
 
+enum class OpCodes {
+	ADD = 1,
+	SUB,
+	MULT,
+	DIV,
+	JMP,
+	JMPN,
+	JMPP,
+	JMPZ,
+	COPY,
+	LOAD,
+	STORE,
+	INPUT,
+	OUTPUT,
+	STOP
+};
+
 class TableManager {
 	public:
 		/// <summary>
