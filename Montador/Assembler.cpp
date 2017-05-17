@@ -109,6 +109,10 @@ void Assembler::firstPass() {
 			lineCount++;
 			continue;
 		}
+
+		if (dto.Operacao=="if") {
+			ShowError("Diretiva IF nao preprocessada", Semantic);
+		}
 		
 		SymbolInfo* symbolCreated = nullptr;
 		if (dto.Rotulo != "") {

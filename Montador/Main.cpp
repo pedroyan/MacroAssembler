@@ -53,13 +53,16 @@ int main(int argc, char *argv[]) {
 		if (FileLibrary::VerifyFile(argv[2],allowedExtensions.c_str(),message.c_str(),&fileStream)) {
 
 			bool preSuccess = true;
+			string inFile = argv[2];
+
 			if (FileLibrary::GetFileExtension(argv[2]) == "asm") {
 				PreProcessor processor(argv[2], argv[3]);
 				preSuccess = processor.PreProcessPass(fileStream);
+				inFile = argv[3];
 			}
 
 			if (preSuccess) {
-				Assembler assembler(argv[3]);
+				Assembler assembler(inFile);
 				assembler.Assemble();
 			}
 		}

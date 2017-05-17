@@ -33,6 +33,10 @@ TokensDTO LexicalScanner::GetNextTokens() {
 
 	string line = getNextLine();
 
+	while (line == "" && file.good()) {
+		line = getNextLine();
+	}
+
 	if (line == "") {
 		toReturn.isEmpty = true;
 		return toReturn;
@@ -67,7 +71,9 @@ void LexicalScanner::RemoveComments(string & line) {
 string LexicalScanner::getNextLine() {
 	string formatedLine;
 	std::getline(file, formatedLine);
+	formatedLine = StringLibrary::ToLower(formatedLine);
 	LexicalScanner::RemoveComments(formatedLine);
+	formatedLine = StringLibrary::Trim(formatedLine);
 	return StringLibrary::RemoveExcessiveSpaces(formatedLine);
 }
 
