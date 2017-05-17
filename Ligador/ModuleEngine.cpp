@@ -49,20 +49,20 @@ void ModuleEngine::SetTableRealocation(string newTable){
 }
 void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	ifstream fp;
-	FileLibrary leitor;
+
 	fp.open(this->fileName);
 	vector<string> members;
 	vector<ObjectTable> tableUse, tableDefinition;
 	vector<ObjectCode> objectCode;
-	auto line = leitor.GetNextLine(fp);
+	auto line = FileLibrary::GetNextLine(fp);
 	StringLibrary::Tokenize(line, " ", members);
 	if (StringLibrary::ToLower(members[1]) == string("use")) {
 		do {
 			members.clear();
-			line = leitor.GetNextLine(fp);
+			line = FileLibrary::GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
 			if (members.size() == 0) {
-				line = leitor.JumpForNextLine(members, fp);
+				line = FileLibrary::JumpForNextLine(members, fp);
 					StringLibrary::Tokenize(line, " ", members);
 			}
 			if (StringLibrary::ToLower(members[0]) != string("table")) {
@@ -77,10 +77,10 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	if (StringLibrary::ToLower(members[1]) == string("definition")) {
 		do {
 			members.clear();
-			line = leitor.GetNextLine(fp);
+			line = FileLibrary::GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
 			if (members.size() == 0) {
-				line = leitor.JumpForNextLine(members, fp);
+				line = FileLibrary::JumpForNextLine(members, fp);
 				StringLibrary::Tokenize(line, " ", members);
 			}
 			if (StringLibrary::ToLower(members[0]) != string("table")) {
@@ -94,10 +94,10 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	if (StringLibrary::ToLower(members[1]) == string("realocation")) {
 		do {
 			members.clear();
-			line = leitor.GetNextLine(fp);
+			line = FileLibrary::GetNextLine(fp);
 			StringLibrary::Tokenize(line, " ", members);
 			if (members.size() == 0) {
-				line = leitor.JumpForNextLine(members, fp);
+				line = FileLibrary::JumpForNextLine(members, fp);
 				StringLibrary::Tokenize(line, " ", members);
 			}
 			if (StringLibrary::ToLower(members[0]) != string("code")) {
@@ -108,7 +108,7 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	}
 	if (StringLibrary::ToLower(line) == string("code")) {
 		members.clear();
-		line = leitor.GetNextLine(fp);
+		line = FileLibrary::GetNextLine(fp);
 		StringLibrary::Tokenize(line, " ", members);
 		vector<int> codeObject;
 		for (int i = 0; i<members.size(); i++) {

@@ -83,4 +83,7 @@ class StringLibrary {
 	/// </summary>
 	/// <returns>True caso as strings sejam iguais</returns>
 	static bool CompareInsensitive(string a, string b);
+
+	private:
+		StringLibrary(){}
 };

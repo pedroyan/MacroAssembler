@@ -30,10 +30,9 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 #endif // DEBUG
-	FileLibrary leitor;
 	ifstream fileStream;
 	for (int i = 1; i < argc-1 ; i++) {//confere todos os arquivos .o se estao no formato correto
-		if (!leitor.VerifyFile(argv[i], "o", "O Ligador aceita somente arquivos .o para sua leitura", &fileStream)) {
+		if (!FileLibrary::VerifyFile(argv[i], "o", "O Ligador aceita somente arquivos .o para sua leitura", &fileStream)) {
 			return 1;
 		}
 	}

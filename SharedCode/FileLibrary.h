@@ -24,7 +24,7 @@ class FileLibrary {
 		/// </summary>
 		/// <param name="stream">Arquivo a ser lido</param>
 		/// <returns>Linha lida</returns>
-		string GetNextLine(istream & stream);
+		static string GetNextLine(istream & stream);
 
 		/// <summary>
 		/// pula linhas em branco ate encontrar uma linha que contenha informacoes
@@ -32,12 +32,15 @@ class FileLibrary {
 		/// <param name="members">Contem a informacao contida na linha</param>
 		/// <param name="fp">Arquivo sendo lido</param>
 		/// <returns>Linha que possui informacoes</returns>
-		string JumpForNextLine(vector<string> members, ifstream & fp);
+		static string JumpForNextLine(vector<string> members, ifstream & fp);
 
 		/// <summary>
 		/// Retorna a extensao do arquivo
 		/// </summary>
 		/// <param name="fileName">Nome do arquivo</param>
 		static string GetFileExtension(string fileName);
+		
+	private:
+		FileLibrary() {}
 };
 
