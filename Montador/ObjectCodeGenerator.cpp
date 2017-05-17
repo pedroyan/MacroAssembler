@@ -32,7 +32,7 @@ void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vl
 	switch (directive) {
 		case WrittenDirectivesType::SPACE:
 			for (size_t i = 0; i < vlr; i++) {
-				code << " 00";
+				code << " 0";
 				tableRealocation << "0";
 			}
 			break;

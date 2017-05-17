@@ -1,17 +1,14 @@
 #include "FileLibrary.h"
 #include "StringLibrary.h"
 
-bool FileLibrary::VerifyFile(const char * fileName, const char * extension, const char * extensionErrorMessage, ifstream* stream) {
-	string fileNameS(fileName);
-	size_t extensionIndex = fileNameS.find_last_of(".");
-	if (extensionIndex == string::npos) {
-		printf("O arquivo passado nao possui extensao. ");
-		return false;
-	}
+bool FileLibrary::VerifyFile(const char * fileName, string extensionsString, const char * extensionErrorMessage, ifstream* stream) {
 
-	string fileExtension = StringLibrary::ToLower(fileNameS.substr(extensionIndex + 1));
+	string fileExtension = StringLibrary::ToLower(GetFileExtension(fileName));
+	auto extensions = StringLibrary::Tokenize(extensionsString, "|");
 
-	if (fileExtension != extension) {
+	auto foundExtension = std::find(extensions.begin(), extensions.end(), fileExtension);
+
+	if (foundExtension == extensions.end()) {
 		printf("%s \nExtensao do arquivo passado: .%s\n", extensionErrorMessage, fileExtension.c_str());
 		return false;
 	}
@@ -42,5 +39,15 @@ string FileLibrary::JumpForNextLine(vector<string> members, ifstream & fp){
 	
 
 	return line;
+}
+
+string FileLibrary::GetFileExtension(string fileName) {
+	size_t extensionIndex = fileName.find_last_of(".");
+	if (extensionIndex == string::npos) {
+		printf("O arquivo passado nao possui extensao. ");
+		return false;
+	}
+
+	return fileName.substr(extensionIndex + 1);
 }
 

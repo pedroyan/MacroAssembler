@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "-o";
-	argv[2] = "fat_mod_B.asm";
+	argv[2] = "SlideModuleB.asm";
 	argv[3] = "middleFile";
 	argc = 4;
 	#else
@@ -38,19 +38,33 @@ int main(int argc, char *argv[]) {
 
 	ifstream fileStream;
 
-	if (FileLibrary::VerifyFile(argv[2], "asm","O Montador aceita somente arquivos .asm ",&fileStream)) {
-		if (tipoOperacao == "-p") {
+	string message = "O Montador aceita somente arquivos .asm ";
+	string allowedExtensions = "asm";
+
+	if (tipoOperacao == "-p") {
+		if (FileLibrary::VerifyFile(argv[2], allowedExtensions.c_str(), message.c_str(), &fileStream)) {
 			PreProcessor processor(argv[2], argv[3]);
 			processor.PreProcessPass(fileStream);
-		} else if (tipoOperacao == "-o") {
-			PreProcessor processor(argv[2], argv[3]);
-			if (processor.PreProcessPass(fileStream)) {
+		}
+	} else if (tipoOperacao == "-o") {
+		message.append("e .pre ");
+		allowedExtensions.append("|pre");
+
+		if (FileLibrary::VerifyFile(argv[2],allowedExtensions.c_str(),message.c_str(),&fileStream)) {
+
+			bool preSuccess = true;
+			if (FileLibrary::GetFileExtension(argv[2]) == "asm") {
+				PreProcessor processor(argv[2], argv[3]);
+				preSuccess = processor.PreProcessPass(fileStream);
+			}
+
+			if (preSuccess) {
 				Assembler assembler(argv[3]);
 				assembler.Assemble();
 			}
-		} else {
-			printf("tipo de operacao nao especificada");
 		}
+	} else {
+		printf("tipo de operacao nao especificada");
 	}
 
 	fileStream.close();
