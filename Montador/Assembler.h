@@ -14,7 +14,7 @@ class Assembler {
 
 		int GetLine();
 		int ExecuteDirective(string directiveName, DirectiveInfo const * info,vector<string> operands, SymbolInfo* symbol);
-		void Assemble();
+		bool Assemble();
 	private:
 		void firstPass();
 		void secondPass();

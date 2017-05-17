@@ -103,7 +103,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 	return positionSkip;
 }
 
-void Assembler::Assemble() {
+bool Assembler::Assemble() {
 	firstPass();
 
 	scanner.RestartStream();
@@ -111,6 +111,8 @@ void Assembler::Assemble() {
 
 	secondPass();
 	generateObjectFile();
+
+	return successAssemble;
 }
 
 void Assembler::firstPass() {
@@ -134,7 +136,7 @@ void Assembler::firstPass() {
 			if (symbol != nullptr) {
 				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Semantic);
 			} else {
-				symbolCreated = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false));
+				symbolCreated = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false, sectionFlags & SectionFlags::Data));
 			}
 		}
 
@@ -157,8 +159,8 @@ void Assembler::firstPass() {
 
 	setDefinitionTableValues();
 	FirstPassLastChecks();
-	TableManager::Diagnostic_PrintSymbols();
-	TableManager::Diagnostic_PrintDefinitions();
+	//TableManager::Diagnostic_PrintSymbols();
+	//TableManager::Diagnostic_PrintDefinitions();
 }
 
 void Assembler::secondPass() {
@@ -320,7 +322,16 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 	}
 
 	if (info->opCode >= OpCodes::JMP && info->opCode <= OpCodes::JMPZ) {
-		// jump para lables invalidas
+		auto symbol = TableManager::GetSymbol(operands[0]);
+		if (symbol == nullptr) {
+			ShowError("Simbolo nao encontrado", Semantic);
+			return;
+		}
+
+		if (symbol->isData) {
+			ShowError("Pulo para label invalida " + operands[0], Semantic);
+			return;
+		}
 	}
 
 	positionCount++; //Posicao da instrucao

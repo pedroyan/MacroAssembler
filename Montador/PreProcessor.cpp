@@ -89,8 +89,7 @@ bool PreProcessor::PreProcessPass(ifstream& stream) {
 		printf("Erros de pre-processamento encontrados. O arquivo .pre nao foi gerado\n");
 		return false;
 	} 
-		
-	printf("arquivo %s.pre gerado com sucesso\n", outputFileName.c_str());
+
 	saveFile();
 	return true;
 }
