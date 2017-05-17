@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
-	argv[1] = "-p";
-	argv[2] = "assemblyTest.asm";
+	argv[1] = "-o";
+	argv[2] = "fat_mod_A.asm";
 	argv[3] = "middleFile";
 	argc = 4;
 	#else

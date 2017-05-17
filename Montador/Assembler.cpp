@@ -304,6 +304,25 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 		return;
 	}
 
+	if (info->opCode == OpCodes::STORE || info->opCode == OpCodes::COPY || info->opCode == OpCodes::INPUT) {
+
+		auto operand = info->opCode == OpCodes::COPY ? operands[1] : operands[0];
+
+		auto symbol = TableManager::GetSymbol(operand);
+		if (symbol == nullptr) {
+			ShowError("Simbolo nao encontrado", Semantic);
+			return;
+		}
+		if (symbol->isConst) {
+			ShowError("Modificacao da constante " + operand, Syntatic);
+			return;
+		}
+	}
+
+	if (info->opCode >= OpCodes::JMP && info->opCode <= OpCodes::JMPZ) {
+		// jump para lables invalidas
+	}
+
 	positionCount++; //Posicao da instrucao
 
 	for (auto operand : operands) {
