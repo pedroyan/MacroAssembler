@@ -47,6 +47,21 @@ void ModuleEngine::SetTableRealocation(string newTable){
 	this->tableRealocation = data;
 
 }
+
+vector<string> ModuleEngine::GetFirstNonEmptyLine(ifstream & file) {
+	vector<string> toReturn;
+	string line;
+
+	line = FileLibrary::GetNextLine(file);
+	StringLibrary::Tokenize(line, " ", toReturn);
+	if (toReturn.size() == 0) {
+		line = FileLibrary::JumpForNextLine(toReturn, file);
+		StringLibrary::Tokenize(line, " ", toReturn);
+	}
+
+	return toReturn;
+}
+
 void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	ifstream fp;
 
@@ -54,17 +69,13 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 	vector<string> members;
 	vector<ObjectTable> tableUse, tableDefinition;
 	vector<ObjectCode> objectCode;
+
 	auto line = FileLibrary::GetNextLine(fp);
 	StringLibrary::Tokenize(line, " ", members);
+
 	if (StringLibrary::ToLower(members[1]) == string("use")) {
 		do {
-			members.clear();
-			line = FileLibrary::GetNextLine(fp);
-			StringLibrary::Tokenize(line, " ", members);
-			if (members.size() == 0) {
-				line = FileLibrary::JumpForNextLine(members, fp);
-					StringLibrary::Tokenize(line, " ", members);
-			}
+			members = GetFirstNonEmptyLine(fp);
 			if (StringLibrary::ToLower(members[0]) != string("table")) {
 				tableUse.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
 			}
@@ -73,16 +84,11 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 		} while (StringLibrary::ToLower(members[0]) != string("table"));
 		SetTableUse(tableUse);
 	}
+
 	StringLibrary::Tokenize(line, " ", members);
 	if (StringLibrary::ToLower(members[1]) == string("definition")) {
 		do {
-			members.clear();
-			line = FileLibrary::GetNextLine(fp);
-			StringLibrary::Tokenize(line, " ", members);
-			if (members.size() == 0) {
-				line = FileLibrary::JumpForNextLine(members, fp);
-				StringLibrary::Tokenize(line, " ", members);
-			}
+			members = GetFirstNonEmptyLine(fp);
 			if (StringLibrary::ToLower(members[0]) != string("table")) {
 				tableDefinition.push_back(ObjectTable(members[0], atoi(members[1].c_str())));
 			}
@@ -106,6 +112,7 @@ void ModuleEngine::ReadFile() { // lê as informações  do aqruivo .o
 
 		} while (StringLibrary::ToLower(members[0]) != string("code"));
 	}
+
 	if (StringLibrary::ToLower(line) == string("code")) {
 		members.clear();
 		line = FileLibrary::GetNextLine(fp);

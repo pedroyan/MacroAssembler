@@ -10,6 +10,7 @@
 using std::vector;
 using std::istream;
 using std::string;
+using std::ifstream;
 
 class ModuleEngine {//Possui todas as informacoes contidas no modulo lido pelo arquivo objeto
 public:
@@ -31,6 +32,8 @@ private:
 	vector<char> tableRealocation;
 	vector<ObjectCode> listaObjectCode;
 	string fileName;
+	vector<string> GetFirstNonEmptyLine(ifstream& file);
+
 
 };
 
