@@ -83,6 +83,20 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 
 		beginFlags = beginFlags | BeginFlags::End;
 
+	} else if (directiveName == "const") {
+		if (symbol == nullptr) {
+			ShowError("Nenhum rótulo foi definido para a diretiva Const", Syntatic);
+			return 0;
+		}
+
+		int constval;
+		if (!TryStringToInt(operands[0],&constval)) {
+			ShowError("Nao foi possivel converter " + operands[0] + " para um numero", Semantic);
+			return 0;
+		}
+
+		symbol->isConst = true;
+		symbol->constValue = constval;
 	} else {
 		positionSkip = info->size;
 	}
@@ -286,26 +300,8 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 		return;
 	}
 
-	if (info->opCode == OpCodes::DIV) {
-		auto operandType = GetType(operands[0]);
-		switch (operandType) {
-			case Assembler::number:
-				int number;
-
-				if (!TryStringToInt(operands[0],&number)) {
-					ShowError("Nao foi possivel converter " + operands[0] + " para um numero", Semantic);
-					return;
-				}
-
-				if (number == 0) {
-					ShowError("Divisão por 0", Syntatic);
-					return;
-				}
-				break;
-			case Assembler::label:
-
-				break;
-		}
+	if (info->opCode == OpCodes::DIV && !evaluateDiv(operands[0])) {
+		return;
 	}
 
 	positionCount++; //Posicao da instrucao
@@ -392,6 +388,37 @@ Assembler::operandTypes Assembler::GetType(string operand) {
 	}
 
 	return operandTypes::label;
+}
+
+bool Assembler::evaluateDiv(const string & divOperand) {
+	auto operandType = GetType(divOperand);
+	switch (operandType) {
+	case Assembler::number:
+		int number;
+
+		if (!TryStringToInt(divOperand, &number)) {
+			ShowError("Nao foi possivel converter " + divOperand + " para um numero", Semantic);
+			return false;
+		}
+
+		if (number == 0) {
+			ShowError("Divisao por 0", Syntatic);
+			return false;
+		}
+		break;
+	case Assembler::label:
+		auto symbol = TableManager::GetSymbol(divOperand);
+		if (symbol == nullptr) {
+			ShowError("Simbolo nao encontrado", Semantic);
+			return false;
+		}
+		if (symbol->isConst && symbol->constValue == 0) {
+			ShowError("Divisao por 0", Syntatic);
+			return false;
+		}
+		break;
+	}
+	return true;
 }
 
 void Assembler::generateObjectFile() {

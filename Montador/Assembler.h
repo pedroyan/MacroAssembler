@@ -73,6 +73,7 @@ class Assembler {
 		ArgumentInfo CalculateAndCheckArrayBoundaries(const string& operand);
 
 		operandTypes GetType(string operand);
+		bool evaluateDiv(const string& divOperand);
 
 		void generateObjectFile();
 };
