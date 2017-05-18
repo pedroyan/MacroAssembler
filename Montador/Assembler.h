@@ -25,11 +25,13 @@ class Assembler {
 		int positionCount;
 		int lineCount;
 		bool successAssemble;
+		
 
 		bool hasStop;
 
 		unsigned char sectionFlags;
 		enum SectionFlags {
+			Start = 0,
 			Text = 1,
 			Data = 2
 		};
@@ -43,7 +45,7 @@ class Assembler {
 			number,
 			label
 		};
-
+		void CheckSection(string nomeDiretiva, unsigned char rigthSection);
 		void ShowError(string message, ErrorType type);
 		int ExecuteSection(vector<string> operands);
 		bool TryStringToInt(string s, int* result);
