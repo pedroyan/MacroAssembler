@@ -48,8 +48,9 @@ struct SymbolInfo {
 
 	bool isConst;
 	int constValue;
+	bool isData;
 
-	SymbolInfo(int valor, bool ext) : address(valor), externo(ext), spaceCount(1), constValue(0), isConst(false) {};
+	SymbolInfo(int valor, bool ext, bool data) : address(valor), externo(ext), spaceCount(1), constValue(0), isConst(false), isData(data) {};
 };
 
 class TableManager {

@@ -108,7 +108,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 	return positionSkip;
 }
 
-void Assembler::Assemble() {
+bool Assembler::Assemble() {
 	firstPass();
 
 	scanner.RestartStream();
@@ -116,6 +116,8 @@ void Assembler::Assemble() {
 
 	secondPass();
 	generateObjectFile();
+
+	return successAssemble;
 }
 
 void Assembler::firstPass() {
@@ -139,7 +141,7 @@ void Assembler::firstPass() {
 			if (symbol != nullptr) {
 				ShowError("Simbolo " + dto.Rotulo + " redefinido", ErrorType::Semantic);
 			} else {
-				symbolCreated = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false));
+				symbolCreated = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false, sectionFlags & SectionFlags::Data));
 			}
 		}
 
@@ -167,8 +169,8 @@ void Assembler::firstPass() {
 
 	setDefinitionTableValues();
 	FirstPassLastChecks();
-	TableManager::Diagnostic_PrintSymbols();
-	TableManager::Diagnostic_PrintDefinitions();
+	//TableManager::Diagnostic_PrintSymbols();
+	//TableManager::Diagnostic_PrintDefinitions();
 }
 
 void Assembler::secondPass() {
@@ -326,20 +328,37 @@ void Assembler::ValidateAndWriteInstruction(const InstructionInfo * info, const 
 	if (info->opCode == OpCodes::STORE || info->opCode == OpCodes::COPY || info->opCode == OpCodes::INPUT) {
 
 		auto operand = info->opCode == OpCodes::COPY ? operands[1] : operands[0];
+		auto tokens = StringLibrary::Tokenize(operand, "+");
+		//So trata se não tiver indices, pois o caso de indices já é tratado anteriormente no codigo.
+		//Caso o token seja uma const, ja será lançado erro de que o indice está sendo usado para um tipo
+		// que não é vetor
 
-		auto symbol = TableManager::GetSymbol(operand);
-		if (symbol == nullptr) {
-			ShowError("Simbolo nao encontrado", Semantic);
-			return;
-		}
-		if (symbol->isConst) {
-			ShowError("Modificacao da constante " + operand, Syntatic);
-			return;
+		if (tokens.size() == 1) {
+
+			auto symbol = TableManager::GetSymbol(operand);
+			if (symbol == nullptr) {
+				ShowError("Simbolo nao" + operand + "encontrado", Semantic);
+				return;
+			}
+			if (symbol->isConst) {
+				ShowError("Modificacao da constante " + operand, Syntatic);
+				return;
+			}
+
 		}
 	}
 
 	if (info->opCode >= OpCodes::JMP && info->opCode <= OpCodes::JMPZ) {
-		// jump para lables invalidas
+		auto symbol = TableManager::GetSymbol(operands[0]);
+		if (symbol == nullptr) {
+			ShowError("Simbolo nao encontrado", Semantic);
+			return;
+		}
+
+		if (symbol->isData) {
+			ShowError("Pulo para label invalida " + operands[0], Semantic);
+			return;
+		}
 	}
 
 	positionCount++; //Posicao da instrucao

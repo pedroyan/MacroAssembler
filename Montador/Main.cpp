@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
 	argv[1] = "-o";
-	argv[2] = "SlideModuleB.asm";
+	argv[2] = "SlideModuleA.asm";
 	argv[3] = "middleFile";
 	argc = 4;
 	#else
@@ -44,7 +44,9 @@ int main(int argc, char *argv[]) {
 	if (tipoOperacao == "-p") {
 		if (FileLibrary::VerifyFile(argv[2], allowedExtensions.c_str(), message.c_str(), &fileStream)) {
 			PreProcessor processor(argv[2], argv[3]);
-			processor.PreProcessPass(fileStream);
+			if (processor.PreProcessPass(fileStream)) {
+				printf("arquivo %s.pre gerado com sucesso\n", argv[3]);
+			}
 		}
 	} else if (tipoOperacao == "-o") {
 		message.append("e .pre ");
@@ -63,7 +65,9 @@ int main(int argc, char *argv[]) {
 
 			if (preSuccess) {
 				Assembler assembler(inFile);
-				assembler.Assemble();
+				if (assembler.Assemble()) {
+					printf("arquivo %s.o gerado com sucesso\n", argv[3]);
+				}
 			}
 		}
 	} else {
