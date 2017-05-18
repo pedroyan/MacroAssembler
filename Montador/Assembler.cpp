@@ -34,7 +34,6 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 	if (directiveName  == "section") {
 		positionSkip = ExecuteSection(operands);
 	} else if (directiveName == "space") {
-		this->sectionFlags;
 		CheckSection(directiveName, (Text | Data));
 		if (symbol == nullptr) {
 			ShowError("Nenhum rotulo definido para a diretiva space", Syntatic);
@@ -138,7 +137,7 @@ void Assembler::firstPass() {
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
 			if (symbol != nullptr) {
-				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Semantic);
+				ShowError("Simbolo " + dto.Rotulo + " redefinido", ErrorType::Semantic);
 			} else {
 				symbolCreated = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false));
 			}
@@ -147,7 +146,6 @@ void Assembler::firstPass() {
 		auto instruction = TableManager::GetInstruction(dto.Operacao);
 		if (instruction != nullptr) {
 			CheckSection(dto.Operacao, Text);
-			this->sectionFlags;
 			positionCount += instruction->operandCount + 1;
 			if (dto.Operacao == "stop") {
 				hasStop = true;
@@ -193,7 +191,6 @@ void Assembler::secondPass() {
 				ShowError("Operacao " + dto.Operacao + " nao identificada", Syntatic);
 			}
 			if (dto.Operacao == "space") {
-				this->sectionFlags;
 				auto symbol = TableManager::GetSymbol(dto.Rotulo);
 				generator.WriteDirective(WrittenDirectivesType::SPACE, symbol->spaceCount);
 			} else if (dto.Operacao=="const") {
@@ -215,7 +212,7 @@ void Assembler::secondPass() {
 
 void Assembler::CheckSection(string nomeDiretiva, unsigned char rigthSection) {
 	if (sectionFlags != rigthSection ) {
-		ShowError(nomeDiretiva + " se encontra na secao errada", ErrorType::Semantic);// A confirmar
+		ShowError("A diretiva "+nomeDiretiva + " se encontra na secao errada", ErrorType::Semantic);// A confirmar
 		successAssemble = false;
 	}
 }

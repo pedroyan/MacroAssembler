@@ -45,6 +45,11 @@ class Assembler {
 			number,
 			label
 		};
+		/// <summary>
+		/// Verifica se a diretiva se encontra na secao correta
+		/// </summary>
+		/// <param name="nomeDiretiva">String referente a diretiva para o programa indicar quando ela estiver errada</param>
+		/// <param name="rigthSection">a secao correta em que a diretiva deve se encontrar</param>
 		void CheckSection(string nomeDiretiva, unsigned char rigthSection);
 		void ShowError(string message, ErrorType type);
 		int ExecuteSection(vector<string> operands);
