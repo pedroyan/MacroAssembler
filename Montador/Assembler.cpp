@@ -34,6 +34,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 	if (directiveName  == "section") {
 		positionSkip = ExecuteSection(operands);
 	} else if (directiveName == "space") {
+		CheckSection(directiveName, (Text | Data));
 		if (symbol == nullptr) {
 			ShowError("Nenhum rotulo definido para a diretiva space", Syntatic);
 			return 0;
@@ -53,6 +54,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 			}
 		}
 	} else if (directiveName == "extern") {
+		CheckSection(directiveName, Text);
 		// Modifica o rotulo passado na tabela de simbolos com o valor 0
 		// e com a flag externa setada
 		if (symbol == nullptr) {
@@ -65,12 +67,14 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 		//insere o operando na tabela de definicoes
 		TableManager::InsertDefinition(operands[0]);
 	} else if (directiveName == "begin") {
+		CheckSection(directiveName, Start);
 		if (beginFlags & Begin) {
-			ShowError("Siretiva begin redefinida", Semantic);
+			ShowError("Diretiva begin redefinida", Semantic);
 			return 0;
 		}
 		beginFlags = Begin;
 	} else if (directiveName == "end") {
+		CheckSection(directiveName, (Text|Data));
 		if (!beginFlags & Begin) {
 			ShowError("End não possui um Begin correspondente",Semantic);
 			return 0;
@@ -84,6 +88,7 @@ int Assembler::ExecuteDirective(string directiveName, DirectiveInfo const * info
 		beginFlags = beginFlags | BeginFlags::End;
 
 	} else if (directiveName == "const") {
+		CheckSection(directiveName, (Text | Data));//conferir
 		if (symbol == nullptr) {
 			ShowError("Nenhum rótulo foi definido para a diretiva Const", Syntatic);
 			return 0;
@@ -134,7 +139,7 @@ void Assembler::firstPass() {
 		if (dto.Rotulo != "") {
 			auto symbol = TableManager::GetSymbol(dto.Rotulo);
 			if (symbol != nullptr) {
-				ShowError("Simbolo " + dto.Rotulo + "redefinido", ErrorType::Semantic);
+				ShowError("Simbolo " + dto.Rotulo + " redefinido", ErrorType::Semantic);
 			} else {
 				symbolCreated = TableManager::InsertSymbol(dto.Rotulo, SymbolInfo(positionCount, false, sectionFlags & SectionFlags::Data));
 			}
@@ -142,6 +147,7 @@ void Assembler::firstPass() {
 
 		auto instruction = TableManager::GetInstruction(dto.Operacao);
 		if (instruction != nullptr) {
+			CheckSection(dto.Operacao, Text);
 			positionCount += instruction->operandCount + 1;
 			if (dto.Operacao == "stop") {
 				hasStop = true;
@@ -149,6 +155,9 @@ void Assembler::firstPass() {
 		} else {
 			auto directive = TableManager::GetDirective(dto.Operacao);
 			if (directive != nullptr) {
+				if (dto.Operacao == "public" || dto.Operacao == "extern" ) {//conferir
+					CheckSection(dto.Operacao, Text);
+				}
 				positionCount += ExecuteDirective(dto.Operacao, directive,dto.Operandos, symbolCreated);
 			} else {
 				ShowError("Operacao " + dto.Operacao + " nao identificada", ErrorType::Syntatic);
@@ -197,6 +206,15 @@ void Assembler::secondPass() {
 		
 		lineCount++;
 		//Para cada operando que é símbolo -> Procura operando na TS -> Se não achou:Erro, símbolo indefinido
+	}
+}
+
+
+
+void Assembler::CheckSection(string nomeDiretiva, unsigned char rigthSection) {
+	if (sectionFlags != rigthSection ) {
+		ShowError("A diretiva "+nomeDiretiva + " se encontra na secao errada", ErrorType::Semantic);// A confirmar
+		successAssemble = false;
 	}
 }
 
