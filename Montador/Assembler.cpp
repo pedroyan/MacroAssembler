@@ -153,7 +153,6 @@ void Assembler::firstPass() {
 				hasStop = true;
 			}
 		} else {
-			this->sectionFlags;
 			auto directive = TableManager::GetDirective(dto.Operacao);
 			if (directive != nullptr) {
 				if (dto.Operacao == "public" || dto.Operacao == "extern" ) {//conferir
