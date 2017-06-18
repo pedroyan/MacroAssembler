@@ -430,9 +430,9 @@ ArgumentInfo Assembler::CalculateAndCheckArrayBoundaries(const string& operand) 
 		return toReturn;
 	}
 
-	//retorna também o symbolInfo para colocat na tabela de realocação
+	//retorna também o symbolInfo para colocar na tabela de realocação
 	toReturn.RealValue = sumResult;
-	toReturn.Extern = symbol->externo;
+	toReturn.Extern = symbol != nullptr ? symbol->externo : false;
 	toReturn.SymbolName = symbolName;
 	return toReturn;
 }
