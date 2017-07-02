@@ -49,7 +49,7 @@ void ObjectCodeGenerator::WriteInstruction(OpCodes opCode, const vector<Argument
 			break;
 		case OpCodes::INPUT:
 			code << "call lerInteiro\n";
-			code << "mov DWORD [" << arguments[0].SymbolName << "], eax\n";
+			code << "mov DWORD [" << arguments[0].SymbolName << "], ebx\n";
 			break;
 		case OpCodes::OUTPUT:
 			code << "mov eax, [" << arguments[0].SymbolName << "]\n";
@@ -63,7 +63,7 @@ void ObjectCodeGenerator::WriteInstruction(OpCodes opCode, const vector<Argument
 			break;
 		case OpCodes::C_INPUT:
 			code << "call lerChar\n";
-			code << "mov [" << arguments[0].SymbolName << "], eax\n";
+			code << "mov [" << arguments[0].SymbolName << "], ebx\n";
 			break;
 		case OpCodes::C_OUTPUT:
 			code << "mov eax, [" << arguments[0].SymbolName << "]\n";
@@ -71,7 +71,7 @@ void ObjectCodeGenerator::WriteInstruction(OpCodes opCode, const vector<Argument
 			break;
 		case OpCodes::S_INPUT:
 			code << "call lerString\n";
-			code << "mov [" << arguments[0].SymbolName << "], eax\n" ;
+			code << "mov [" << arguments[0].SymbolName << "], ebx\n" ;
 			break;
 		case OpCodes::S_OUTPUT:
 			code << "mov eax, [" << arguments[0].SymbolName << "]\n";
@@ -86,7 +86,7 @@ void ObjectCodeGenerator::WriteInstruction(OpCodes opCode, const vector<Argument
 void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vlr, string label) {
 	switch (directive) {
 		case WrittenDirectivesType::SPACE:
-			bssSection << label << " resb " << vlr << "\n";
+			bssSection << label << " resd " << vlr << "\n";
 			break;
 		case WrittenDirectivesType::CONST:
 			dataSection << label << " dd " << vlr << "\n";
