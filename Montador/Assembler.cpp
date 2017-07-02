@@ -193,11 +193,11 @@ void Assembler::secondPass() {
 			}
 			if (dto.Operacao == "space") {
 				auto symbol = TableManager::GetSymbol(dto.Rotulo);
-				generator.WriteDirective(WrittenDirectivesType::SPACE, symbol->spaceCount);
+				generator.WriteDirective(WrittenDirectivesType::SPACE, symbol->spaceCount,dto.Rotulo);
 			} else if (dto.Operacao=="const") {
 				int result;
 				if (TryStringToInt(dto.Operandos[0],&result)) {
-					generator.WriteDirective(WrittenDirectivesType::CONST, result);
+					generator.WriteDirective(WrittenDirectivesType::CONST, result,dto.Rotulo);
 				} else {
 					ShowError("Nao foi possivel converter valor passado para operador CONST para um inteiro", Semantic);
 				}		
@@ -483,10 +483,6 @@ void Assembler::generateObjectFile() {
 		return;
 	}
 
-	if (beginFlags&BeginFlags::Begin) {
-		generator.GenerateFile(GenerationType::Modular);
-	} else {
-		generator.GenerateFile(GenerationType::Direct);
-	}
+	generator.GenerateFile();
 }
 

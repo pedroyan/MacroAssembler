@@ -30,11 +30,6 @@ struct ArgumentInfo {
 	ArgumentInfo(int realValue, bool isExtern) : Extern(isExtern), RealValue(realValue){}
 };
 
-enum class GenerationType {
-	Direct,
-	Modular
-};
-
 enum class WrittenDirectivesType {
 	SPACE,
 	CONST
@@ -59,12 +54,11 @@ class ObjectCodeGenerator {
 		/// </summary>
 		/// <param name="directive">Diretiva avaliada</param>
 		/// <param name="vlr">Valor da diretiva</param>
-		void WriteDirective(WrittenDirectivesType directive, int vlr);
+		void WriteDirective(WrittenDirectivesType directive, int vlr, string label);
 
-		void GenerateFile(GenerationType type);
+		void GenerateFile();
 
 	private:
-		GenerationType type;
 
 		string outputFileName;
 		stringstream code;
@@ -72,6 +66,7 @@ class ObjectCodeGenerator {
 		stringstream bssSection;
 
 		void GenerateModularFile(fstream& file);
+		void WriteConstantData();
 
 };
 

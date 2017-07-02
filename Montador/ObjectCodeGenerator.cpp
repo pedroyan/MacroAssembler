@@ -83,44 +83,47 @@ void ObjectCodeGenerator::WriteInstruction(OpCodes opCode, const vector<Argument
 	}
 }
 
-void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vlr) {
+void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vlr, string label) {
 	switch (directive) {
 		case WrittenDirectivesType::SPACE:
-			// <label> resb <vlr>
+			bssSection << label << " resb " << vlr << "\n";
 			break;
 		case WrittenDirectivesType::CONST:
-			//<Label>: dd <vlr>
+			dataSection << label << " dd " << vlr << "\n";
 			break;
 		default:
 			break;
 	}
 }
 
-void ObjectCodeGenerator::GenerateFile(GenerationType type) {
+void ObjectCodeGenerator::GenerateFile() {
 	fstream file;
 	file.open(outputFileName, std::fstream::out);
-
-	switch (type) {
-		case GenerationType::Direct:
-			file << code.rdbuf();
-			break;
-		case GenerationType::Modular:
-			GenerateModularFile(file);
-			break;
-		default:
-			break;
-	}
+	GenerateModularFile(file);
 	file.close();
 }
 
 void ObjectCodeGenerator::GenerateModularFile(fstream & file) {
-	//file << "TABLE USE\n";
-	//file << tableUse.str().c_str();
-	//file << "\nTABLE DEFINITION\n";
-	//file << tableDefinition.str().c_str();
-	//file << "\nTABLE REALOCATION\n";
-	//file << tableRealocation.str().c_str();
-	file << "\n\nCODE\n";
-	file << code.str().c_str();
+	if (bssSection.rdbuf()->in_avail()) {
+		file << "section .bss\n";
+		file << bssSection.str().c_str();
+		file << "\n";
+	}
 
+	file << "section .data\n";
+	WriteConstantData();
+
+	if (dataSection.rdbuf()->in_avail()) {
+		file << dataSection.str().c_str();
+		file << "\n";
+	}
+
+	file << "section .text\n"
+		 << "global _start\n"
+		 << "_start:\n";
+
+	file << code.str().c_str();
+}
+
+void ObjectCodeGenerator::WriteConstantData() {
 }
