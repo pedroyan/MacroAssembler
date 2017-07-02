@@ -66,7 +66,8 @@ class ObjectCodeGenerator {
 		stringstream bssSection;
 
 		void GenerateModularFile(fstream& file);
-		void WriteConstantData();
+		void WriteConstantData(fstream& file);
+		void WriteConstantText(fstream& file);
 
 };
 
