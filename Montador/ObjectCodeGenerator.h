@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "TableManager.h"
 
 using std::stringstream;
 using std::ifstream;
@@ -51,7 +52,7 @@ class ObjectCodeGenerator {
 		/// </summary>
 		/// <param name="opCode">opcode da instrucao</param>
 		/// <param name="arguments">argumentos da instrucao</param>
-		void WriteInstruction(int opCode, const vector<ArgumentInfo>& arguments);
+		void WriteInstruction(OpCodes opCode, const vector<ArgumentInfo>& arguments);
 
 		/// <summary>
 		/// Escreve uma diretiva no código objeto
@@ -67,19 +68,8 @@ class ObjectCodeGenerator {
 
 		string outputFileName;
 		stringstream code;
-		stringstream tableDefinition;
-		stringstream tableUse;
-		stringstream tableRealocation;
-
-		/// <summary>
-		/// Escreve a tabela da definição
-		/// </summary>
-		void WriteTableDefinition();
-
-		/// <summary>
-		/// Escreve a tabela de uso
-		/// </summary>
-		void WriteTableUse();
+		stringstream dataSection;
+		stringstream bssSection;
 
 		void GenerateModularFile(fstream& file);
 

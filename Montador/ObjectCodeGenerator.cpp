@@ -1,44 +1,95 @@
 #include "ObjectCodeGenerator.h"
-#include "TableManager.h"
 
 ObjectCodeGenerator::ObjectCodeGenerator(string objectFileName) {
-	outputFileName = objectFileName.append(".o");
+	outputFileName = objectFileName.append(".s");
 }
 
 ObjectCodeGenerator::~ObjectCodeGenerator() {
 }
 
-void ObjectCodeGenerator::WriteInstruction(int opCode, const vector<ArgumentInfo>& arguments) {
-	string line = "";
-	tableRealocation << "0"; //do opcode
-	line = std::to_string(opCode);
-	for (auto arg : arguments) {
-		line +=  " " + std::to_string(arg.RealValue);
-		if (arg.Extern) {
-			tableRealocation << "0";
-		} else {
-			tableRealocation << "1";
-		}
-	}
-
-	if(code.rdbuf() -> in_avail() == 0) {
-		code << line;
-	} else {
-		code << " " + line;
+void ObjectCodeGenerator::WriteInstruction(OpCodes opCode, const vector<ArgumentInfo>& arguments) {
+	switch (opCode) {
+		case OpCodes::ADD:
+			code << "mov ebx, [" << arguments[0].SymbolName << "]\n";
+			code << "add eax,ebx\n";
+			break;
+		case OpCodes::SUB:
+			code << "mov ebx, [" << arguments[0].SymbolName << "]\n";
+			code << "sub eax, ebx\n";
+			break;
+		case OpCodes::MULT:
+			code << "mov ebx, [" << arguments[0].SymbolName << "]\n";
+			code << "mul ebx\n";
+			break;
+		case OpCodes::DIV:
+			code << "mov ebx, [" << arguments[0].SymbolName << "]\n";
+			code << "div ebx" << "\n";
+			break;
+		case OpCodes::JMP:
+			code << "jmp " << arguments[0].SymbolName << "\n";
+			break;
+		case OpCodes::JMPN:
+			code << "js eax, " << arguments[0].SymbolName << "\n";
+			break;
+		case OpCodes::JMPP:
+			code << "jns eax, " << arguments[0].SymbolName << "\n";
+			break;
+		case OpCodes::JMPZ:
+			code << "cmp eax, 0\n";
+			code << "je " << arguments[0].SymbolName << "\n";
+			break;
+		case OpCodes::COPY:
+			code << "mov " << arguments[0].SymbolName << ", " << arguments[1].SymbolName << "\n";
+			break;
+		case OpCodes::LOAD:
+			code << "mov eax, [" << arguments[0].SymbolName << "]\n";
+			break;
+		case OpCodes::STORE:
+			code << "mov [" << arguments[0].SymbolName << "], eax\n";
+			break;
+		case OpCodes::INPUT:
+			code << "call lerInteiro\n";
+			code << "mov DWORD [" << arguments[0].SymbolName << "], eax\n";
+			break;
+		case OpCodes::OUTPUT:
+			code << "mov eax, [" << arguments[0].SymbolName << "]\n";
+			code << "mov esi, 0\n";
+			code << "call escreverInteiro\n";
+			break;
+		case OpCodes::STOP:
+			code << "mov eax, 1\n";
+			code << "mov ebx, 0\n";
+			code << "int 80h\n";
+			break;
+		case OpCodes::C_INPUT:
+			code << "call lerChar\n";
+			code << "mov [" << arguments[0].SymbolName << "], eax\n";
+			break;
+		case OpCodes::C_OUTPUT:
+			code << "mov eax, [" << arguments[0].SymbolName << "]\n";
+			code << "call escreverChar\n";
+			break;
+		case OpCodes::S_INPUT:
+			code << "call lerString\n";
+			code << "mov [" << arguments[0].SymbolName << "], eax\n" ;
+			break;
+		case OpCodes::S_OUTPUT:
+			code << "mov eax, [" << arguments[0].SymbolName << "]\n";
+			code << "mov esi, 0\n";
+			code << "call escreverChar\n";
+			break;
+		default:
+			break;
 	}
 }
 
 void ObjectCodeGenerator::WriteDirective(WrittenDirectivesType directive, int vlr) {
 	switch (directive) {
 		case WrittenDirectivesType::SPACE:
-			for (size_t i = 0; i < vlr; i++) {
-				code << " 0";
-				tableRealocation << "0";
-			}
+			// <label> resb <vlr>
 			break;
 		case WrittenDirectivesType::CONST:
-			code << " "+std::to_string(vlr);
-			tableRealocation << "0";
+			//<Label>: dd <vlr>
 			break;
 		default:
 			break;
@@ -62,30 +113,13 @@ void ObjectCodeGenerator::GenerateFile(GenerationType type) {
 	file.close();
 }
 
-void ObjectCodeGenerator::WriteTableDefinition() {
-	const auto& defTable = TableManager::GetDefinitionTable();
-	for (auto definition : defTable) {
-		tableDefinition << definition.first + " " + std::to_string(definition.second) + "\n";
-	}
-}
-
-void ObjectCodeGenerator::WriteTableUse() {
-	const auto& useTable = TableManager::GetUseTable();
-	for (auto use : useTable) {
-		tableUse << use.first + " " + std::to_string(use.second) + "\n";
-	}
-}
-
 void ObjectCodeGenerator::GenerateModularFile(fstream & file) {
-	WriteTableDefinition();
-	WriteTableUse();
-
-	file << "TABLE USE\n";
-	file << tableUse.str().c_str();
-	file << "\nTABLE DEFINITION\n";
-	file << tableDefinition.str().c_str();
-	file << "\nTABLE REALOCATION\n";
-	file << tableRealocation.str().c_str();
+	//file << "TABLE USE\n";
+	//file << tableUse.str().c_str();
+	//file << "\nTABLE DEFINITION\n";
+	//file << tableDefinition.str().c_str();
+	//file << "\nTABLE REALOCATION\n";
+	//file << tableRealocation.str().c_str();
 	file << "\n\nCODE\n";
 	file << code.str().c_str();
 
