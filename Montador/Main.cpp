@@ -16,62 +16,50 @@ int main(int argc, char *argv[]) {
 
 	#ifdef _DEBUG
 	//seta programaticamente os argumentos em modo debug
-	argv[1] = "-o";
-	argv[2] = "Triangulo.asm";
-	argv[3] = "middleFile";
-	argc = 4;
+	argv[1] = ".\\Triangulo.asm";
+	argc = 2;
 	#else
 	//pega os argumentos da linha de comando em modo release
-	if (argc != 4) {
-		printf("Sao necessarios 3 argumentos para executar o montador:\n");
-		printf("cmd>Montador <Tipo de Operacao> <Arquivo de Entrada> <Arquivo de Saida>\n");
+	if (argc != 2) {
+		printf("Sao necessarios 1 argumento para executar o tradutor:\n");
+		printf("cmd>Montador <Arquivo de Entrada>.asm \n");
 		return 0;
 	}
 	#endif // DEBUG
-	string outputName(argv[3]);
-	if (outputName.find(".") != string::npos) {
-		printf("Nome do arquivo de saida nao pode conter extensao\n");
-		return 0;
+	string inputName(argv[1]);
+	auto initialIndex = inputName.find("\\");
+
+	if (initialIndex != string::npos) {
+		inputName = inputName.substr(initialIndex+1, inputName.size() - initialIndex -1);
 	}
 
-	string tipoOperacao = StringLibrary::ToLower(argv[1]);
+	string outputName = inputName.substr(0,inputName.find("."));
 
 	ifstream fileStream;
 
-	string message = "O Montador aceita somente arquivos .asm ";
+	string message = "O Tradutor aceita somente arquivos .asm ";
 	string allowedExtensions = "asm";
 
-	if (tipoOperacao == "-p") {
-		if (FileLibrary::VerifyFile(argv[2], allowedExtensions.c_str(), message.c_str(), &fileStream)) {
-			PreProcessor processor(argv[2], argv[3]);
-			if (processor.PreProcessPass(fileStream)) {
-				printf("arquivo %s.pre gerado com sucesso\n", argv[3]);
+	message.append("e .pre ");
+	allowedExtensions.append("|pre");
+
+	if (FileLibrary::VerifyFile(argv[1],allowedExtensions.c_str(),message.c_str(),&fileStream)) {
+
+		bool preSuccess = true;
+		string inFile = argv[1];
+
+		if (FileLibrary::GetFileExtension(argv[1]) == "asm") {
+			PreProcessor processor(inputName.c_str(), outputName.c_str());
+			preSuccess = processor.PreProcessPass(fileStream);
+			inFile = outputName.c_str();
+		}
+
+		if (preSuccess) {
+			Assembler assembler(inFile);
+			if (assembler.Assemble()) {
+				printf("%s.s gerado com sucesso\n", outputName.c_str());
 			}
 		}
-	} else if (tipoOperacao == "-o") {
-		message.append("e .pre ");
-		allowedExtensions.append("|pre");
-
-		if (FileLibrary::VerifyFile(argv[2],allowedExtensions.c_str(),message.c_str(),&fileStream)) {
-
-			bool preSuccess = true;
-			string inFile = argv[2];
-
-			if (FileLibrary::GetFileExtension(argv[2]) == "asm") {
-				PreProcessor processor(argv[2], argv[3]);
-				preSuccess = processor.PreProcessPass(fileStream);
-				inFile = argv[3];
-			}
-
-			if (preSuccess) {
-				Assembler assembler(inFile);
-				if (assembler.Assemble()) {
-					printf("arquivo %s.o gerado com sucesso\n", argv[3]);
-				}
-			}
-		}
-	} else {
-		printf("tipo de operacao nao especificada");
 	}
 
 	fileStream.close();

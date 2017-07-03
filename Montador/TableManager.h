@@ -21,7 +21,11 @@ enum class OpCodes {
 	STORE,
 	INPUT,
 	OUTPUT,
-	STOP
+	STOP,
+	C_INPUT,
+	C_OUTPUT,
+	S_INPUT,
+	S_OUTPUT
 };
 
 struct InstructionInfo {

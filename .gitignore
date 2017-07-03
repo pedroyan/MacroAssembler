@@ -252,3 +252,8 @@ paket-files/
 *.sln.iml
 Codes/middleFile.o
 Codes/middleFile.pre
+Codes/middleFile.s
+Codes/arquivo.s
+Codes/arquivo.pre
+Codes/Triangulo.s
+Codes/Triangulo.pre

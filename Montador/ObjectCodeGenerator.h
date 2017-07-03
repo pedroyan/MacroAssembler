@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "TableManager.h"
 
 using std::stringstream;
 using std::ifstream;
@@ -29,11 +30,6 @@ struct ArgumentInfo {
 	ArgumentInfo(int realValue, bool isExtern) : Extern(isExtern), RealValue(realValue){}
 };
 
-enum class GenerationType {
-	Direct,
-	Modular
-};
-
 enum class WrittenDirectivesType {
 	SPACE,
 	CONST
@@ -51,37 +47,27 @@ class ObjectCodeGenerator {
 		/// </summary>
 		/// <param name="opCode">opcode da instrucao</param>
 		/// <param name="arguments">argumentos da instrucao</param>
-		void WriteInstruction(int opCode, const vector<ArgumentInfo>& arguments);
+		void WriteInstruction(OpCodes opCode, const vector<ArgumentInfo>& arguments);
 
 		/// <summary>
 		/// Escreve uma diretiva no código objeto
 		/// </summary>
 		/// <param name="directive">Diretiva avaliada</param>
 		/// <param name="vlr">Valor da diretiva</param>
-		void WriteDirective(WrittenDirectivesType directive, int vlr);
+		void WriteDirective(WrittenDirectivesType directive, int vlr, string label);
 
-		void GenerateFile(GenerationType type);
+		void GenerateFile();
 
 	private:
-		GenerationType type;
 
 		string outputFileName;
 		stringstream code;
-		stringstream tableDefinition;
-		stringstream tableUse;
-		stringstream tableRealocation;
-
-		/// <summary>
-		/// Escreve a tabela da definição
-		/// </summary>
-		void WriteTableDefinition();
-
-		/// <summary>
-		/// Escreve a tabela de uso
-		/// </summary>
-		void WriteTableUse();
+		stringstream dataSection;
+		stringstream bssSection;
 
 		void GenerateModularFile(fstream& file);
+		void WriteConstantData(fstream& file);
+		void WriteConstantText(fstream& file);
 
 };
 

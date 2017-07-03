@@ -68,7 +68,7 @@ bool StringLibrary::IsInteger(string s) {
 	return (*p == 0);
 }
 bool StringLibrary::IsHexadecimal(string s) {
-	regex hexRegex("(\\+|-)?(0x)?([[:xdigit:]]+)");
+	regex hexRegex("(\\+|-)?(0x)([[:xdigit:]]+)");
 	return std::regex_match(s,hexRegex);
 }
 int StringLibrary::ConvertHexaToInt(string s) {
